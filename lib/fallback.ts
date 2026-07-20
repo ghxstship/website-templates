@@ -1,0 +1,172 @@
+import type { SiteData } from "./types";
+
+/**
+ * Bundled snapshot of the seed content. Used only as a fallback if the
+ * database is unreachable (e.g. during an offline build) so pages always
+ * render. In normal operation content is fetched live from Supabase.
+ */
+export const fallbackData: SiteData = {
+  config: {
+    artist_name: "VESPER",
+    tagline:
+      "Cinematic art-pop built from tape hiss, choir, and the low hum of the city at 4am.",
+    genre: "Art-pop",
+    location: "Los Angeles",
+    accent_color: "#ec3013",
+    label: "Self-released",
+    active_since: "2018",
+    show_videos: true,
+    show_news: true,
+    show_gallery: true,
+    show_store: true,
+    latest_blurb:
+      "Eight tracks recorded over one winter in a converted chapel — the fullest, most physical record yet. Out now on all platforms and limited black vinyl.",
+  },
+  bio: {
+    lead: "VESPER makes music for the hour when the city finally goes quiet.",
+    p1: "Beginning with a handful of cassette recordings passed between friends, VESPER built a sound from the ground up — layered choir, detuned piano, and field recordings pulled from a decade of restless travel. The early EPs earned a devoted following long before any label came calling.",
+    p2: "Three albums later, the project has grown into a full live band without losing its intimacy. Each record is written and self-produced, released on the artist's own imprint, and performed in rooms chosen for how they sound rather than how many they hold.",
+  },
+  albums: [
+    {
+      id: "a0",
+      title: "Hollow Season",
+      year: 2025,
+      type: "LP",
+      is_latest: true,
+      sort_order: 0,
+      blurb:
+        "Eight tracks recorded over one winter in a converted chapel — the fullest, most physical record yet. Out now on all platforms and limited black vinyl.",
+      tracks: [
+        { position: 1, name: "Threshold", seconds: 195 },
+        { position: 2, name: "Hollow Season", seconds: 241 },
+        { position: 3, name: "Static Bloom", seconds: 208 },
+        { position: 4, name: "Nightjar", seconds: 176 },
+        { position: 5, name: "Undertow", seconds: 263 },
+        { position: 6, name: "Ash & Amber", seconds: 224 },
+        { position: 7, name: "Low Country", seconds: 199 },
+        { position: 8, name: "The Long Way Down", seconds: 288 },
+      ],
+    },
+    {
+      id: "a1",
+      title: "Iron & Ochre",
+      year: 2023,
+      type: "LP",
+      is_latest: false,
+      sort_order: 1,
+      blurb: null,
+      tracks: [
+        { position: 1, name: "Ochre", seconds: 212 },
+        { position: 2, name: "Copper Wire", seconds: 187 },
+        { position: 3, name: "Signal Fire", seconds: 231 },
+        { position: 4, name: "Cold Frame", seconds: 176 },
+        { position: 5, name: "Iron", seconds: 254 },
+        { position: 6, name: "Distance", seconds: 203 },
+      ],
+    },
+    {
+      id: "a2",
+      title: "Nightjar",
+      year: 2021,
+      type: "EP",
+      is_latest: false,
+      sort_order: 2,
+      blurb: null,
+      tracks: [
+        { position: 1, name: "Dusk Chorus", seconds: 198 },
+        { position: 2, name: "Nightjar", seconds: 221 },
+        { position: 3, name: "Field Recording", seconds: 165 },
+        { position: 4, name: "Return", seconds: 244 },
+      ],
+    },
+    {
+      id: "a3",
+      title: "First Light",
+      year: 2019,
+      type: "LP",
+      is_latest: false,
+      sort_order: 3,
+      blurb: null,
+      tracks: [
+        { position: 1, name: "First Light", seconds: 205 },
+        { position: 2, name: "Paper Streets", seconds: 189 },
+        { position: 3, name: "Halogen", seconds: 233 },
+        { position: 4, name: "Quiet Part", seconds: 172 },
+        { position: 5, name: "Softening", seconds: 218 },
+        { position: 6, name: "Home Movies", seconds: 247 },
+      ],
+    },
+  ],
+  shows: [
+    { id: "s0", date_label: "MAR 04", city: "Los Angeles", country: "USA", venue: "The Regent Theater", region: "na", status: "on", sort_order: 0 },
+    { id: "s1", date_label: "MAR 07", city: "San Francisco", country: "USA", venue: "The Chapel", region: "na", status: "low", sort_order: 1 },
+    { id: "s2", date_label: "MAR 11", city: "Chicago", country: "USA", venue: "Thalia Hall", region: "na", status: "on", sort_order: 2 },
+    { id: "s3", date_label: "MAR 14", city: "New York", country: "USA", venue: "Bowery Ballroom", region: "na", status: "sold", sort_order: 3 },
+    { id: "s4", date_label: "MAR 18", city: "Toronto", country: "Canada", venue: "The Danforth Music Hall", region: "na", status: "on", sort_order: 4 },
+    { id: "s5", date_label: "APR 02", city: "London", country: "UK", venue: "EartH Hackney", region: "eu", status: "low", sort_order: 5 },
+    { id: "s6", date_label: "APR 05", city: "Paris", country: "France", venue: "La Maroquinerie", region: "eu", status: "on", sort_order: 6 },
+    { id: "s7", date_label: "APR 08", city: "Berlin", country: "Germany", venue: "Festsaal Kreuzberg", region: "eu", status: "on", sort_order: 7 },
+    { id: "s8", date_label: "APR 12", city: "Amsterdam", country: "Netherlands", venue: "Paradiso", region: "eu", status: "sold", sort_order: 8 },
+    { id: "s9", date_label: "APR 26", city: "Tokyo", country: "Japan", venue: "Liquidroom", region: "as", status: "on", sort_order: 9 },
+    { id: "s10", date_label: "APR 29", city: "Seoul", country: "South Korea", venue: "Yes24 Live Hall", region: "as", status: "low", sort_order: 10 },
+  ],
+  videos: [
+    { id: "v0", title: "Hollow Season", meta: "Official video — 2025" },
+    { id: "v1", title: "Nightjar (Live at the Chapel)", meta: "Live session — 2024" },
+    { id: "v2", title: "Static Bloom", meta: "Official video — 2025" },
+    { id: "v3", title: "Iron", meta: "Official video — 2023" },
+  ],
+  posts: [
+    { id: "p0", category: "Announcement", date_label: "Feb 12", title: "Hollow Season out now on limited black vinyl", excerpt: "The second pressing ships this week — 180g black vinyl with a gatefold sleeve and printed lyric insert, mastered specifically for the format." },
+    { id: "p1", category: "Tour", date_label: "Jan 28", title: "Spring 2026 dates announced across three continents", excerpt: "Eleven shows from Los Angeles to Seoul, with the full band and a new stage design built around a single moving light source." },
+    { id: "p2", category: "Feature", date_label: "Jan 09", title: "Inside the chapel sessions", excerpt: "A long read on the making of the record — the room, the tape machines, and the decision to keep almost every first take." },
+  ],
+  gallery: [
+    { id: "g0", caption: "Soundcheck, Los Angeles", ratio: "3/4" },
+    { id: "g1", caption: "Chapel sessions", ratio: "1/1" },
+    { id: "g2", caption: "Backstage, London", ratio: "3/4" },
+    { id: "g3", caption: "Vinyl test pressing", ratio: "1/1" },
+    { id: "g4", caption: "Crowd, New York", ratio: "3/4" },
+    { id: "g5", caption: "Studio detail", ratio: "1/1" },
+    { id: "g6", caption: "Tour van, dawn", ratio: "3/4" },
+    { id: "g7", caption: "Encore", ratio: "1/1" },
+  ],
+  merch: [
+    { id: "m0", name: "Hollow Season — Black Vinyl", category: "Vinyl LP", price: "$32" },
+    { id: "m1", name: "Hollow Season — CD", category: "Compact disc", price: "$14" },
+    { id: "m2", name: "Tour Tee 2026", category: "Apparel", price: "$28" },
+    { id: "m3", name: "Chapel Sessions Hoodie", category: "Apparel", price: "$58" },
+    { id: "m4", name: "Enamel Pin Set", category: "Accessory", price: "$16" },
+    { id: "m5", name: "Signed Print A2", category: "Print", price: "$40" },
+  ],
+  stats: [
+    { num: "3", label: "Studio albums" },
+    { num: "1.4M", label: "Monthly listeners" },
+    { num: "11", label: "Cities on tour" },
+    { num: "8", label: "Years making noise" },
+  ],
+  press: [
+    { quote: "A record that sounds like it was recorded inside a cathedral of your own memory.", source: "The Quietus" },
+    { quote: "Few artists this understated hit this hard.", source: "Pitchfork" },
+    { quote: "The live show is a genuine event.", source: "The Guardian" },
+  ],
+  facts: [
+    { k: "Based in", v: "Los Angeles" },
+    { k: "Genre", v: "Art-pop" },
+    { k: "Label", v: "Self-released" },
+    { k: "Active since", v: "2018" },
+  ],
+  contacts: [
+    { role: "Booking (N. America)", name: "Maren Cole", email: "booking-us@vesper.com" },
+    { role: "Booking (Europe)", name: "Jonas Ek", email: "booking-eu@vesper.com" },
+    { role: "Press & management", name: "Studio Office", email: "press@vesper.com" },
+  ],
+  socials: [
+    { name: "Instagram", url: "#" },
+    { name: "YouTube", url: "#" },
+    { name: "Spotify", url: "#" },
+    { name: "Bandcamp", url: "#" },
+    { name: "TikTok", url: "#" },
+  ],
+};

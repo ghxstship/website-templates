@@ -1,0 +1,391 @@
+/* ============================================================
+   Modernist design system — tokens + atoms
+   Flat, architectural, Archivo throughout, radius 0, 2px rules.
+   ============================================================ */
+
+:root {
+  /* Core color */
+  --color-bg: #f3f2f2;
+  --color-surface: #eae9e9;
+  --color-text: #201e1d;
+  --color-accent: #ec3013;
+  --color-divider: rgba(32, 30, 29, 0.4);
+
+  /* Accent ramp (light -> dark) */
+  --color-accent-100: #fff2ef;
+  --color-accent-200: #ffe0d9;
+  --color-accent-300: #ffc4b8;
+  --color-accent-400: #ff9783;
+  --color-accent-500: #ff563c;
+  --color-accent-600: #dd2b0f;
+  --color-accent-700: #ae1800;
+  --color-accent-800: #7c1405;
+  --color-accent-900: #4d170e;
+
+  /* Neutral ramp */
+  --color-neutral-100: #f8f4f4;
+  --color-neutral-200: #eae7e7;
+  --color-neutral-300: #d7d3d3;
+  --color-neutral-400: #bab6b6;
+  --color-neutral-500: #9b9797;
+  --color-neutral-600: #7d7979;
+  --color-neutral-700: #605d5d;
+  --color-neutral-800: #444141;
+  --color-neutral-900: #2d2b2b;
+
+  /* Type — Archivo (via next/font variable --font-archivo) */
+  --font-heading: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  --font-body: var(--font-archivo), "Archivo", system-ui, sans-serif;
+
+  /* Space scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Radius — zero everywhere */
+  --radius-md: 0;
+
+  /* Shadows exist but the design uses rules, not elevation */
+  --shadow-sm: 0 1px 2px rgba(32, 30, 29, 0.08);
+  --shadow-md: 0 4px 12px rgba(32, 30, 29, 0.1);
+  --shadow-lg: 0 12px 32px rgba(32, 30, 29, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color-accent);
+}
+a:hover {
+  color: var(--color-accent-600);
+}
+
+/* ---- Layout container ---- */
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-inline: clamp(20px, 5vw, 72px);
+}
+
+/* ---- Rule / hr ---- */
+.rule,
+.hr {
+  height: 2px;
+  border: 0;
+  margin: 0;
+  background: var(--color-divider);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  background: transparent;
+  color: var(--color-text);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+  white-space: nowrap;
+}
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-600);
+  color: var(--color-bg);
+}
+.btn-primary:active:not(:disabled) {
+  background: var(--color-accent-700);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+  color: var(--color-text);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-accent);
+  padding: 8px 4px;
+}
+.btn-ghost:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  color: var(--color-accent);
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  flex: 0 0 auto;
+}
+
+.btn-block {
+  display: flex;
+  width: 100%;
+  padding: 11px 16px;
+}
+
+/* ============================================================
+   Tags
+   ============================================================ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: var(--radius-md);
+}
+.tag-accent {
+  background: var(--color-accent-100);
+  color: var(--color-accent-800);
+}
+.tag-outline {
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+}
+.tag-neutral {
+  background: var(--color-surface);
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+
+/* ============================================================
+   Form controls
+   ============================================================ */
+.input {
+  width: 100%;
+  min-height: 36px;
+  padding: 9px 12px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  caret-color: var(--color-accent);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.input::placeholder {
+  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+.input:focus {
+  border-color: var(--color-accent);
+}
+textarea.input {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field > label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
+}
+
+/* ============================================================
+   Photography — grayscale frame
+   ============================================================ */
+.grayscale {
+  filter: grayscale(1) contrast(1.08);
+  overflow: hidden;
+}
+.grayscale img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Kicker */
+.kicker {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+/* Small uppercase label (footer headings, facts, contact roles) */
+.foot-heading {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  margin-bottom: 16px;
+}
+
+/* ============================================================
+   Motion
+   ============================================================ */
+@keyframes eqbar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fadein {
+  animation: fadein 0.4s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Navigation + layout helpers
+   ============================================================ */
+.desk-nav {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  margin-left: auto;
+}
+.nav-cta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-left: 0;
+  flex: 0;
+}
+.nav-link {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.15s ease;
+}
+.nav-link:hover {
+  color: var(--color-accent-600);
+}
+.nav-link[aria-current="page"],
+.nav-link[data-active="true"] {
+  color: var(--color-accent);
+}
+
+.burger {
+  display: none;
+}
+.mob-menu {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .desk-nav {
+    display: none;
+  }
+  .burger {
+    display: inline-flex;
+    margin-left: auto;
+  }
+  .mob-menu.open {
+    display: block;
+  }
+}
+
+/* Two-column splits collapse to one column */
+@media (max-width: 960px) {
+  .split2 {
+    grid-template-columns: 1fr !important;
+  }
+  .split2 .sticky-fig {
+    position: static !important;
+  }
+}
+
+/* Stat grid, footer, and show rows reflow */
+@media (max-width: 720px) {
+  .grid4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .foot-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .row-line {
+    grid-template-columns: 1fr auto !important;
+    gap: 4px 16px !important;
+  }
+  .row-line .row-venue {
+    grid-column: 1 / -1;
+  }
+}
