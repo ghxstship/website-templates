@@ -118,15 +118,15 @@ export const PAGE_LABELS: Record<PageKey, string> = {
 };
 
 export const PAGE_PATHS: Record<PageKey, string> = {
-  home: "/",
-  music: "/music",
-  tour: "/tour",
-  videos: "/videos",
-  news: "/news",
-  about: "/about",
-  gallery: "/gallery",
-  store: "/store",
-  contact: "/contact",
+  home: "/artist",
+  music: "/artist/music",
+  tour: "/artist/tour",
+  videos: "/artist/videos",
+  news: "/artist/news",
+  about: "/artist/about",
+  gallery: "/artist/gallery",
+  store: "/artist/store",
+  contact: "/artist/contact",
 };
 
 /**

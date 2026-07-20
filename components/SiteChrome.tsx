@@ -5,40 +5,42 @@ import { AudioPlayer } from "./player/AudioPlayer";
 import { LightboxProvider } from "./lightbox/LightboxContext";
 import { Lightbox } from "./lightbox/Lightbox";
 import { PlayerSpacer } from "./player/PlayerSpacer";
-import { Header, type NavItem } from "./Header";
-import { Footer } from "./Footer";
+import { SiteHeader, type NavItem } from "./shell/SiteHeader";
+import { SiteFooter } from "./shell/SiteFooter";
 import type { Social } from "@/lib/types";
 
 /**
- * App-wide chrome. Because this is rendered by the root layout and the
- * providers live here, player + lightbox state persist across route changes.
+ * Artist-site chrome. Player + lightbox providers live here (rendered by the
+ * /artist layout), so their state persists across artist route changes.
  */
 export function SiteChrome({
   artistName,
   tagline,
   navItems,
   socials,
-  year,
   children,
 }: {
   artistName: string;
   tagline: string;
   navItems: NavItem[];
   socials: Social[];
-  year: number;
   children: React.ReactNode;
 }) {
   return (
     <PlayerProvider>
       <LightboxProvider>
-        <Header artistName={artistName} navItems={navItems} />
-        <main>{children}</main>
-        <Footer
-          artistName={artistName}
-          tagline={tagline}
+        <SiteHeader
+          brand={artistName}
+          brandHref="/artist"
           navItems={navItems}
-          socials={socials}
-          year={year}
+          ctas={[{ label: "Listen", href: "/artist/music" }]}
+        />
+        <main>{children}</main>
+        <SiteFooter
+          brand={artistName}
+          tagline={tagline}
+          columns={[{ title: "Explore", links: navItems.map((n) => ({ label: n.label, href: n.path })) }]}
+          socials={socials.map((s) => s.name)}
         />
         <PlayerSpacer />
         <AudioPlayer artistName={artistName} />
