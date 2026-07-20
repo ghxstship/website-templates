@@ -621,6 +621,80 @@ textarea.input {
 }
 
 /* ============================================================
+   Social three-pane app shell
+   ============================================================ */
+.app-grid {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 340px;
+  max-width: 1380px;
+  margin: 0 auto;
+  align-items: start;
+}
+.left-rail {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-right: 2px solid var(--color-divider);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.social-center {
+  border-right: 2px solid var(--color-divider);
+  min-height: 100vh;
+}
+.right-rail {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+  padding: 22px 24px;
+}
+.bottom-bar {
+  display: none;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 12px;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  text-align: left;
+  width: 100%;
+  color: var(--color-text);
+}
+.nav-item:hover {
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+@media (max-width: 1080px) {
+  .app-grid {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+  .right-rail {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+  .left-rail {
+    display: none;
+  }
+  .social-center {
+    border: 0;
+    padding-bottom: 72px;
+  }
+}
+
+/* ============================================================
    Motion
    ============================================================ */
 @keyframes eqbar {
