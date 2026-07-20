@@ -620,6 +620,21 @@ textarea.input {
   }
 }
 
+/* Career ATS Kanban pipeline */
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(200px, 1fr));
+  gap: 2px;
+  background: var(--color-divider);
+  border: 2px solid var(--color-divider);
+  overflow-x: auto;
+}
+@media (max-width: 900px) {
+  .pipeline {
+    grid-template-columns: repeat(5, 78vw);
+  }
+}
+
 /* ============================================================
    Social three-pane app shell
    ============================================================ */
