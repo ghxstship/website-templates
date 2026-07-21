@@ -4,12 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MenuIcon } from "@/components/icons";
-import { QtyStepper } from "@/components/ds/QtyStepper";
-import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { Placeholder } from "@/components/Placeholder";
 import { SaveHeart } from "@/components/ds/SaveHeart";
 import { useFavorites } from "@/lib/useFavorites";
-import { captureBooking, captureMessage } from "@/lib/actions";
+import { captureMessage } from "@/lib/actions";
 import { VENUE, NAV, EVENTS, EVENT_CATS, TICKET_TIERS, type VEvent } from "@/lib/venue";
 
 export function VenueHeader() {
@@ -71,19 +69,6 @@ export function EventsList() {
 }
 
 export function EventDetail({ event }: { event: VEvent }) {
-  const [qtys, setQtys] = useState<number[]>([0, 0, 0]);
-  const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
-  const setQ = (i: number, v: number) => setQtys((q) => q.map((x, j) => (j === i ? v : x)));
-  const total = TICKET_TIERS.reduce((s, t, i) => s + t.num * qtys[i], 0);
-  const count = qtys.reduce((s, x) => s + x, 0);
-
-  const checkout = async () => {
-    if (count === 0) return;
-    await captureBooking("venue", { kind: "tickets", summary: `${count}× ${event.title} — ${VENUE.name}`, details: { event: event.title, date: event.date, count, total }, refPrefix: "ARM" });
-    setConfirm({ title: "Tickets reserved", body: `${count} ticket(s) held for 10 minutes. Complete payment via the link in your email to receive your mobile tickets.` });
-    setQtys([0, 0, 0]);
-  };
-
   return (
     <>
       <section className="wrap" style={{ paddingBlock: "20px 0" }}><Link href="/venue/events" className="btn btn-ghost" style={{ padding: "8px 4px" }}>← All events</Link></section>
@@ -94,23 +79,19 @@ export function EventDetail({ event }: { event: VEvent }) {
           <h1 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(30px, 4vw, 52px)", lineHeight: 1, letterSpacing: "-0.02em", margin: "14px 0" }}>{event.title}</h1>
           <div style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 70%, transparent)", marginBottom: 22 }}>{event.date} — {event.time} · {VENUE.name}</div>
           <p style={{ fontSize: 16, lineHeight: 1.65, margin: "0 0 28px", maxWidth: "48ch", color: "color-mix(in srgb, var(--color-text) 82%, transparent)" }}>{event.desc}</p>
-          <div className="eyebrow" style={{ marginBottom: 12 }}>Select tickets</div>
-          {TICKET_TIERS.map((t, i) => (
-            <div key={t.name} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, alignItems: "center", padding: "16px 0", borderTop: "1px solid var(--color-divider)" }}>
+          <div className="eyebrow" style={{ marginBottom: 12 }}>Ticket tiers</div>
+          {TICKET_TIERS.map((t) => (
+            <div key={t.name} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center", padding: "16px 0", borderTop: "1px solid var(--color-divider)" }}>
               <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16 }}>{t.name}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 58%, transparent)" }}>{t.note}</div></div>
-              <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16, color: "var(--color-accent)" }}>${t.num}</div>
-              <QtyStepper value={qtys[i]} onChange={(v) => setQ(i, v)} min={0} max={10} size="sm" />
+              <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16, color: "var(--color-accent)" }}>From ${t.num}</div>
             </div>
           ))}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 0", marginTop: 4, borderTop: "2px solid var(--color-divider)", borderBottom: "2px solid var(--color-divider)" }}>
-            <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18 }}>Total</span>
-            <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, color: "var(--color-accent)" }}>${total}</span>
+          <div style={{ borderTop: "2px solid var(--color-divider)", marginTop: 4, paddingTop: 24 }}>
+            <Link href="/ticketing/events" className="btn btn-primary" style={{ padding: "14px 26px", textDecoration: "none" }}>Get tickets on FRONTROW ↗</Link>
+            <p style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 58%, transparent)", margin: "16px 0 0", maxWidth: "44ch" }}>Tickets, seat maps, loyalty points and VIP for every {VENUE.name} event are handled by FRONTROW, our ticketing partner.</p>
           </div>
-          <button type="button" className="btn btn-primary" onClick={checkout} disabled={count === 0} style={{ marginTop: 20, padding: "14px 26px", justifyContent: "flex-start" }}>Continue to checkout</button>
-          <p style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 58%, transparent)", margin: "16px 0 0" }}>Members save on every booking. <Link href="/ticketing">Join the club ↗</Link></p>
         </div>
       </section>
-      <ConfirmModal open={!!confirm} onClose={() => setConfirm(null)} title={confirm?.title ?? ""} body={confirm?.body ?? ""} />
     </>
   );
 }

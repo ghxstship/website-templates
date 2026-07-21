@@ -22,7 +22,7 @@ export const REQ_CATS = CATEGORIES.map(([name]) => name);
 export const SERVICE_SECTIONS = [
   { name: "Dining & nightlife", intro: "From the neighborhood favorite to the three-month waitlist — and the quiet corner table you actually wanted.", items: ["Reservations", "Private dining", "Sommelier picks", "Guest lists"] },
   { name: "Travel", intro: "Whole trips or a single transfer, planned and re-planned as life changes. We hold the details so you don’t.", items: ["Flights & upgrades", "Hotels & villas", "Transfers", "Itineraries", "Visas"] },
-  { name: "Access & events", intro: "Tickets and access for the things that sell out in seconds, plus the invitations money can’t normally buy.", items: ["Premieres", "Sport & courtside", "Fashion week", "Members’ events"] },
+  { name: "Access & events", intro: "Tickets and access for the things that sell out in seconds, plus the invitations money can’t normally buy.", items: ["Premieres", "Sport & courtside", "Fashion week", "Private previews"] },
   { name: "Home & lifestyle", intro: "The running of a life — vetted people, on time, checked in on. Gifts sourced and errands cleared.", items: ["Household staff", "Deliveries", "Gifting", "Personal shopping", "Wellness"] },
 ];
 
@@ -44,5 +44,5 @@ export const NAV = [
   { label: "Services", path: "/concierge/services" },
   { label: "New request", path: "/concierge/request" },
   { label: "My requests", path: "/concierge/requests" },
-  { label: "Membership", path: "/concierge/membership" },
+  { label: "Plans", path: "/concierge/membership" },
 ];

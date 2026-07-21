@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { MenuIcon } from "@/components/icons";
 import { Placeholder } from "@/components/Placeholder";
+import { CrossLinkCard } from "@/components/shell/CrossLinkCard";
 import { useTravel } from "./TravelContext";
 import { TRAVEL, NAV, MODES, FIELD_SETS, RESULTS, RESULTS_SUMMARY, MODE_TITLE, TOURS, type Mode } from "@/lib/travel";
 
@@ -82,9 +83,22 @@ export function ResultsClient({ mode }: { mode: Mode }) {
             <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(17px, 2vw, 22px)" }}>{r.title}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", marginTop: 4 }}>{r.sub}</div></div>
             <div className="row-sub" style={{ fontSize: 14, color: "color-mix(in srgb, var(--color-text) 72%, transparent)" }}>{r.meta}</div>
             <div style={{ textAlign: "right" }}><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 20, color: "var(--color-accent)" }}>${r.num}</div><div style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }}>{r.priceNote}</div></div>
-            <button type="button" className="btn btn-primary" onClick={() => openBooking({ title: r.title, sub: r.sub, meta: r.meta, price: `$${r.num}`, mode: MODE_TITLE[mode] })} style={{ padding: "9px 18px" }}>Select</button>
+            {mode === "stays" ? (
+              <Link href="/hospitality/rooms" className="btn btn-primary" style={{ padding: "9px 18px", textDecoration: "none" }}>View rooms ↗</Link>
+            ) : (
+              <button type="button" className="btn btn-primary" onClick={() => openBooking({ title: r.title, sub: r.sub, meta: r.meta, price: `$${r.num}`, mode: MODE_TITLE[mode] })} style={{ padding: "9px 18px" }}>Select</button>
+            )}
           </div>
         ))}
+        {mode === "flights" ? (
+          <div style={{ marginTop: 28 }}>
+            <CrossLinkCard kicker="Not flying commercial?" title="Flying private?" body="Charter a jet, helicopter, yacht or black car by request — fleet, empty legs and jet-card membership on our charter desk." href="/charter" cta="Charter" />
+          </div>
+        ) : mode === "stays" ? (
+          <div style={{ marginTop: 28 }}>
+            <CrossLinkCard kicker="Booking a specific hotel?" title="Book direct with the property" body="Room types, suites, residences and on-property dining are handled on each hotel's own site." href="/hospitality" cta="View property" />
+          </div>
+        ) : null}
       </section>
     </>
   );

@@ -47,7 +47,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
     setLastOrder(items.map((i) => ({ name: i.name, price_num: i.price_num })));
     setItems([]);
     setOpen(false);
-    setConfirm({ title: "Order received", body: "Thank you. Your provisions will be ready as scheduled — we'll text you when it's time." });
+    setConfirm({ title: "Order received", body: "Thank you. Your provisions will be ready as scheduled — we'll text you when it's time. Payment is settled through POS Checkout." });
   }, [items, mode, setLastOrder]);
 
   const reorder = useCallback(() => {
@@ -143,6 +143,7 @@ export function OrderOverlays() {
             <div style={{ padding: "20px 24px", borderTop: "2px solid var(--color-divider)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16, fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 17 }}><span>Subtotal</span><span>${subtotal}</span></div>
               <button type="button" className="btn btn-primary" onClick={place} disabled={empty} style={{ width: "100%", justifyContent: "flex-start", padding: "13px 20px" }}>Checkout — ${subtotal}</button>
+              <p style={{ fontSize: 11.5, letterSpacing: "0.04em", textTransform: "uppercase", color: "color-mix(in srgb, var(--color-text) 50%, transparent)", margin: "12px 0 0", textAlign: "center" }}>Payments powered by <Link href="/pos">POS Checkout ↗</Link></p>
             </div>
           </aside>
         </>

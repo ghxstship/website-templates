@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Placeholder } from "@/components/Placeholder";
-import { EVENTS, EVENT_CATS, SPACES, PLANS, CLUBHOUSE, type ClubEvent } from "@/lib/clubhouse";
+import { EVENTS, EVENT_CATS, SPACES, type ClubEvent } from "@/lib/clubhouse";
 import { useClubhouse } from "./ClubhouseContext";
 
 const UP = "var(--color-up)";
@@ -86,57 +86,3 @@ export function SpacesList() {
   );
 }
 
-export function JoinPlans() {
-  return (
-    <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>
-      {PLANS.map((pl) => {
-        const featured = pl.key === "full";
-        return (
-          <div key={pl.key} style={{ background: featured ? "var(--color-accent)" : "var(--color-bg)", color: featured ? "var(--color-bg)" : "var(--color-text)", padding: "clamp(24px, 3vw, 40px)", display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.8, marginBottom: 16 }}>{pl.tagline}</div>
-            <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 26, margin: "0 0 8px" }}>{pl.name}</h3>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 22 }}><span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(30px, 4vw, 44px)" }}>{pl.price}</span><span style={{ fontSize: 14, opacity: 0.7 }}>{pl.per}</span></div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28, flex: 1 }}>
-              {pl.perks.map((pk) => <div key={pk} style={{ display: "flex", gap: 10, alignItems: "baseline", fontSize: 14, lineHeight: 1.4 }}><span style={{ fontWeight: 800 }}>—</span><span>{pk}</span></div>)}
-            </div>
-            <a href="#apply" className="btn" style={{ padding: "12px 20px", textDecoration: "none", justifyContent: "center", background: featured ? "var(--color-bg)" : "var(--color-accent)", color: featured ? "var(--color-accent)" : "var(--color-bg)", border: 0 }}>Apply for {pl.name}</a>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-export function JoinForm() {
-  const { joined, joinRef, submitJoin } = useClubhouse();
-  const [pending, setPending] = useState(false);
-  if (joined) {
-    return (
-      <div style={{ border: "2px solid var(--color-accent)", padding: 28 }}>
-        <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 20, color: "var(--color-accent)", marginBottom: 8 }}>Application received.</div>
-        <p style={{ fontSize: 15, margin: 0, color: "color-mix(in srgb, var(--color-text) 75%, transparent)" }}>We&rsquo;ll be in touch within a week. Reference {joinRef}.</p>
-      </div>
-    );
-  }
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    setPending(true);
-    await submitJoin(
-      (form.elements.namedItem("cl-name") as HTMLInputElement)?.value ?? "",
-      (form.elements.namedItem("cl-email") as HTMLInputElement)?.value ?? "",
-      (form.elements.namedItem("cl-why") as HTMLTextAreaElement)?.value ?? "",
-    );
-    setPending(false);
-  };
-  return (
-    <form onSubmit={submit} style={{ display: "grid", gap: 18 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-        <div className="field"><label htmlFor="cl-name">Full name</label><input id="cl-name" name="cl-name" className="input" required /></div>
-        <div className="field"><label htmlFor="cl-email">Email</label><input id="cl-email" name="cl-email" className="input" type="email" required /></div>
-      </div>
-      <div className="field"><label htmlFor="cl-why">What brings you to {CLUBHOUSE.brand}?</label><textarea id="cl-why" name="cl-why" className="input" required style={{ minHeight: 100 }} /></div>
-      <button type="submit" className="btn btn-primary" disabled={pending} style={{ padding: "13px 24px", justifyContent: "flex-start" }}>{pending ? "Submitting…" : "Submit application"}</button>
-    </form>
-  );
-}

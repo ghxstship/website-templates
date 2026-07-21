@@ -11,6 +11,7 @@ export default function MembershipHome() {
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           <Link href="/membership/apply" className="btn btn-primary" style={{ padding: "13px 22px", textDecoration: "none" }}>Request invite</Link>
           <Link href="/membership/ecosystem" className="btn btn-secondary" style={{ padding: "13px 22px", textDecoration: "none" }}>Explore the ecosystem</Link>
+          <Link href="/clubhouse" className="btn btn-secondary" style={{ padding: "13px 22px", textDecoration: "none" }}>Enter the Clubhouse ↗</Link>
         </div>
       </section>
       <section style={{ background: "var(--color-accent)", color: "var(--color-bg)" }}>

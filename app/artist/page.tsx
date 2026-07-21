@@ -68,12 +68,22 @@ export default async function HomePage() {
               </PlayButton>
             ) : null}
             <Link
+              href="/streaming"
+              className="btn btn-secondary"
+              style={{ padding: "12px 20px" }}
+            >
+              Listen ↗
+            </Link>
+            <Link
               href="/artist/tour"
               className="btn btn-secondary"
               style={{ padding: "12px 20px" }}
             >
               Tour dates
             </Link>
+          </div>
+          <div style={{ marginTop: 16, fontSize: 13, color: "color-mix(in srgb, var(--color-text) 60%, transparent)" }}>
+            Stream everywhere via <Link href="/streaming">the studio ↗</Link> · Follow &amp; chat on <Link href="/social">the feed ↗</Link>
           </div>
         </div>
         <figure className="grayscale" style={{ margin: 0, aspectRatio: "4/5" }}>
@@ -189,6 +199,13 @@ export default async function HomePage() {
                   style={{ padding: "11px 18px" }}
                 >
                   All music
+                </Link>
+                <Link
+                  href="/streaming"
+                  className="btn btn-secondary"
+                  style={{ padding: "11px 18px" }}
+                >
+                  Listen ↗
                 </Link>
               </div>
             </div>

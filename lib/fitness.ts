@@ -70,7 +70,7 @@ export const PLANS = [
 export const NAV = [
   { label: "Timetable", path: "/fitness/schedule" },
   { label: "Programs", path: "/fitness/programs" },
-  { label: "Wellness", path: "/fitness/wellness" },
+  { label: "Recovery", path: "/fitness/recovery" },
   { label: "Leagues", path: "/fitness/leagues" },
   { label: "Membership", path: "/fitness/membership" },
 ];

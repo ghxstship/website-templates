@@ -1,18 +1,9 @@
-"use client";
-
-import { useState } from "react";
+import Link from "next/link";
 import type { Merch } from "@/lib/types";
 import { Placeholder } from "@/components/Placeholder";
 import { ArrowRightIcon } from "@/components/icons";
 
 function MerchCard({ item }: { item: Merch }) {
-  const [added, setAdded] = useState(false);
-
-  const onAdd = () => {
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 1600);
-  };
-
   return (
     <div>
       <figure
@@ -63,15 +54,14 @@ function MerchCard({ item }: { item: Merch }) {
       >
         {item.category}
       </div>
-      <button
-        type="button"
+      <Link
+        href="/ecommerce/shop"
         className="btn btn-secondary btn-block"
-        onClick={onAdd}
-        style={{ justifyContent: "space-between" }}
+        style={{ justifyContent: "space-between", textDecoration: "none" }}
       >
-        {added ? "Added ✓" : "Add to cart"}
-        {added ? null : <ArrowRightIcon size={15} />}
-      </button>
+        View in shop
+        <ArrowRightIcon size={15} />
+      </Link>
     </div>
   );
 }

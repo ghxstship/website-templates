@@ -13,9 +13,9 @@ export default function ClubhouseLayout({ children }: { children: React.ReactNod
   return (
     <ClubhouseProvider>
       <div style={{ minHeight: "100vh" }}>
-        <SiteHeader brand={CLUBHOUSE.brand} brandHref="/clubhouse" navItems={NAV} ctas={[{ label: "Become a member", href: "/clubhouse/membership" }]} />
+        <SiteHeader brand={CLUBHOUSE.brand} brandHref="/clubhouse" navItems={NAV} ctas={[{ label: "Manage membership", href: "/membership" }]} />
         <main>{children}</main>
-        <SiteFooter brand={CLUBHOUSE.brand} tagline={CLUBHOUSE.address} columns={[{ title: "The house", links: NAV.map((n) => ({ label: n.label, href: n.path })) }, { title: "Hours", links: [{ label: "Mon–Fri 7:00–00:00", href: "/clubhouse/visit" }, { label: "Sat 9:00–02:00", href: "/clubhouse/visit" }, { label: "Sun 9:00–22:00", href: "/clubhouse/visit" }] }]} />
+        <SiteFooter brand={CLUBHOUSE.brand} tagline={CLUBHOUSE.address} columns={[{ title: "The house", links: NAV.map((n) => ({ label: n.label, href: n.path })) }, { title: "More", links: [{ label: "Manage membership ↗", href: "/membership" }, { label: "Concierge desk ↗", href: "/concierge" }] }]} />
       </div>
     </ClubhouseProvider>
   );
