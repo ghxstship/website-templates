@@ -41,9 +41,12 @@ export function OpenAccountButton({ label, className, style }: { label: string; 
 }
 
 export function Dashboard() {
-  const { openModal, notify } = useBanking();
+  const { openModal, notify, balanceCents, transfers } = useBanking();
+  const liveBalance = "$" + (balanceCents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const accounts = ACCOUNTS.map((a, i) => (i === 0 ? { ...a, balance: liveBalance } : a));
+  const activity = [...transfers, ...TRANSACTIONS];
   const actions: [string, () => void][] = [
-    ["Send", () => notify("Send — ready", "Your send flow is set up. This is a prototype action.")],
+    ["Send", () => openModal("send")],
     ["Request", () => notify("Request — ready", "Your request flow is set up. This is a prototype action.")],
     ["Add money", () => notify("Add money — ready", "Your add-money flow is set up. This is a prototype action.")],
     ["Trade", () => openModal("convert")],
@@ -52,7 +55,7 @@ export function Dashboard() {
     <>
       <section className="wrap" style={{ paddingBlock: "clamp(24px, 3vw, 40px) 8px" }}>
         <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>
-          {ACCOUNTS.map((a) => (
+          {accounts.map((a) => (
             <div key={a.name} style={{ background: a.dark ? "var(--color-text)" : "var(--color-bg)", color: a.dark ? "var(--color-bg)" : "var(--color-text)", padding: 24 }}>
               <div style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.75, marginBottom: 10 }}>{a.name}</div>
               <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(26px, 3vw, 38px)", lineHeight: 1 }}>{a.balance}</div>
@@ -80,8 +83,8 @@ export function Dashboard() {
       </section>
       <section className="wrap" style={{ paddingBlock: "clamp(24px, 3vw, 36px) clamp(48px, 6vw, 80px)" }}>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 16, marginBottom: 8 }}><h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, margin: 0 }}>Recent activity</h2><span style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }}>This month</span></div>
-        {TRANSACTIONS.map((t) => (
-          <div key={t.merchant} className="row-line" style={{ display: "grid", gridTemplateColumns: "44px minmax(0,1fr) minmax(0,0.8fr) auto", gap: 16, alignItems: "center", padding: "14px 0", borderTop: "1px solid var(--color-divider)" }}>
+        {activity.map((t, i) => (
+          <div key={`${t.merchant}-${i}`} className="row-line" style={{ display: "grid", gridTemplateColumns: "44px minmax(0,1fr) minmax(0,0.8fr) auto", gap: 16, alignItems: "center", padding: "14px 0", borderTop: "1px solid var(--color-divider)" }}>
             <div style={{ width: 34, height: 34, border: "1px solid var(--color-divider)", display: "flex", alignItems: "center", justifyContent: "center", color: "color-mix(in srgb, var(--color-text) 60%, transparent)", fontWeight: 800 }}>{t.out ? "↗" : "↙"}</div>
             <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 15 }}>{t.merchant}</div><div style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }}>{t.cat}</div></div>
             <div className="row-sub" style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }}>{t.date}</div>

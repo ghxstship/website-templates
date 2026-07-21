@@ -3,11 +3,14 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { usePersistentState } from "@/lib/persist";
+import { announce } from "@/lib/announce";
 import { MenuIcon, CloseIcon, CheckIcon } from "@/components/icons";
 import { RESTAURANT, NAV } from "@/lib/restaurant";
 import { captureBooking } from "@/lib/actions";
 
 type OrderItem = { key: string; name: string; price_num: number };
+type SavedItem = { name: string; price_num: number };
 type Ctx = {
   items: OrderItem[];
   mode: "pickup" | "delivery";
@@ -19,6 +22,8 @@ type Ctx = {
   confirm: { title: string; body: string } | null;
   place: () => Promise<void>;
   closeConfirm: () => void;
+  lastOrder: SavedItem[];
+  reorder: () => void;
 };
 const OrderCtx = createContext<Ctx | null>(null);
 let seq = 0;
@@ -28,6 +33,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<"pickup" | "delivery">("pickup");
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
+  const [lastOrder, setLastOrder] = usePersistentState<SavedItem[]>("restaurant.lastOrder", []);
 
   const add = useCallback((name: string, price_num: number) => {
     setItems((s) => [...s, { key: `o${seq++}`, name, price_num }]);
@@ -38,15 +44,41 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
     if (!items.length) return;
     const total = items.reduce((t, c) => t + c.price_num, 0);
     await captureBooking("restaurant", { kind: "order", summary: `Provisions order — $${total} (${mode})`, details: { items: items.map((i) => i.name), mode }, refPrefix: "MRD" });
+    setLastOrder(items.map((i) => ({ name: i.name, price_num: i.price_num })));
     setItems([]);
     setOpen(false);
     setConfirm({ title: "Order received", body: "Thank you. Your provisions will be ready as scheduled — we'll text you when it's time." });
-  }, [items, mode]);
+  }, [items, mode, setLastOrder]);
+
+  const reorder = useCallback(() => {
+    if (!lastOrder.length) return;
+    setItems(lastOrder.map((i) => ({ key: `o${seq++}`, name: i.name, price_num: i.price_num })));
+    setOpen(true);
+    announce("Your last order was added to the cart");
+  }, [lastOrder]);
 
   return (
-    <OrderCtx.Provider value={{ items, mode, setMode, add, removeAt, open, setOpen, confirm, place, closeConfirm: () => setConfirm(null) }}>
+    <OrderCtx.Provider value={{ items, mode, setMode, add, removeAt, open, setOpen, confirm, place, closeConfirm: () => setConfirm(null), lastOrder, reorder }}>
       {children}
     </OrderCtx.Provider>
+  );
+}
+
+export function ReorderBar() {
+  const { lastOrder, reorder } = useOrder();
+  if (!lastOrder.length) return null;
+  const total = lastOrder.reduce((t, c) => t + c.price_num, 0);
+  const names = lastOrder.map((i) => i.name).join(", ");
+  return (
+    <section className="wrap" style={{ paddingBlock: "8px 0" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap", border: "2px solid var(--color-accent)", padding: "16px 20px" }}>
+        <div>
+          <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 15, textTransform: "uppercase" }}>Order again</div>
+          <div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 65%, transparent)", marginTop: 2, maxWidth: "52ch" }}>{names} · ${total}</div>
+        </div>
+        <button type="button" className="btn btn-primary" onClick={reorder} style={{ padding: "10px 20px" }}>Reorder — ${total}</button>
+      </div>
+    </section>
   );
 }
 export function useOrder() {

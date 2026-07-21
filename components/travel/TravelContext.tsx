@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { usePersistentState } from "@/lib/persist";
 import { Modal } from "@/components/ds/Modal";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { captureBooking } from "@/lib/actions";
@@ -12,17 +13,25 @@ type BookingItem = { title: string; sub: string; meta: string; price: string; mo
 type Ctx = {
   trips: Trip[];
   openBooking: (item: BookingItem) => void;
+  cancelTrip: (index: number) => void;
 };
 const TravelCtx = createContext<Ctx | null>(null);
 
 export function TravelProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [trips, setTrips] = useState<Trip[]>([]);
+  const [trips, setTrips] = usePersistentState<Trip[]>("travel.trips", []);
   const [booking, setBooking] = useState<BookingItem | null>(null);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
   const [pending, setPending] = useState(false);
 
   const openBooking = useCallback((item: BookingItem) => setBooking(item), []);
+  const cancelTrip = useCallback((index: number) => {
+    setTrips((prev) => {
+      const trip = prev[index];
+      if (trip) setConfirm({ title: "Trip cancelled", body: `${trip.title} (ref ${trip.ref}) has been cancelled. Any refund due will be processed to your original payment method.` });
+      return prev.filter((_, i) => i !== index);
+    });
+  }, [setTrips]);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,7 +46,7 @@ export function TravelProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <TravelCtx.Provider value={{ trips, openBooking }}>
+    <TravelCtx.Provider value={{ trips, openBooking, cancelTrip }}>
       {children}
       <Modal open={!!booking} onClose={() => setBooking(null)} width={520} showClose={false}>
         {booking ? (

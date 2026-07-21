@@ -6,17 +6,31 @@ import { fmt } from "@/lib/data";
 import { Placeholder } from "@/components/Placeholder";
 import { PlayButton } from "@/components/player/PlayButton";
 import { PlayIcon } from "@/components/icons";
+import { SaveHeart } from "@/components/ds/SaveHeart";
+import { useFavorites } from "@/lib/useFavorites";
 import { usePlayer as usePlayerState } from "@/components/player/PlayerContext";
 
 const STREAMING = ["Spotify", "Apple Music", "Bandcamp"];
 
 export function Discography({ albums }: { albums: Album[] }) {
   const [expanded, setExpanded] = useState<number | null>(0);
+  const [showLiked, setShowLiked] = useState(false);
+  const fav = useFavorites("artist", "Album");
   const { player } = usePlayerState();
+
+  const shown = showLiked ? albums.filter((a) => fav.isSaved(a.id)) : albums;
 
   return (
     <>
-      {albums.map((album, i) => {
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingBottom: 16 }}>
+        <button type="button" onClick={() => setShowLiked(false)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: !showLiked ? "var(--color-text)" : "transparent", color: !showLiked ? "var(--color-bg)" : "var(--color-text)" }}>All releases</button>
+        <button type="button" onClick={() => setShowLiked(true)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: showLiked ? "var(--color-accent)" : "transparent", color: showLiked ? "var(--color-bg)" : "var(--color-text)" }}>Liked · {fav.count}</button>
+      </div>
+      {showLiked && shown.length === 0 ? (
+        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No liked releases yet. Tap the heart on any album.</p>
+      ) : null}
+      {shown.map((album) => {
+        const i = albums.indexOf(album);
         const isOpen = expanded === i;
         const first = album.tracks[0];
         return (
@@ -28,7 +42,7 @@ export function Discography({ albums }: { albums: Album[] }) {
               onClick={() => setExpanded(isOpen ? null : i)}
               style={{
                 display: "grid",
-                gridTemplateColumns: "96px minmax(0, 1fr) auto auto",
+                gridTemplateColumns: "96px minmax(0, 1fr) auto auto auto",
                 gap: "clamp(16px, 3vw, 40px)",
                 alignItems: "center",
                 paddingBlock: 24,
@@ -73,6 +87,7 @@ export function Discography({ albums }: { albums: Album[] }) {
                   {album.year} — {album.tracks.length} tracks
                 </div>
               </div>
+              <SaveHeart active={fav.isSaved(album.id)} onToggle={() => fav.toggle(album.id, album.title)} label={`Like ${album.title}`} size={18} />
               {first ? (
                 <PlayButton
                   title={first.name}

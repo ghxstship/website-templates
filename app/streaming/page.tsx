@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { STREAMING } from "@/lib/streaming";
-import { MediaGrid } from "@/components/streaming/StreamingClient";
+import { MediaGrid, ContinueWatching } from "@/components/streaming/StreamingClient";
 
 export default function StreamingHome() {
   return (
@@ -14,6 +14,7 @@ export default function StreamingHome() {
           <Link href="/streaming/creators" className="btn btn-secondary" style={{ padding: "13px 22px" }}>Explore creators</Link>
         </div>
       </section>
+      <ContinueWatching />
       <MediaGrid />
     </div>
   );

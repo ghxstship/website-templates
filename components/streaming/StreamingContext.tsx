@@ -1,13 +1,16 @@
 "use client";
 
 import { createContext, useContext, useState, useRef, useCallback, useEffect } from "react";
+import { usePersistentState } from "@/lib/persist";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { PlayIcon, PauseIcon, CloseIcon } from "@/components/icons";
 import type { Media } from "@/lib/streaming";
 
 type PlayerItem = { title: string; creator: string } | null;
+export type WatchItem = { title: string; creator: string };
 type Ctx = {
   subs: Set<string>; purchased: Set<string>; premium: boolean;
+  continueWatching: WatchItem[];
   hasAccess: (m: Media) => boolean;
   subscribe: (creator: string, sub: number) => void;
   buy: (title: string) => void;
@@ -21,6 +24,7 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
   const [subs, setSubs] = useState<Set<string>>(new Set());
   const [purchased, setPurchased] = useState<Set<string>>(new Set());
   const [premium, setPremium] = useState(false);
+  const [continueWatching, setContinueWatching] = usePersistentState<WatchItem[]>("streaming.continue", []);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
   const [player, setPlayer] = useState<PlayerItem>(null);
   const [playing, setPlaying] = useState(false);
@@ -39,12 +43,15 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
   const buy = useCallback((title: string) => { setPurchased((s) => new Set(s).add(title)); setConfirm({ title: "Purchased", body: `You now own ${title}. It has been added to your library.` }); }, []);
   const joinPlan = useCallback((name: string, prem: boolean) => { setPremium(prem); setConfirm({ title: `${name} active`, body: prem ? "Premium unlocked — ad-free streaming, offline downloads and every creator's free tier." : `Your ${name} plan is active.` }); }, []);
   const download = useCallback((title: string) => setConfirm({ title: "Download started", body: `${title} is downloading to your device.` }), []);
-  const play = useCallback((item: { title: string; creator: string }) => { setPlayer(item); setPlaying(true); setProgress(0); run(); }, [run]);
+  const play = useCallback((item: { title: string; creator: string }) => {
+    setPlayer(item); setPlaying(true); setProgress(0); run();
+    setContinueWatching((prev) => [item, ...prev.filter((w) => w.title !== item.title)].slice(0, 8));
+  }, [run, setContinueWatching]);
   const togglePlay = () => setPlaying((pl) => { const next = !pl; if (next && progress < 100) run(); else stop(); return next; });
   const closePlayer = () => { stop(); setPlayer(null); setPlaying(false); setProgress(0); };
 
   return (
-    <StreamingCtx.Provider value={{ subs, purchased, premium, hasAccess, subscribe, buy, joinPlan, play, download }}>
+    <StreamingCtx.Provider value={{ subs, purchased, premium, continueWatching, hasAccess, subscribe, buy, joinPlan, play, download }}>
       {children}
       <div style={{ height: player ? 72 : 0 }} />
       {player ? (

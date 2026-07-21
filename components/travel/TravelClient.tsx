@@ -113,18 +113,19 @@ export function ToursGrid() {
 }
 
 export function TripsList() {
-  const { trips } = useTravel();
+  const { trips, cancelTrip } = useTravel();
   if (trips.length === 0) {
     return <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "20px 0" }}>No trips booked yet. <Link href="/travel">Start a search →</Link></p>;
   }
   return (
     <>
       {trips.map((t, i) => (
-        <div key={i} className="row-line" style={{ display: "grid", gridTemplateColumns: "130px minmax(0,1fr) minmax(0,1fr) auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)" }}>
+        <div key={`${t.ref}-${i}`} className="row-line" style={{ display: "grid", gridTemplateColumns: "120px minmax(0,1fr) minmax(0,1fr) auto auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)" }}>
           <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 14, textTransform: "uppercase" }}>{t.mode}</div>
           <div className="row-sub" style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 17 }}>{t.title}</div>
           <div style={{ fontSize: 14, color: "color-mix(in srgb, var(--color-text) 62%, transparent)" }}>{t.detail}</div>
           <span className="tag tag-outline">{t.ref}</span>
+          <button type="button" onClick={() => cancelTrip(i)} className="btn btn-secondary" style={{ padding: "7px 14px", fontSize: 12 }}>Cancel</button>
         </div>
       ))}
     </>

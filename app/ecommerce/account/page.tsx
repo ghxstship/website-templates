@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { AccountDetails } from "@/components/ecommerce/AccountDetails";
+import { Wishlist } from "@/components/ecommerce/Wishlist";
+import { getProducts } from "@/lib/ecommerce";
 
 export const metadata: Metadata = { title: "Account" };
 
@@ -9,7 +11,8 @@ const ORDERS = [
   { id: "#AT-4390", date: "Mar 21, 2026", items: "3 items", status: "Delivered" },
 ];
 
-export default function AccountPage() {
+export default async function AccountPage() {
+  const products = await getProducts();
   return (
     <div className="fadein">
       <section className="wrap" style={{ paddingBlock: "clamp(32px, 5vw, 56px) 24px" }}>
@@ -30,9 +33,12 @@ export default function AccountPage() {
             </div>
           ))}
         </div>
-        <div>
-          <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, margin: "0 0 18px" }}>Details</h2>
-          <AccountDetails />
+        <div style={{ display: "grid", gap: "clamp(32px, 5vw, 48px)" }}>
+          <div>
+            <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, margin: "0 0 18px" }}>Details</h2>
+            <AccountDetails />
+          </div>
+          <Wishlist products={products} />
         </div>
       </section>
     </div>

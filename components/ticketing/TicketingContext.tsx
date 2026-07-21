@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback } from "react";
+import { usePersistentState } from "@/lib/persist";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { captureBooking } from "@/lib/actions";
 import { type MemberTier, TIER_NAME, TIER_MULT } from "@/lib/ticketing";
@@ -14,15 +15,16 @@ type Ctx = {
   isMember: boolean;
   tierName: string;
   book: (ev: { title: string; date: string }, count: number, firstTier: string, earn: number) => Promise<void>;
+  cancelBooking: (index: number) => void;
   joinTier: (t: MemberTier) => void;
   redeem: (name: string, cost: number) => void;
 };
 const TicketingCtx = createContext<Ctx | null>(null);
 
 export function TicketingProvider({ children }: { children: React.ReactNode }) {
-  const [points, setPoints] = useState(2450);
-  const [tier, setTier] = useState<MemberTier>("free");
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [points, setPoints] = usePersistentState("ticketing.points", 2450);
+  const [tier, setTier] = usePersistentState<MemberTier>("ticketing.tier", "free");
+  const [bookings, setBookings] = usePersistentState<Booking[]>("ticketing.bookings", []);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
 
   const book = useCallback(async (ev: { title: string; date: string }, count: number, firstTier: string, earn: number) => {
@@ -35,6 +37,14 @@ export function TicketingProvider({ children }: { children: React.ReactNode }) {
     });
     setBookings((b) => [...b, { date: ev.date, title: ev.title, qty: count, tier: firstTier }]);
   }, []);
+
+  const cancelBooking = useCallback((index: number) => {
+    setBookings((prev) => {
+      const bk = prev[index];
+      if (bk) setConfirm({ title: "Tickets cancelled", body: `Your ${bk.qty}× ${bk.title} ${bk.qty === 1 ? "ticket has" : "tickets have"} been cancelled and refunded to your original payment method.` });
+      return prev.filter((_, i) => i !== index);
+    });
+  }, [setBookings]);
 
   const joinTier = useCallback((t: MemberTier) => {
     setTier(t);
@@ -54,7 +64,7 @@ export function TicketingProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <TicketingCtx.Provider value={{ points, tier, bookings, isMember: tier !== "free", tierName: TIER_NAME[tier], book, joinTier, redeem }}>
+    <TicketingCtx.Provider value={{ points, tier, bookings, isMember: tier !== "free", tierName: TIER_NAME[tier], book, cancelBooking, joinTier, redeem }}>
       {children}
       <ConfirmModal open={!!confirm} onClose={() => setConfirm(null)} title={confirm?.title ?? ""} body={confirm?.body ?? ""} />
     </TicketingCtx.Provider>

@@ -158,7 +158,7 @@ export function Rewards() {
 }
 
 export function Account() {
-  const { points, tierName, bookings } = useTicketing();
+  const { points, tierName, bookings, cancelBooking } = useTicketing();
   const ticketCount = bookings.reduce((s, b) => s + b.qty, 0);
   return (
     <>
@@ -177,11 +177,12 @@ export function Account() {
         {bookings.length === 0 ? (
           <p style={{ fontSize: 15, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "20px 0" }}>No upcoming tickets yet. <Link href="/ticketing/events">Browse events →</Link></p>
         ) : bookings.map((b, i) => (
-          <div key={i} className="row-line" style={{ display: "grid", gridTemplateColumns: "120px minmax(0,1fr) auto auto", gap: 18, alignItems: "center", padding: "18px 0", borderTop: "2px solid var(--color-divider)" }}>
+          <div key={i} className="row-line" style={{ display: "grid", gridTemplateColumns: "120px minmax(0,1fr) auto auto auto", gap: 18, alignItems: "center", padding: "18px 0", borderTop: "2px solid var(--color-divider)" }}>
             <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 14, textTransform: "uppercase" }}>{b.date}</div>
             <div className="row-sub" style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 17 }}>{b.title}</div>
             <div style={{ fontSize: 14, color: "color-mix(in srgb, var(--color-text) 60%, transparent)" }}>{b.qty}× {b.tier}</div>
             <span className="tag tag-outline">Confirmed</span>
+            <button type="button" onClick={() => cancelBooking(i)} className="btn btn-secondary" style={{ padding: "7px 14px", fontSize: 12 }}>Cancel</button>
           </div>
         ))}
       </section>

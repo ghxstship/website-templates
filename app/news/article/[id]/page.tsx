@@ -29,7 +29,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         <p style={{ fontSize: 19, lineHeight: 1.5, margin: "0 0 20px", color: "color-mix(in srgb, var(--color-text) 80%, transparent)" }}>{article.excerpt}</p>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, padding: "14px 0", borderTop: "2px solid var(--color-divider)", borderBottom: "2px solid var(--color-divider)", marginBottom: 28 }}>
           <div style={{ fontSize: 14 }}>By <strong style={{ fontFamily: "var(--font-heading)", fontWeight: 800 }}>{article.author}</strong></div>
-          <ArticleActions />
+          <ArticleActions id={article.id} title={article.title} />
         </div>
         <figure className="grayscale" style={{ margin: "0 0 12px", aspectRatio: "16/9", border: "2px solid var(--color-divider)" }}><Placeholder /></figure>
         <figcaption style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 55%, transparent)", marginBottom: 28 }}>{article.caption ?? "Photograph for The Dispatch."}</figcaption>

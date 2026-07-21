@@ -106,7 +106,7 @@ export function CourseDetail({ course }: { course: Course }) {
                   const idx = li;
                   const isDone = doneSet.has(idx);
                   return (
-                    <button key={l.title} type="button" onClick={() => enrolled && toggleLesson(course.slug, idx)} disabled={!enrolled} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "10px 0", background: "none", border: 0, cursor: enrolled ? "pointer" : "not-allowed", textAlign: "left" }}>
+                    <button key={l.title} type="button" onClick={() => enrolled && toggleLesson(course.slug, idx, total)} disabled={!enrolled} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "10px 0", background: "none", border: 0, cursor: enrolled ? "pointer" : "not-allowed", textAlign: "left" }}>
                       <span style={{ width: 22, height: 22, flex: "0 0 auto", border: `2px solid ${isDone ? "var(--color-accent)" : "var(--color-divider)"}`, background: isDone ? "var(--color-accent)" : "transparent", color: "var(--color-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>{isDone ? <CheckIcon size={13} /> : null}</span>
                       <span style={{ flex: 1, fontSize: 14.5, color: !enrolled ? "color-mix(in srgb, var(--color-text) 45%, transparent)" : isDone ? "color-mix(in srgb, var(--color-text) 55%, transparent)" : "var(--color-text)" }}>{l.title}</span>
                       <span style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 50%, transparent)" }}>{l.len}</span>
@@ -176,10 +176,28 @@ export function Community() {
 }
 
 export function Dashboard() {
-  const { enrolled, done } = useLearning();
+  const { enrolled, done, certificates } = useLearning();
   const mine = COURSES.filter((c) => enrolled.has(c.slug));
+  const earned = COURSES.filter((c) => certificates.includes(c.slug));
   return (
     <section className="wrap" style={{ paddingBlock: "clamp(28px, 4vw, 48px) clamp(48px, 6vw, 80px)" }}>
+      {earned.length > 0 ? (
+        <div style={{ marginBottom: 36 }}>
+          <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, margin: "0 0 20px" }}>Your certificates · {earned.length}</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+            {earned.map((c) => (
+              <div key={c.slug} style={{ border: "2px solid var(--color-accent)", padding: 22, display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-accent-700)" }}>Certificate of completion</span>
+                  <span style={{ fontSize: 22 }}>🎓</span>
+                </div>
+                <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 20, margin: 0 }}>{c.title}</h3>
+                <div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 62%, transparent)" }}>Awarded to Alex Rivera · {c.instructor}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, margin: "0 0 20px" }}>Continue learning</h2>
       {mine.length === 0 ? (
         <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>You haven&apos;t enrolled in any courses yet. <Link href="/learning/courses">Browse courses →</Link></p>

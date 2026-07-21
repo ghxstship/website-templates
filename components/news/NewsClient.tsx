@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Placeholder } from "@/components/Placeholder";
 import { PhotoGallery } from "@/components/ds/PhotoGallery";
+import { useFavorites } from "@/lib/useFavorites";
 import { ARTICLES, SECTIONS, VIDEOS, NEWSLETTERS } from "@/lib/news";
 
 export function SectionBrowser() {
@@ -32,12 +33,13 @@ export function SectionBrowser() {
   );
 }
 
-export function ArticleActions() {
-  const [saved, setSaved] = useState(false);
+export function ArticleActions({ id, title }: { id: string; title: string }) {
+  const fav = useFavorites("news", "Article");
+  const saved = fav.isSaved(id);
   const share = () => { try { navigator.clipboard?.writeText(location.href); } catch { /* noop */ } };
   return (
     <div style={{ display: "flex", gap: 10 }}>
-      <button type="button" onClick={() => setSaved((s) => !s)} className="btn btn-secondary" style={{ padding: "7px 14px", fontSize: 12 }}>{saved ? "Saved" : "Save"}</button>
+      <button type="button" onClick={() => fav.toggle(id, title)} aria-pressed={saved} className={`btn ${saved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "7px 14px", fontSize: 12 }}>{saved ? "★ Saved" : "Save"}</button>
       <button type="button" onClick={share} className="btn btn-secondary" style={{ padding: "7px 14px", fontSize: 12 }}>Share</button>
     </div>
   );

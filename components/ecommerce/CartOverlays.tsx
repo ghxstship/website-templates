@@ -85,9 +85,11 @@ function Field({ label, name, type = "text", placeholder, required = true }: { l
 }
 
 function Checkout() {
-  const { items, subtotalCents, shippingCents, totalCents, openCart, clear, setConfirm } = useCart();
+  const { items, subtotalCents, shippingCents, discountCents, totalCents, promo, applyPromo, clearPromo, openCart, clear, setConfirm } = useCart();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [promoInput, setPromoInput] = useState("");
+  const [promoError, setPromoError] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -103,7 +105,7 @@ function Checkout() {
       region: String(fd.get("region") ?? ""),
       zip: String(fd.get("zip") ?? ""),
       items: items.map((i) => ({ name: i.name, variant: i.variant, price_cents: i.price_cents })),
-      subtotalCents,
+      subtotalCents: subtotalCents - discountCents,
       shippingCents,
     });
     setPending(false);
@@ -158,6 +160,23 @@ function Checkout() {
           ))}
           <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 0 0", fontSize: 14, color: "color-mix(in srgb, var(--color-text) 65%, transparent)" }}><span>Subtotal</span><span>{money(subtotalCents)}</span></div>
           <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: 14, color: "color-mix(in srgb, var(--color-text) 65%, transparent)" }}><span>Shipping</span><span>{shippingCents === 0 ? "Free" : money(shippingCents)}</span></div>
+          {discountCents > 0 ? (
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: 14, color: "var(--color-accent)", fontFamily: "var(--font-heading)", fontWeight: 800 }}><span>Promo {promo}</span><span>−{money(discountCents)}</span></div>
+          ) : null}
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--color-divider)" }}>
+            {promo ? (
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13 }}>
+                <span style={{ color: "var(--color-accent)", fontFamily: "var(--font-heading)", fontWeight: 800 }}>✓ {promo} applied (10% off)</span>
+                <button type="button" onClick={clearPromo} style={{ background: "none", border: 0, cursor: "pointer", fontSize: 12, textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--color-accent-700)", padding: 0 }}>Remove</button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", gap: 8 }}>
+                <input aria-label="Promo code" className="input" value={promoInput} onChange={(e) => { setPromoInput(e.target.value); setPromoError(null); }} placeholder="Promo code" style={{ flex: 1, minHeight: 40 }} />
+                <button type="button" className="btn btn-secondary" onClick={() => { if (applyPromo(promoInput)) { setPromoError(null); setPromoInput(""); } else { setPromoError("That code isn’t valid."); } }} style={{ padding: "8px 16px" }}>Apply</button>
+              </div>
+            )}
+            {promoError ? <div style={{ fontSize: 12, color: "var(--color-accent-700)", marginTop: 6 }}>{promoError}</div> : null}
+          </div>
           <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 0 0", marginTop: 8, borderTop: "2px solid var(--color-divider)", fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18 }}><span>Total</span><span>{money(totalCents)}</span></div>
         </div>
       </div>

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePersistentState } from "@/lib/persist";
+import { announce } from "@/lib/announce";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { Placeholder } from "@/components/Placeholder";
 import { captureBooking } from "@/lib/actions";
@@ -12,16 +14,22 @@ const UP = "var(--color-up)";
 export function Timetable() {
   const [day, setDay] = useState(0);
   const [disc, setDisc] = useState("all");
-  const [booked, setBooked] = useState<Set<string>>(new Set());
+  const [booked, setBooked] = usePersistentState<string[]>("fitness.booked", []);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
   const shown = CLASSES.map((c, i) => ({ c, i })).filter(({ c }) => disc === "all" || c.discipline === disc);
 
   const book = async (i: number, name: string) => {
     const key = `${day}:${i}`;
-    if (booked.has(key)) return;
-    setBooked((s) => new Set(s).add(key));
+    if (booked.includes(key)) return;
+    setBooked((s) => [...s, key]);
     await captureBooking("fitness", { kind: "class", summary: `${name} — ${DAYS[day]}`, details: { class: name, day: DAYS[day] }, refPrefix: "IRN" });
     setConfirm({ title: "You're booked in", body: `${name} is on your schedule. We've added it to your calendar and app.` });
+  };
+  const cancel = (i: number, name: string) => {
+    const key = `${day}:${i}`;
+    setBooked((s) => s.filter((k) => k !== key));
+    announce(`${name} cancelled`);
+    setConfirm({ title: "Class cancelled", body: `Your place in ${name} on ${DAYS[day]} has been released.` });
   };
 
   return (
@@ -33,7 +41,7 @@ export function Timetable() {
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
         {shown.map(({ c, i }) => {
           const key = `${day}:${i}`;
-          const isBooked = booked.has(key);
+          const isBooked = booked.includes(key);
           const full = c.spots === 0 && !isBooked;
           return (
             <div key={i} className="row-line" style={{ display: "grid", gridTemplateColumns: "110px minmax(0,1.3fr) minmax(0,1fr) auto auto", gap: 18, alignItems: "center", padding: "18px 0", borderTop: "2px solid var(--color-divider)" }}>
@@ -41,7 +49,11 @@ export function Timetable() {
               <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(17px, 2vw, 22px)" }}>{c.name}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", marginTop: 4 }}>{c.coach} · {c.len}</div></div>
               <div className="row-sub"><span className="tag tag-outline">{c.discipline}</span></div>
               <div style={{ fontSize: 13, color: full ? "var(--color-accent-700)" : isBooked ? UP : "color-mix(in srgb, var(--color-text) 60%, transparent)" }}>{full ? "Waitlist" : isBooked ? "Booked" : `${c.spots} spots`}</div>
-              <button type="button" onClick={() => book(i, c.name)} disabled={isBooked} className={isBooked ? "btn btn-secondary" : "btn btn-primary"} style={{ padding: "9px 18px" }}>{isBooked ? "Booked" : full ? "Join waitlist" : "Book"}</button>
+              {isBooked ? (
+                <button type="button" onClick={() => cancel(i, c.name)} className="btn btn-secondary" style={{ padding: "9px 18px" }}>Cancel</button>
+              ) : (
+                <button type="button" onClick={() => book(i, c.name)} className="btn btn-primary" style={{ padding: "9px 18px" }}>{full ? "Join waitlist" : "Book"}</button>
+              )}
             </div>
           );
         })}

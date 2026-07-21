@@ -27,6 +27,30 @@ function MediaCard({ m }: { m: Media }) {
   );
 }
 
+export function ContinueWatching() {
+  const { continueWatching, play } = useStreaming();
+  if (continueWatching.length === 0) return null;
+  const rows = continueWatching.map((w) => MEDIA.find((m) => m.title === w.title) ?? { id: w.title, title: w.title, creator: w.creator, type: "video" as MediaType, ratio: "16/9", meta: "Resume", num: 0, locked: false });
+  return (
+    <section className="wrap" style={{ paddingBlock: "clamp(20px, 3vw, 32px) 4px" }}>
+      <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(20px, 2.4vw, 30px)", letterSpacing: "-0.015em", margin: "0 0 16px", textTransform: "uppercase" }}>Continue watching</h2>
+      <div style={{ display: "grid", gridAutoFlow: "column", gridAutoColumns: "minmax(200px, 1fr)", gap: 16, overflowX: "auto", paddingBottom: 8 }}>
+        {rows.map((m) => (
+          <button key={m.id} type="button" onClick={() => play({ title: m.title, creator: m.creator })} style={{ background: "var(--color-bg)", border: 0, padding: 0, cursor: "pointer", textAlign: "left", color: "inherit", font: "inherit" }}>
+            <figure className="grayscale" style={{ margin: "0 0 12px", aspectRatio: "16/9", border: "2px solid var(--color-divider)", position: "relative" }}>
+              <Placeholder label={m.title} />
+              <span style={{ position: "absolute", bottom: 8, left: 8, width: 34, height: 34, background: "var(--color-accent)", color: "var(--color-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}><PlayIcon size={16} /></span>
+              <span style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 4, background: "color-mix(in srgb, var(--color-text) 20%, transparent)" }}><span style={{ display: "block", height: "100%", width: "45%", background: "var(--color-accent)" }} /></span>
+            </figure>
+            <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 15 }}>{m.title}</div>
+            <div style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 58%, transparent)", marginTop: 3 }}>{m.creator} · Resume</div>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function MediaGrid() {
   const [type, setType] = useState<MediaType | "all">("all");
   const shown = MEDIA.filter((m) => type === "all" || m.type === type);
