@@ -61,7 +61,7 @@ export function DiscoverGrid({ initialCat = "all" }: { initialCat?: string }) {
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>{CATEGORIES.map((c) => <button key={c} type="button" onClick={() => setCat(c)} className={`chip${cat === c ? " active" : ""}`}>{c === "all" ? "All" : c}</button>)}</div>
       </section>
       <section className="wrap" style={{ paddingBlock: "8px 0" }}>
-        <button type="button" onClick={() => setShowSaved((v) => !v)} className={showSaved ? "btn btn-primary" : "btn btn-secondary"} style={{ padding: "8px 16px" }}>{showSaved ? `Showing favorites · ` : `Favorites · `}</button>
+        <button type="button" onClick={() => setShowSaved((v) => !v)} className={showSaved ? "btn btn-primary" : "btn btn-secondary"} style={{ padding: "8px 16px" }}>{showSaved ? `Showing favorites · ${fav.count}` : `Favorites · ${fav.count}`}</button>
       </section>
       <section className="wrap" style={{ paddingBlock: "16px clamp(48px, 6vw, 80px)" }}>
         {showSaved && fav.count === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No saved businesses yet. Tap the heart on any listing.</p> : null}

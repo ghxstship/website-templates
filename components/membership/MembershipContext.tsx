@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useState } from "react";
+import { useRouter } from "next/navigation";
 import { usePersistentState } from "@/lib/persist";
 import { announce } from "@/lib/announce";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
@@ -31,6 +32,7 @@ export function MembershipProvider({ children }: { children: React.ReactNode }) 
   const [votes, setVotes] = usePersistentState<Record<string, string>>("membership.votes", {});
   const [decisions, setDecisions] = usePersistentState<Record<string, string>>("membership.decisions", {});
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
+  const router = useRouter();
 
   const isMember = status === "member";
   const tierName = TIER_NAMES[tier];
@@ -47,7 +49,8 @@ export function MembershipProvider({ children }: { children: React.ReactNode }) 
     setStatus("member");
     announce("Membership approved");
     setConfirm({ title: "You’re in", body: `Welcome to ${MEMBERSHIP.brand}. Your Resident membership is live — explore the ecosystem with your new pass.` });
-  }, [setStatus]);
+    router.push("/membership/pass");
+  }, [setStatus, router]);
 
   const resetApply = useCallback(() => { setStatus("guest"); setApplyRef(""); }, [setStatus, setApplyRef]);
 

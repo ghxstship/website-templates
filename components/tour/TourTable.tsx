@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { Show } from "@/lib/types";
 
 const REGIONS: { key: string; label: string }[] = [
@@ -109,14 +110,15 @@ export function TourTable({ shows }: { shows: Show[] }) {
               >
                 {show.venue}
               </div>
-              <button
-                type="button"
-                className={`btn ${st.cls}`}
-                style={{ padding: "9px 18px" }}
-                disabled={st.sold}
-              >
-                {st.cta}
-              </button>
+              {st.sold ? (
+                <button type="button" className={`btn ${st.cls}`} style={{ padding: "9px 18px" }} disabled>
+                  {st.cta}
+                </button>
+              ) : (
+                <Link href="/ticketing/events" className={`btn ${st.cls}`} style={{ padding: "9px 18px", textDecoration: "none" }}>
+                  {st.cta}
+                </Link>
+              )}
             </div>
           );
         })}

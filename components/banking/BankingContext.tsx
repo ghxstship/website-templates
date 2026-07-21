@@ -35,13 +35,11 @@ export function BankingProvider({ children }: { children: React.ReactNode }) {
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
 
   const redeem = useCallback((name: string, cost: number) => {
-    setPoints((p) => {
-      if (p < cost) return p;
-      const np = p - cost;
-      setConfirm({ title: "Reward redeemed", body: `${name} is on its way. New balance: ${np.toLocaleString()} pts.` });
-      return np;
-    });
-  }, []);
+    if (points < cost) return;
+    const np = points - cost;
+    setPoints(np);
+    setConfirm({ title: "Reward redeemed", body: `${name} is on its way. New balance: ${np.toLocaleString()} pts.` });
+  }, [points, setPoints]);
   const openModal = useCallback((kind: "open" | "convert" | "send") => setModal(kind), []);
   const notify = useCallback((title: string, body: string) => setConfirm({ title, body }), []);
 

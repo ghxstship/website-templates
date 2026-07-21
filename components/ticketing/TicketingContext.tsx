@@ -18,6 +18,7 @@ type Ctx = {
   cancelBooking: (index: number) => void;
   joinTier: (t: MemberTier) => void;
   redeem: (name: string, cost: number) => void;
+  reserveExperience: (exp: { name: string; price: number }) => Promise<void>;
 };
 const TicketingCtx = createContext<Ctx | null>(null);
 
@@ -63,8 +64,17 @@ export function TicketingProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const reserveExperience = useCallback(async (exp: { name: string; price: number }) => {
+    await captureBooking("ticketing", { kind: "experience", summary: `Reserved — ${exp.name}`, details: { experience: exp.name, price: exp.price }, refPrefix: "FRW" });
+    setPoints((p) => {
+      const np = p + exp.price;
+      setConfirm({ title: "Experience reserved", body: `${exp.name} is booked — details are in your account, and you earned ${exp.price} points. New balance: ${np} points.` });
+      return np;
+    });
+  }, []);
+
   return (
-    <TicketingCtx.Provider value={{ points, tier, bookings, isMember: tier !== "free", tierName: TIER_NAME[tier], book, cancelBooking, joinTier, redeem }}>
+    <TicketingCtx.Provider value={{ points, tier, bookings, isMember: tier !== "free", tierName: TIER_NAME[tier], book, cancelBooking, joinTier, redeem, reserveExperience }}>
       {children}
       <ConfirmModal open={!!confirm} onClose={() => setConfirm(null)} title={confirm?.title ?? ""} body={confirm?.body ?? ""} />
     </TicketingCtx.Provider>

@@ -5,20 +5,27 @@ import { Placeholder } from "@/components/Placeholder";
 import { WishlistHeart } from "./WishlistHeart";
 
 export function ProductCard({ product }: { product: Product }) {
+  const href = `/ecommerce/product/${product.slug}`;
   return (
-    <Link href={`/ecommerce/product/${product.slug}`} style={{ textDecoration: "none", color: "var(--color-text)", cursor: "pointer" }}>
+    <div style={{ color: "var(--color-text)" }}>
+      {/* Figure holds the clickable image (Link as a stretched overlay) plus the
+          heart button and "New" tag as siblings — none nested inside the anchor,
+          so there are no interactive elements inside an <a> (valid + accessible). */}
       <figure className="grayscale" style={{ margin: "0 0 14px", aspectRatio: "1/1", border: "2px solid var(--color-divider)", position: "relative" }}>
         <Placeholder label="Product" />
+        <Link href={href} aria-label={product.name} style={{ position: "absolute", inset: 0, zIndex: 1, textDecoration: "none", cursor: "pointer" }} />
         <WishlistHeart slug={product.slug} name={product.name} />
         {product.is_new ? (
-          <span className="tag" style={{ position: "absolute", top: 10, left: 10, background: "var(--color-accent)", color: "var(--color-bg)" }}>New</span>
+          <span className="tag" style={{ position: "absolute", top: 10, left: 10, zIndex: 2, background: "var(--color-accent)", color: "var(--color-bg)" }}>New</span>
         ) : null}
       </figure>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
-        <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16, margin: 0 }}>{product.name}</h3>
+        <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16, margin: 0 }}>
+          <Link href={href} style={{ textDecoration: "none", color: "var(--color-text)" }}>{product.name}</Link>
+        </h3>
         <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 15, color: "var(--color-accent)" }}>{money(product.price_cents)}</span>
       </div>
       <div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 58%, transparent)", marginTop: 4 }}>{product.category}</div>
-    </Link>
+    </div>
   );
 }

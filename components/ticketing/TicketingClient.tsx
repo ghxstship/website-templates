@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { MenuIcon } from "@/components/icons";
 import { QtyStepper } from "@/components/ds/QtyStepper";
 import { useTicketing, TIER_MULT } from "./TicketingContext";
-import { TICKETING, NAV, EVENTS, EVENT_CATS, TICKET_TIERS, MEMBERSHIP, REWARDS, type TEvent } from "@/lib/ticketing";
+import { TICKETING, NAV, EVENTS, EVENT_CATS, TICKET_TIERS, MEMBERSHIP, REWARDS, EXPERIENCES, type TEvent } from "@/lib/ticketing";
 
 export function TicketingHeader() {
   const pathname = usePathname();
@@ -154,6 +154,35 @@ export function Rewards() {
         </div>
       </section>
     </>
+  );
+}
+
+export function Experiences() {
+  const { reserveExperience } = useTicketing();
+  return (
+    <section className="wrap" style={{ paddingBlock: "clamp(24px, 3vw, 44px) clamp(48px, 6vw, 80px)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>
+        {EXPERIENCES.map((x) => (
+          <div key={x.id} style={{ background: "var(--color-bg)", display: "flex", flexDirection: "column" }}>
+            <figure className="grayscale" style={{ margin: 0, aspectRatio: "3/2", position: "relative" }}>
+              <PlaceholderClient label={x.name} />
+              <span className="tag tag-accent" style={{ position: "absolute", top: 10, left: 10 }}>{x.tier}</span>
+            </figure>
+            <div style={{ padding: "18px 20px 22px", flex: 1, display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+                <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18, margin: 0 }}>{x.name}</h3>
+                <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, color: "var(--color-accent)" }}>${x.price}</span>
+              </div>
+              <p style={{ fontSize: 13.5, lineHeight: 1.5, margin: "10px 0 14px", flex: 1, color: "color-mix(in srgb, var(--color-text) 74%, transparent)" }}>{x.desc}</p>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 58%, transparent)" }}>{x.spots} places</span>
+                <button type="button" onClick={() => reserveExperience({ name: x.name, price: x.price })} className="btn btn-primary" style={{ padding: "8px 16px" }}>Reserve</button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 

@@ -9,6 +9,7 @@ import { useCart } from "./CartContext";
 const NAV = [
   { label: "Home", path: "/ecommerce" },
   { label: "Shop", path: "/ecommerce/shop" },
+  { label: "Drops", path: "/ecommerce/drops" },
 ];
 
 export function EcommerceHeader({ brand }: { brand: string }) {

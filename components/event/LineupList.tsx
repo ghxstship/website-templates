@@ -36,7 +36,7 @@ export function LineupList() {
                     style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "none", border: 0, padding: 0, cursor: "pointer", color: liked ? "var(--color-accent)" : "var(--color-text)", fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: tier.size, letterSpacing: "-0.02em", lineHeight: 1.05 }}
                   >
                     {a}
-                    <HeartIcon size={Math.max(14, parseInt(tier.size) / 2)} style={{ fill: liked ? "var(--color-accent)" : "none", flex: "0 0 auto" }} />
+                    <HeartIcon size={18} style={{ fill: liked ? "var(--color-accent)" : "none", flex: "0 0 auto" }} />
                   </button>
                 );
               })}

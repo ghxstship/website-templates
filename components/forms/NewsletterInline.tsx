@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { captureLead } from "@/lib/actions";
+import { announce } from "@/lib/announce";
 
 /** Inline email capture → leads. Reused across templates. */
 export function NewsletterInline({
@@ -28,9 +29,11 @@ export function NewsletterInline({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => { if (done) announce(success); }, [done, success]);
+
   if (done) {
     return (
-      <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18, color: "var(--color-accent)" }}>
+      <div role="status" style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18, color: "var(--color-accent)" }}>
         {success}
       </div>
     );
@@ -62,7 +65,7 @@ export function NewsletterInline({
       <button type="submit" className={buttonClassName} disabled={pending} style={buttonStyle}>
         {pending ? "…" : button}
       </button>
-      {error ? <div style={{ flexBasis: "100%", fontSize: 13 }}>{error}</div> : null}
+      {error ? <div role="alert" style={{ flexBasis: "100%", fontSize: 13, color: "var(--color-accent-700)" }}>{error}</div> : null}
     </form>
   );
 }

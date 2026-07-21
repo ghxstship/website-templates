@@ -53,7 +53,7 @@ export function RoomsList() {
       <section className="wrap" style={{ paddingBlock: "8px 0" }}><div className="kicker">{nightsLabel}</div></section>
       <section className="wrap" style={{ paddingBlock: "16px 0" }}>
         <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>
-          {showSaved ? `Showing favorites · ` : `Favorites · `}
+          {showSaved ? `Showing favorites · ${fav.count}` : `Favorites · ${fav.count}`}
         </button>
       </section>
       <section className="wrap" style={{ paddingBlock: "clamp(24px, 3vw, 44px) clamp(48px, 6vw, 80px)" }}>

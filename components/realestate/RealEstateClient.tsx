@@ -176,15 +176,24 @@ export function ListingAside({ l }: { l: Listing }) {
 export function SellForm() {
   const [done, setDone] = useState(false);
   const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const addr = (form.elements.namedItem("sell-addr") as HTMLInputElement)?.value ?? "";
-    const name = (form.elements.namedItem("sell-name") as HTMLInputElement)?.value ?? "";
+    const val = (n: string) => (form.elements.namedItem(n) as HTMLInputElement | HTMLSelectElement)?.value ?? "";
+    const addr = val("sell-addr"), type = val("sell-type"), beds = val("sell-beds");
+    const name = val("sell-name"), phone = val("sell-phone"), email = val("sell-email");
     setPending(true);
-    await captureMessage("realestate", { name: name || "Valuation request", email: "valuation@meridian.example", subject: "Valuation request", message: `Valuation requested for ${addr}.` });
+    setError(null);
+    const res = await captureMessage("realestate", {
+      name: name || "Valuation request",
+      email,
+      subject: "Valuation request",
+      message: `Valuation requested for ${addr}. Type: ${type || "—"}. Bedrooms: ${beds || "—"}. Phone: ${phone || "—"}.`,
+    });
     setPending(false);
-    setDone(true);
+    if (res.ok) setDone(true);
+    else setError(res.error ?? "Something went wrong. Please try again.");
   };
   if (done) {
     return (
@@ -198,13 +207,15 @@ export function SellForm() {
     <form onSubmit={submit} style={{ display: "grid", gap: 18 }}>
       <div className="field"><label htmlFor="sell-addr">Property address</label><input id="sell-addr" name="sell-addr" className="input" required /></div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-        <div className="field"><label htmlFor="sell-type">Type</label><select id="sell-type" className="input" style={{ minHeight: 42 }}><option>House</option><option>Apartment</option><option>Land</option><option>Commercial</option></select></div>
-        <div className="field"><label htmlFor="sell-beds">Bedrooms</label><input id="sell-beds" className="input" placeholder="e.g. 3" /></div>
+        <div className="field"><label htmlFor="sell-type">Type</label><select id="sell-type" name="sell-type" className="input" style={{ minHeight: 42 }}><option>House</option><option>Apartment</option><option>Land</option><option>Commercial</option></select></div>
+        <div className="field"><label htmlFor="sell-beds">Bedrooms</label><input id="sell-beds" name="sell-beds" className="input" placeholder="e.g. 3" /></div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
         <div className="field"><label htmlFor="sell-name">Your name</label><input id="sell-name" name="sell-name" className="input" required /></div>
-        <div className="field"><label htmlFor="sell-phone">Phone</label><input id="sell-phone" className="input" required /></div>
+        <div className="field"><label htmlFor="sell-phone">Phone</label><input id="sell-phone" name="sell-phone" className="input" type="tel" required /></div>
       </div>
+      <div className="field"><label htmlFor="sell-email">Email</label><input id="sell-email" name="sell-email" className="input" type="email" required placeholder="you@email.com" /></div>
+      {error ? <div role="alert" style={{ fontSize: 14, color: "var(--color-accent-700)" }}>{error}</div> : null}
       <button type="submit" className="btn btn-primary" disabled={pending} style={{ padding: "13px 24px", justifyContent: "flex-start" }}>{pending ? "Sending…" : "Request valuation"}</button>
     </form>
   );

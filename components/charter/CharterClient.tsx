@@ -27,9 +27,10 @@ export function RequestEngine({ showNote = true }: { showNote?: boolean }) {
         </div>
         <div style={{ padding: "clamp(20px, 3vw, 32px)" }}>
           <div className="searchgrid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, alignItems: "end" }}>
-            {FIELD_SETS[mode].map(([label, ph], i) => (
-              <div key={i} className="field"><label>{label}</label><input className="input" placeholder={ph} /></div>
-            ))}
+            {FIELD_SETS[mode].map(([label, ph], i) => {
+              const fid = `ch-${mode}-${i}`;
+              return <div key={fid} className="field"><label htmlFor={fid}>{label}</label><input id={fid} className="input" placeholder={ph} /></div>;
+            })}
           </div>
           <div style={{ display: "flex", gap: 12, marginTop: 20, flexWrap: "wrap", alignItems: "center" }}>
             <button type="button" className="btn btn-primary" onClick={() => setShown(true)} style={{ padding: "12px 22px" }}>Search availability</button>
@@ -80,7 +81,7 @@ export function FleetGrid() {
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "4px 0" }}>
-        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing favorites · ` : `Favorites · `}</button>
+        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing favorites · ${fav.count}` : `Favorites · ${fav.count}`}</button>
       </section>
       <section className="wrap" style={{ paddingBlock: "20px clamp(48px, 6vw, 80px)" }}>
         {showSaved && rows.length === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No favorites yet. Tap the heart on any listing.</p> : null}

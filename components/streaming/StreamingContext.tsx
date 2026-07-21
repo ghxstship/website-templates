@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useRef, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { usePersistentState } from "@/lib/persist";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { PlayIcon, PauseIcon, CloseIcon } from "@/components/icons";
@@ -21,9 +21,11 @@ type Ctx = {
 const StreamingCtx = createContext<Ctx | null>(null);
 
 export function StreamingProvider({ children }: { children: React.ReactNode }) {
-  const [subs, setSubs] = useState<Set<string>>(new Set());
-  const [purchased, setPurchased] = useState<Set<string>>(new Set());
-  const [premium, setPremium] = useState(false);
+  const [subsArr, setSubsArr] = usePersistentState<string[]>("streaming.subs", []);
+  const [purchasedArr, setPurchasedArr] = usePersistentState<string[]>("streaming.purchased", []);
+  const [premium, setPremium] = usePersistentState<boolean>("streaming.premium", false);
+  const subs = useMemo(() => new Set(subsArr), [subsArr]);
+  const purchased = useMemo(() => new Set(purchasedArr), [purchasedArr]);
   const [continueWatching, setContinueWatching] = usePersistentState<WatchItem[]>("streaming.continue", []);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
   const [player, setPlayer] = useState<PlayerItem>(null);
@@ -39,8 +41,8 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => () => stop(), [stop]);
 
   const hasAccess = useCallback((m: Media) => !m.locked || premium || subs.has(m.creator) || purchased.has(m.title), [premium, subs, purchased]);
-  const subscribe = useCallback((creator: string) => { setSubs((s) => new Set(s).add(creator)); setConfirm({ title: `Subscribed to ${creator}`, body: `Every premium post from ${creator} is now unlocked, and you can cancel any time.` }); }, []);
-  const buy = useCallback((title: string) => { setPurchased((s) => new Set(s).add(title)); setConfirm({ title: "Purchased", body: `You now own ${title}. It has been added to your library.` }); }, []);
+  const subscribe = useCallback((creator: string) => { setSubsArr((a) => (a.includes(creator) ? a : [...a, creator])); setConfirm({ title: `Subscribed to ${creator}`, body: `Every premium post from ${creator} is now unlocked, and you can cancel any time.` }); }, [setSubsArr]);
+  const buy = useCallback((title: string) => { setPurchasedArr((a) => (a.includes(title) ? a : [...a, title])); setConfirm({ title: "Purchased", body: `You now own ${title}. It has been added to your library.` }); }, [setPurchasedArr]);
   const joinPlan = useCallback((name: string, prem: boolean) => { setPremium(prem); setConfirm({ title: `${name} active`, body: prem ? "Premium unlocked — ad-free streaming, offline downloads and every creator's free tier." : `Your ${name} plan is active.` }); }, []);
   const download = useCallback((title: string) => setConfirm({ title: "Download started", body: `${title} is downloading to your device.` }), []);
   const play = useCallback((item: { title: string; creator: string }) => {

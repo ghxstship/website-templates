@@ -148,9 +148,9 @@ export function Rewards() {
   );
 }
 
-export function Plans() {
+export function Plans({ initialTab = "personal" }: { initialTab?: "personal" | "business" }) {
   const { notify } = useBanking();
-  const [tab, setTab] = useState<"personal" | "business">("personal");
+  const [tab, setTab] = useState<"personal" | "business">(initialTab);
   const src = tab === "business" ? BUSINESS_PLANS : PERSONAL_PLANS;
   return (
     <>

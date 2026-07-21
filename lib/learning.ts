@@ -9,7 +9,7 @@ export type Module = { title: string; lessons: Lesson[] };
 export type Course = { slug: string; title: string; cat: string; instructor: string; num: number; blurb: string; hours: string; modules: Module[] };
 
 export const COURSES: Course[] = [
-  { slug: "product-design-foundations", title: "Product Design Foundations", cat: "Design", instructor: "Maya Okafor", num: 149, blurb: "From research to shipped UI — the process, the tools and the judgement calls.", hours: "8 hours", modules: [ { title: "Research", lessons: [{ title: "Talking to users", len: "12m" }, { title: "Synthesis", len: "18m" }] }, { title: "Craft", lessons: [{ title: "Layout systems", len: "22m" }, { title: "Type & color", len: "16m" }, { title: "Prototyping", len: "20m" }] }, { title: "Ship", lessons: [{ title: "Handoff", len: "14m" }, { title: "Measuring impact", len: "15m" }] } ] },
+  { slug: "product-design-foundations", title: "Product Design Foundations", cat: "Design", instructor: "Maya Okafor", num: 149, blurb: "From research to shipped UI — the process, the tools and the judgment calls.", hours: "8 hours", modules: [ { title: "Research", lessons: [{ title: "Talking to users", len: "12m" }, { title: "Synthesis", len: "18m" }] }, { title: "Craft", lessons: [{ title: "Layout systems", len: "22m" }, { title: "Type & color", len: "16m" }, { title: "Prototyping", len: "20m" }] }, { title: "Ship", lessons: [{ title: "Handoff", len: "14m" }, { title: "Measuring impact", len: "15m" }] } ] },
   { slug: "full-stack-in-30-days", title: "Full-Stack in 30 Days", cat: "Code", instructor: "Dev Null", num: 199, blurb: "Build and deploy a real app end to end — no toy examples.", hours: "14 hours", modules: [ { title: "Frontend", lessons: [{ title: "Components", len: "20m" }, { title: "State", len: "18m" }] }, { title: "Backend", lessons: [{ title: "APIs", len: "24m" }, { title: "Databases", len: "22m" }] }, { title: "Deploy", lessons: [{ title: "CI/CD", len: "16m" }, { title: "Monitoring", len: "12m" }] } ] },
   { slug: "marketing-that-compounds", title: "Marketing That Compounds", cat: "Marketing", instructor: "Jonah Reed", num: 129, blurb: "Content, distribution and the loops that make growth cheaper over time.", hours: "6 hours", modules: [ { title: "Positioning", lessons: [{ title: "Finding the wedge", len: "15m" }, { title: "Messaging", len: "14m" }] }, { title: "Channels", lessons: [{ title: "SEO basics", len: "20m" }, { title: "Email that works", len: "18m" }] } ] },
   { slug: "founder-finance", title: "Founder Finance", cat: "Business", instructor: "Dana Okafor", num: 179, blurb: "Model your business, read your numbers, and raise (or not) on your terms.", hours: "7 hours", modules: [ { title: "Modeling", lessons: [{ title: "Unit economics", len: "19m" }, { title: "Runway", len: "13m" }] }, { title: "Fundraising", lessons: [{ title: "The deck", len: "17m" }, { title: "The terms", len: "21m" }] } ] },
@@ -47,4 +47,21 @@ export const NAV = [
   { label: "Community", path: "/learning/community" },
   { label: "Dashboard", path: "/learning/dashboard" },
   { label: "Pricing", path: "/learning/pricing" },
+  { label: "Help", path: "/learning/help" },
+];
+
+export type HelpCategory = { name: string; count: string; articles: string[] };
+
+export const HELP_CATEGORIES: HelpCategory[] = [
+  { name: "Getting started", count: "12 articles", articles: ["How enrollment works", "Navigating your dashboard", "Downloading resources"] },
+  { name: "Billing & plans", count: "9 articles", articles: ["Change or cancel your plan", "Refunds & guarantees", "Team & seat management"] },
+  { name: "Courses & progress", count: "15 articles", articles: ["Marking lessons complete", "Certificates explained", "Offline viewing"] },
+  { name: "Community", count: "7 articles", articles: ["Posting & etiquette", "Reporting content", "Live event access"] },
+];
+
+export const HELP_FAQS: { q: string; a: string }[] = [
+  { q: "How do I reset my password?", a: "From the sign-in screen, choose “Forgot password” and follow the emailed link. Links expire after an hour." },
+  { q: "Can I get a refund?", a: "Yes — within 14 days of purchase, no questions asked, from Billing in your dashboard." },
+  { q: "Do courses expire?", a: "No. Once enrolled you have lifetime access, including future updates to that course." },
+  { q: "How do certificates work?", a: "Complete every lesson in a course and your certificate is issued automatically to your dashboard." },
 ];

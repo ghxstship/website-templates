@@ -23,6 +23,7 @@ export function Timetable() {
     if (booked.includes(key)) return;
     setBooked((s) => [...s, key]);
     await captureBooking("fitness", { kind: "class", summary: `${name} — ${DAYS[day]}`, details: { class: name, day: DAYS[day] }, refPrefix: "IRN" });
+    announce(`${name} booked for ${DAYS[day]}`);
     setConfirm({ title: "You're booked in", body: `${name} is on your schedule. We've added it to your calendar and app.` });
   };
   const cancel = (i: number, name: string) => {

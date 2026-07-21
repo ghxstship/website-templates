@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SocialProvider } from "@/components/social/SocialContext";
-import { LeftRail, RightRail } from "@/components/social/SocialClient";
+import { LeftRail, RightRail, BottomBar } from "@/components/social/SocialClient";
 import { SOCIAL } from "@/lib/social";
 
 export const metadata: Metadata = {
@@ -16,6 +16,7 @@ export default function SocialLayout({ children }: { children: React.ReactNode }
         <main className="social-center">{children}</main>
         <RightRail />
       </div>
+      <BottomBar />
     </SocialProvider>
   );
 }

@@ -599,9 +599,19 @@ textarea.input {
   .split2 .sticky-fig {
     position: static !important;
   }
+  .ticketgrid {
+    grid-template-columns: 1fr !important;
+  }
+  .ticketgrid .sticky-fig,
+  .ticketgrid aside {
+    position: static !important;
+  }
 }
 
 @media (max-width: 720px) {
+  .grid3 {
+    grid-template-columns: 1fr !important;
+  }
   .grid4 {
     grid-template-columns: repeat(2, 1fr) !important;
   }
@@ -684,6 +694,23 @@ textarea.input {
 .bottom-bar {
   display: none;
 }
+.bottom-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text);
+}
 .nav-item {
   display: flex;
   align-items: center;
@@ -721,6 +748,16 @@ textarea.input {
   .social-center {
     border: 0;
     padding-bottom: 72px;
+  }
+  .bottom-bar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 70;
+    background: var(--color-bg);
+    border-top: 2px solid var(--color-divider);
   }
 }
 

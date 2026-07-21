@@ -45,6 +45,25 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   return all.find((p) => p.slug === slug) ?? null;
 }
 
+export type Drop = {
+  id: string;
+  name: string;
+  /** Opening bid, in whole dollars. */
+  base: number;
+  ends: string;
+  bidders: number;
+};
+
+/** Live-auction lots, ported from the v4 "Drops" screen. Bids raise in $20 increments. */
+export const DROPS: Drop[] = [
+  { id: "d1", name: "Prototype No. 1 — signed", base: 420, ends: "Ends in 02:14:08", bidders: 34 },
+  { id: "d2", name: "Archive Jacket (1 of 12)", base: 260, ends: "Ends in 05:41:22", bidders: 21 },
+  { id: "d3", name: "Hand-thrown vase set", base: 140, ends: "Ends in 09:03:55", bidders: 12 },
+];
+
+/** Auction bid increment, in whole dollars. */
+export const BID_STEP = 20;
+
 export const ECOM = {
   name: "ATELIER",
   heroLine: "Built to outlast the season.",

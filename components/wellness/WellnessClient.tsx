@@ -42,7 +42,7 @@ export function TreatmentsList() {
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "4px 0" }}>
-        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing favorites · ` : `Favorites · `}</button>
+        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing favorites · ${fav.count}` : `Favorites · ${fav.count}`}</button>
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
         {showSaved && rows.length === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No favorites yet. Tap the heart on any treatment.</p> : null}
@@ -75,7 +75,7 @@ export function RetreatsList() {
             <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "0 0 18px", maxWidth: "52ch", color: "color-mix(in srgb, var(--color-text) 80%, transparent)" }}>{r.desc}</p>
             <div style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
               <div><span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, color: "var(--color-accent)" }}>${r.num.toLocaleString()}</span> <span style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }}>all-inclusive</span></div>
-              <button type="button" className="btn btn-primary" onClick={() => openBook(r.name)} style={{ padding: "10px 20px" }}>Reserve a place</button>
+              <button type="button" className="btn btn-primary" onClick={() => openBook(r.name, "retreat")} style={{ padding: "10px 20px" }}>Reserve a place</button>
             </div>
           </div>
         </div>

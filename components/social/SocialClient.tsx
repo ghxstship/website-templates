@@ -39,13 +39,37 @@ export function LeftRail() {
   );
 }
 
+/** Fixed bottom tab bar — mobile navigation (shown ≤760px via `.bottom-bar`). */
+export function BottomBar() {
+  const pathname = usePathname();
+  const { openComposer } = useSocial();
+  const active = (p: string) => (p === "/social" ? pathname === p : pathname.startsWith(p));
+  const tabs = [
+    { label: "Home", path: "/social" },
+    { label: "Explore", path: "/social/explore" },
+    { label: "Rooms", path: "/social/communities" },
+    { label: "Profile", path: "/social/profile" },
+  ];
+  return (
+    <nav className="bottom-bar" aria-label="Primary">
+      {tabs.slice(0, 2).map((t) => (
+        <Link key={t.path} href={t.path} className="bottom-tab" aria-current={active(t.path) ? "page" : undefined} style={{ color: active(t.path) ? "var(--color-accent)" : "var(--color-text)" }}>{t.label}</Link>
+      ))}
+      <button type="button" onClick={openComposer} className="bottom-tab" aria-label="Compose post" style={{ color: "var(--color-accent)", fontWeight: 800 }}>Post</button>
+      {tabs.slice(2).map((t) => (
+        <Link key={t.path} href={t.path} className="bottom-tab" aria-current={active(t.path) ? "page" : undefined} style={{ color: active(t.path) ? "var(--color-accent)" : "var(--color-text)" }}>{t.label}</Link>
+      ))}
+    </nav>
+  );
+}
+
 export function RightRail() {
   const { follows, toggle } = useSocial();
   return (
     <aside className="right-rail">
       <div style={{ display: "flex", alignItems: "center", gap: 10, border: "1px solid var(--color-divider)", padding: "10px 14px", marginBottom: 24 }}>
         <SearchIcon size={18} style={{ color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }} />
-        <input placeholder={`Search ${SOCIAL.brand}`} style={{ border: 0, background: "none", outline: "none", font: "inherit", fontSize: 14, width: "100%", color: "var(--color-text)" }} />
+        <input placeholder={`Search ${SOCIAL.brand}`} aria-label={`Search ${SOCIAL.brand}`} style={{ border: 0, background: "none", outline: "none", font: "inherit", fontSize: 14, width: "100%", color: "var(--color-text)" }} />
       </div>
       <div style={{ border: "2px solid var(--color-divider)", marginBottom: 24 }}>
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 17, padding: "16px 18px 10px" }}>Trending</div>

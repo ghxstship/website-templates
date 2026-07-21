@@ -43,7 +43,7 @@ export function ServicesList() {
           className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`}
           style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}
         >
-          {showSaved ? `Showing favorites · ` : `Favorites · `}
+          {showSaved ? `Showing favorites · ${fav.count}` : `Favorites · ${fav.count}`}
         </button>
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>

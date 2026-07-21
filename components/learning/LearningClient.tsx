@@ -97,7 +97,7 @@ export function CourseDetail({ course }: { course: Course }) {
               <div className="progress"><span style={{ width: `${pct}%` }} /></div>
             </div>
           ) : null}
-          <div style={{ borderTop: "2px solid var(--color-divider)" }}>
+          <div id="lessons" style={{ borderTop: "2px solid var(--color-divider)" }}>
             {course.modules.map((m) => (
               <div key={m.title} style={{ padding: "18px 0", borderBottom: "1px solid var(--color-divider)" }}>
                 <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16, marginBottom: 10 }}>{m.title}</div>
@@ -123,7 +123,7 @@ export function CourseDetail({ course }: { course: Course }) {
             <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 32, color: "var(--color-accent)", marginBottom: 4 }}>${course.num}</div>
             <div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 58%, transparent)", marginBottom: 20 }}>One-time · lifetime access</div>
             {enrolled ? (
-              <button type="button" className="btn btn-secondary" style={{ width: "100%", justifyContent: "center", padding: "13px 20px" }}>Continue learning</button>
+              <button type="button" onClick={() => document.getElementById("lessons")?.scrollIntoView({ behavior: "smooth" })} className="btn btn-secondary" style={{ width: "100%", justifyContent: "center", padding: "13px 20px" }}>Continue learning</button>
             ) : (
               <button type="button" className="btn btn-primary" onClick={() => enroll(course.slug, course.title)} style={{ width: "100%", justifyContent: "center", padding: "13px 20px" }}>Enroll now</button>
             )}

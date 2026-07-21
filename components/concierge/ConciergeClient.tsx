@@ -93,7 +93,7 @@ export function ServiceSections() {
           <div>
             <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "0 0 16px", color: "color-mix(in srgb, var(--color-text) 80%, transparent)" }}>{sec.intro}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{sec.items.map((i) => <span key={i} className="tag tag-neutral">{i}</span>)}</div>
-            <button type="button" className="btn btn-primary" onClick={() => router.push(`/concierge/request?cat=${encodeURIComponent(sec.name.split(" ")[0])}`)} style={{ marginTop: 20, padding: "10px 20px" }}>Request this</button>
+            <button type="button" className="btn btn-primary" onClick={() => router.push(`/concierge/request?cat=${encodeURIComponent(sec.cat)}`)} style={{ marginTop: 20, padding: "10px 20px" }}>Request this</button>
           </div>
         </div>
       ))}

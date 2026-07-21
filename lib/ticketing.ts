@@ -27,6 +27,16 @@ export const MEMBERSHIP = [
   { key: "vip" as MemberTier, name: "VIP Club", tagline: "The full experience", price: "$25", per: "/mo", perks: ["3× points on every ticket", "Zero fees, ever", "First-access presales", "Members bar & lounge", "Complimentary upgrades"] },
 ];
 
+export type TExperience = { id: string; name: string; tier: string; spots: number; price: number; desc: string };
+export const EXPERIENCES: TExperience[] = [
+  { id: "x0", name: "Backstage & soundcheck", tier: "VIP", spots: 8, price: 240, desc: "Watch soundcheck from the pit, then meet the band before doors." },
+  { id: "x1", name: "Chef's table before the show", tier: "Premium", spots: 12, price: 180, desc: "A five-course tasting in the venue kitchen, then your seats." },
+  { id: "x2", name: "Suite for the derby", tier: "VIP", spots: 4, price: 600, desc: "A private box for four, full hospitality, best view in the house." },
+  { id: "x3", name: "Festival glamping weekend", tier: "Premium", spots: 20, price: 420, desc: "A furnished tent, priority entry and a members' bar all weekend." },
+  { id: "x4", name: "Opening-night gala", tier: "Founder", spots: 6, price: 350, desc: "Red carpet, after-party and a signed programme." },
+  { id: "x5", name: "Rehearsal & Q&A", tier: "Premium", spots: 15, price: 120, desc: "Sit in on a working rehearsal and quiz the director." },
+];
+
 export const REWARDS = [
   { name: "$10 ticket credit", desc: "Knock $10 off your next booking.", cost: 1000 },
   { name: "Free booking fees", desc: "Waive all fees for a month.", cost: 1500 },
@@ -51,6 +61,7 @@ export const FAQS = [
 
 export const NAV = [
   { label: "Events", path: "/ticketing/events" },
+  { label: "Experiences", path: "/ticketing/experiences" },
   { label: "Membership", path: "/ticketing/membership" },
   { label: "Rewards", path: "/ticketing/rewards" },
   { label: "Help", path: "/ticketing/help" },
