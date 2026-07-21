@@ -620,6 +620,21 @@ textarea.input {
   }
 }
 
+/* News front-page grids */
+@media (max-width: 980px) {
+  .lead {
+    grid-template-columns: 1fr !important;
+  }
+  .frontgrid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (max-width: 640px) {
+  .frontgrid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Career ATS Kanban pipeline */
 .pipeline {
   display: grid;
