@@ -1,36 +1,46 @@
-# Modernist Artist Site — Next.js + Supabase
+# Modernist — White-Label Website Suite
 
-A white-label music-artist website. One design serves any artist (solo, band, DJ,
-rapper) by swapping a few brand values and content rows. Nine pages — Home, Music,
-Tour, Videos, News, About, Gallery, Store, Contact — with a persistent audio
-player, a media lightbox, tour filtering, an expandable discography, and working
-forms wired to a database.
+Sixteen white-label website templates on one shared design system (**Modernist**),
+built as a single **Next.js 15 + Supabase** app. Every template is a full site with
+its signature workflow wired end to end, and the whole suite shares one design
+language: flat, architectural, Archivo throughout, mono-accent red (`#ec3013`) on
+off-white (`#f3f2f2`), zero corner radius, 2px rules, photography in black & white.
 
-Built in the **Modernist** design system: flat, architectural, Archivo throughout,
-near-mono red (`#ec3013`) on off-white (`#f3f2f2`), zero corner radius, strong 2px
-rules, flush-left, photography in black & white.
+The landing page (`/`) is a gallery linking to each template.
+
+## The templates
+
+| Route | Template | Signature workflow |
+| --- | --- | --- |
+| `/artist` | Artist | Persistent audio player, discography accordion, tour, store, forms |
+| `/ecommerce` | Ecommerce Store *(canonical shop)* | Filter/sort → product → cart drawer → multi-step checkout → order |
+| `/event` | Event | Live countdown, day-tabbed schedule, ticket tiers reserve → confirm |
+| `/company` | Company | Sign-in modal, product modal, pricing toggle, demo request |
+| `/restaurant` | Restaurant | Menu tabs, reservation picker, online order → cart → checkout |
+| `/ticketing` | Ticketing | Loyalty points, membership tiers, rewards redeem, account |
+| `/venue` | Venue | Event ticket qty → reserve, spaces, hire enquiry (links to shop/club) |
+| `/travel` | Travel | Multi-mode booking engine → results → booking modal → My Trips |
+| `/learning` | Learning | Course catalog, curriculum progress, enroll, community, pricing |
+| `/social` | Social | Three-pane feed, compose, like/repost, communities + upvote, DMs |
+| `/attraction` | Attraction | Timed-entry ticketing (date + slot + qty) → checkout → QR confirm |
+| `/streaming` | Streaming | Type filter, paywall gate → subscribe/buy, persistent player, plans |
+| `/career` | Career | Type-specific apply → tracker, post a role, ATS Kanban pipeline |
+| `/news` | News | Front-page grid, section filter, article reader, video, newsletters |
+| `/banking` | Banking | Wallet ledger, crypto markets + trade modal, rewards, plan tabs |
+| `/fitness` | Fitness | Class timetable (day + discipline filters) booking, leagues, membership |
 
 ## Stack
 
-- **Next.js 15** (App Router, React 19, TypeScript)
-- **Supabase** (Postgres) for all content + form submissions, guarded by RLS
-- **next/font** (Archivo) — no external font requests at runtime
-- Deployed on **Vercel**, source on **GitHub**
-
-## How it works
-
-- All content lives in Supabase and is fetched in parallel by `lib/data.ts`
-  (`getSiteData`, request-cached). If the database is briefly unreachable the site
-  falls back to a bundled snapshot (`lib/fallback.ts`) so pages always render.
-- The **audio player** and **lightbox** are React contexts mounted in the root
-  layout (`components/SiteChrome.tsx`), so their state persists across client-side
-  route changes.
-- The **newsletter** and **contact/booking** forms post through server actions
-  (`app/actions.ts`) that validate input and insert into Supabase. Anon writes are
-  allowed only on those two tables via row-level security; every content table is
-  read-only to the public.
-- Section pages (`videos`, `news`, `gallery`, `store`) can be switched off from the
-  `site_config` row — the nav entry disappears and the route returns 404.
+- **Next.js 15** (App Router, React 19, TypeScript) — each template is a route group
+  with its own layout/shell; shared state (cart, player, points, ATS) lives in
+  layout-level React contexts so it persists across route changes.
+- **Supabase** (Postgres) — the Artist site backs its content in dedicated tables;
+  the Ecommerce store persists products + orders; every template's key workflow
+  (bookings, reservations, applications, newsletter/contact) writes to a small set
+  of shared, template-tagged capture tables via server actions, guarded by RLS.
+- **next/font** (Archivo) — no external font requests at runtime.
+- **Design system** — the authoritative Modernist tokens + component classes are
+  ported into `app/globals.css`; shared React atoms live in `components/ds/`.
 
 ## Local development
 
@@ -39,8 +49,6 @@ npm install
 cp .env.example .env.local   # fill in your Supabase URL + publishable key
 npm run dev
 ```
-
-Then open the printed local URL.
 
 ### Environment variables
 
@@ -51,30 +59,25 @@ Then open the printed local URL.
 
 ## Database
 
-Schema and seed content are applied as Supabase migrations:
+All templates share one Supabase project. Schema and seed content are applied as
+migrations:
 
-- `create_artist_site_schema` — all tables + RLS policies
-- `seed_vesper_content` — the VESPER demo content
-
-Tables: `site_config`, `bio`, `albums`, `tracks`, `shows`, `videos`, `posts`,
-`gallery`, `merch`, `stats`, `press`, `facts`, `contacts`, `socials`,
-`newsletter_signups`, `contact_messages`.
+- `create_artist_site_schema` + `seed_vesper_content` — Artist content
+- `ecommerce_schema_seed` — `ecom_products`, `ecom_orders`
+- `shared_capture_tables` — `leads`, `messages`, `bookings` (template-tagged,
+  write-only for anon; used by the other templates' workflows)
 
 ## White-labelling
 
-1. **Brand & sections** — edit the single `site_config` row: `artist_name`,
-   `tagline`, `genre`, `location`, `accent_color`, and the `show_videos /
-   show_news / show_gallery / show_store` toggles. `accent_color` overrides the
-   design accent (validated — a single color string only).
-2. **Content** — replace the rows in the content tables (albums/tracks, shows,
-   videos, posts, gallery, merch, etc.).
-3. **Photography** — the design ships with grayscale placeholders. Swap
-   `components/Placeholder.tsx` usages for real `<img>`/`next/image` inside the
-   same `.grayscale` wrappers, keeping the fixed aspect ratios (hero 4/5,
-   album 1/1, video 16/9, news 3/2, gallery 1/1 & 3/4, merch 1/1).
+Each template's brand values and content are plain config modules in `lib/` (e.g.
+`lib/event.ts`, `lib/banking.ts`) — swap them, or back them with a CMS/API. The
+Artist site additionally reads its config + content live from Supabase. Photography
+ships as grayscale placeholders (`components/Placeholder.tsx`); replace with real
+`<img>`/`next/image` inside the same `.grayscale` wrappers.
 
 ## Notes
 
-- The player simulates playback progress (no audio files ship with the template).
-  Point it at a real `<audio>` element to play actual tracks.
-- Store "Add to cart" is a UI stub — checkout/payment is intentionally out of scope.
+- Players (Artist, Streaming) simulate playback progress — no media files ship with
+  the templates. Point them at a real `<audio>`/`<video>` element to play files.
+- Store checkout, crypto trades, and card fields are UI flows only — no real payment
+  is taken (that's intentionally out of scope for a template).
