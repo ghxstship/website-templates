@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { Album } from "@/lib/types";
 import { fmt } from "@/lib/data";
 import { Placeholder } from "@/components/Placeholder";
@@ -198,10 +199,9 @@ export function Discography({ albums }: { albums: Album[] }) {
                   }}
                 >
                   {STREAMING.map((name) => (
-                    <a
+                    <Link
                       key={name}
-                      href="#"
-                      onClick={(e) => e.preventDefault()}
+                      href="/streaming"
                       style={{
                         fontFamily: "var(--font-heading)",
                         fontWeight: 600,
@@ -211,7 +211,7 @@ export function Discography({ albums }: { albums: Album[] }) {
                       }}
                     >
                       {name} ↗
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>

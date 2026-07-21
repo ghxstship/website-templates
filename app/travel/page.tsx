@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TRAVEL, DESTINATIONS, STATS } from "@/lib/travel";
 import { BookingEngine } from "@/components/travel/TravelClient";
 import { Placeholder } from "@/components/Placeholder";
+import { CrossLinkCard } from "@/components/shell/CrossLinkCard";
 
 export default function TravelHome() {
   const featured = DESTINATIONS.slice(0, 3);
@@ -13,6 +14,10 @@ export default function TravelHome() {
       </section>
 
       <BookingEngine />
+
+      <section className="wrap" style={{ paddingBlock: "0 clamp(20px, 3vw, 32px)" }}>
+        <CrossLinkCard kicker="Not flying commercial?" title="Flying private?" body="Charter a jet, helicopter, yacht or car by request — fleet, empty legs and jet-card membership on our charter desk." href="/charter" cta="Charter" />
+      </section>
 
       <hr className="rule" />
       <section className="wrap" style={{ paddingBlock: "clamp(36px, 5vw, 64px)" }}>

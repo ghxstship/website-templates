@@ -44,5 +44,5 @@ export const NAV = [
   { label: "Services", path: "/concierge/services" },
   { label: "New request", path: "/concierge/request" },
   { label: "My requests", path: "/concierge/requests" },
-  { label: "Plans", path: "/concierge/membership" },
+  { label: "Membership", path: "/concierge/membership" },
 ];

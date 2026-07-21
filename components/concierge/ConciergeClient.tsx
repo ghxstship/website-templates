@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CATEGORIES, REQ_CATS, SERVICE_SECTIONS, PLANS, STATUS_TAGS } from "@/lib/concierge";
 import { useConcierge } from "./ConciergeContext";
@@ -100,8 +101,8 @@ export function ServiceSections() {
   );
 }
 
+/** Tier display only — applications/billing are owned by Membership OS (/membership). */
 export function MembershipPlans() {
-  const { notify } = useConcierge();
   return (
     <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>
       {PLANS.map((pl) => {
@@ -114,7 +115,7 @@ export function MembershipPlans() {
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28, flex: 1 }}>
               {pl.perks.map((pk) => <div key={pk} style={{ display: "flex", gap: 10, alignItems: "baseline", fontSize: 14, lineHeight: 1.4 }}><span style={{ fontWeight: 800 }}>—</span><span>{pk}</span></div>)}
             </div>
-            <button type="button" className="btn" onClick={() => notify(`Welcome to ATLAS CONCIERGE`, `Your ${pl.name} membership is being set up — your lifestyle manager will introduce themselves today.`)} style={{ padding: "12px 20px", background: featured ? "var(--color-bg)" : "var(--color-accent)", color: featured ? "var(--color-accent)" : "var(--color-bg)", border: 0 }}>{pl.price === "Custom" ? "Talk to us" : `Choose ${pl.name}`}</button>
+            <Link href="/membership" className="btn" style={{ padding: "12px 20px", textDecoration: "none", justifyContent: "center", background: featured ? "var(--color-bg)" : "var(--color-accent)", color: featured ? "var(--color-accent)" : "var(--color-bg)", border: 0 }}>{pl.price === "Custom" ? "Talk to us ↗" : `Choose ${pl.name} ↗`}</Link>
           </div>
         );
       })}

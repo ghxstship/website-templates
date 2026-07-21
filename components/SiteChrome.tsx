@@ -41,6 +41,7 @@ export function SiteChrome({
           tagline={tagline}
           columns={[{ title: "Explore", links: navItems.map((n) => ({ label: n.label, href: n.path })) }]}
           socials={socials.map((s) => s.name)}
+          socialHref="/social"
         />
         <PlayerSpacer />
         <AudioPlayer artistName={artistName} />

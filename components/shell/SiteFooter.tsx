@@ -8,17 +8,20 @@ export function SiteFooter({
   tagline,
   columns,
   socials = [],
+  socialHref = "#",
   legalRight = "White-label template — Modernist",
 }: {
   brand: string;
   tagline: string;
   columns: FooterColumn[];
   socials?: string[];
+  /** Destination for the "Follow" social links (e.g. "/social"). Defaults to "#". */
+  socialHref?: string;
   legalRight?: string;
 }) {
   const year = new Date().getFullYear();
   const cols = socials.length
-    ? [...columns, { title: "Follow", links: socials.map((s) => ({ label: `${s} ↗`, href: "#" })) }]
+    ? [...columns, { title: "Follow", links: socials.map((s) => ({ label: `${s} ↗`, href: socialHref })) }]
     : columns;
 
   return (

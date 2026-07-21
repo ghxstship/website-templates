@@ -48,6 +48,12 @@ export const MENU = [
   ] },
 ];
 
+export const PLANS = [
+  { key: "weekday", name: "Weekday", tagline: "Work hours", price: "£120", per: "/mo", perks: ["Mon–Fri 7am–7pm", "All workspaces", "Kitchen & bar", "Member events"] },
+  { key: "full", name: "Full House", tagline: "Most popular", price: "£220", per: "/mo", perks: ["24/7 access", "Bring a guest", "Room booking credit", "Priority events", "All locations"] },
+  { key: "founder", name: "Founder", tagline: "The inner circle", price: "£600", per: "/mo", perks: ["Everything in Full House", "Private dining nights", "Concierge", "Governance vote", "Guest memberships"] },
+];
+
 export const VISIT_INFO = [
   { title: "Address", body: `${CLUBHOUSE.address}. The house is the unmarked black door beside the old foundry gates.` },
   { title: "Getting here", body: "Old Street underground, five minutes’ walk. Secure bike storage in the courtyard." },
@@ -59,6 +65,6 @@ export const NAV = [
   { label: "Spaces", path: "/clubhouse/spaces" },
   { label: "Calendar", path: "/clubhouse/calendar" },
   { label: "Dining", path: "/clubhouse/dining" },
-  { label: "Concierge", path: "/concierge" },
+  { label: "Membership", path: "/clubhouse/membership" },
   { label: "Visit", path: "/clubhouse/visit" },
 ];

@@ -7,7 +7,7 @@ export const NONPROFIT = {
 };
 
 export const STATS = [
-  { num: "2.4M", label: "Litres cleaned" }, { num: "140km", label: "Coast restored" },
+  { num: "2.4M", label: "Liters cleaned" }, { num: "140km", label: "Coast restored" },
   { num: "38", label: "Communities" }, { num: "91%", label: "To programs" },
 ];
 export const PROGRAMS = [
@@ -25,7 +25,7 @@ export const WORK_SECTIONS = [
 ];
 
 export const IMPACT_STATS = [
-  { num: "91¢", label: "Of every $1 to programs" }, { num: "2.4M", label: "Litres cleaned" },
+  { num: "91¢", label: "Of every $1 to programs" }, { num: "2.4M", label: "Liters cleaned" },
   { num: "600", label: "Rangers trained" }, { num: "4★", label: "Charity rating" },
 ];
 export const ALLOCATIONS = [

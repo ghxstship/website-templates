@@ -1,9 +1,32 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Placeholder } from "@/components/Placeholder";
-import { EVENTS, EVENT_CATS, SPACES, type ClubEvent } from "@/lib/clubhouse";
+import { EVENTS, EVENT_CATS, SPACES, PLANS, type ClubEvent } from "@/lib/clubhouse";
 import { useClubhouse } from "./ClubhouseContext";
+
+/** Tier display only — applications/billing are owned by Membership OS (/membership). */
+export function JoinPlans() {
+  return (
+    <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>
+      {PLANS.map((pl) => {
+        const featured = pl.key === "full";
+        return (
+          <div key={pl.key} style={{ background: featured ? "var(--color-accent)" : "var(--color-bg)", color: featured ? "var(--color-bg)" : "var(--color-text)", padding: "clamp(24px, 3vw, 40px)", display: "flex", flexDirection: "column" }}>
+            <div style={{ fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.8, marginBottom: 16 }}>{pl.tagline}</div>
+            <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 26, margin: "0 0 8px" }}>{pl.name}</h3>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 22 }}><span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(30px, 4vw, 44px)" }}>{pl.price}</span><span style={{ fontSize: 14, opacity: 0.7 }}>{pl.per}</span></div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28, flex: 1 }}>
+              {pl.perks.map((pk) => <div key={pk} style={{ display: "flex", gap: 10, alignItems: "baseline", fontSize: 14, lineHeight: 1.4 }}><span style={{ fontWeight: 800 }}>—</span><span>{pk}</span></div>)}
+            </div>
+            <Link href="/membership" className="btn" style={{ padding: "12px 20px", textDecoration: "none", justifyContent: "center", background: featured ? "var(--color-bg)" : "var(--color-accent)", color: featured ? "var(--color-accent)" : "var(--color-bg)", border: 0 }}>Apply for {pl.name} ↗</Link>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 const UP = "var(--color-up)";
 

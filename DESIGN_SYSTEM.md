@@ -52,17 +52,17 @@ Banking, Service (single provider — books through Booking Platform).
 | From (non-owner) | Surface demoted | → To (owner) |
 | --- | --- | --- |
 | Travel | "Stays" result → in-Travel room booking | `/hospitality/rooms` (+ property card, footer) |
-| Travel | flights results / footer | `/charter` (private charter card) |
-| Venue | per-event checkout (was self-capture) | `/ticketing/events` ("Get tickets on FRONTROW") |
+| Travel | home (after search) + flights results + footer | `/charter` (private charter card) |
+| Venue | per-event tickets: select → **hold**, payment settles on network | `/ticketing/events` ("Hold & pay on FRONTROW") |
 | Event | tickets page / (self-checkout kept) | `/ticketing` ("Ticketing powered by FRONTROW") |
 | Service | scheduling (already deep-linked) | `/booking/business/the-fade-room/book` |
 | Fitness | "Wellness" label/route collision | renamed → `/fitness/recovery` ("Recovery") |
-| Artist | Listen / Follow | `/streaming` (Listen ↗), `/social` (the feed ↗) |
-| Artist | store fake "Add to cart" | `/ecommerce/shop` ("View in shop") |
+| Artist | Listen / Follow · discography streaming · footer socials | `/streaming` (Listen), `/social` (Follow) |
+| Artist | store fake "Add to cart" | `/ecommerce/shop` ("View in shop") + catalog card |
 | Restaurant | order checkout | inline confirm + "Payments powered by POS ↗" `/pos` |
-| Clubhouse | apply/pricing funnel | `/membership` ("Manage membership"); nav gains Concierge |
+| Clubhouse | membership tiers shown; "Apply for X" hands off | `/membership`; Concierge reachable via hero + footer |
 | Membership OS | (no members' feed to drop) | adds "Enter the Clubhouse ↗" `/clubhouse` |
-| Concierge | "Membership" label collision | renamed nav → "Plans"; reached from Clubhouse |
+| Concierge | membership tiers shown; "Choose X" hands off | `/membership`; reached from Clubhouse |
 
 **Method:** demote to a cross-link card (never delete the concept — the consumer
 still expects the pathway); keep the owner's implementation; preserve every
@@ -70,12 +70,23 @@ persistence key; routing and scope only, no visual redesign.
 
 ## Notes / deliberate judgment calls
 
-- **Concierge retainer plans** (`Lite/Personal/Private Office`) are kept — they are
-  the concierge product itself — but the surface is relabeled "Plans" so it does not
-  read as a second club-membership funnel competing with Membership OS. Restore the
-  "Membership" label if Concierge is deployed as an isolated standalone site.
-- **Event** keeps its self-contained checkout (a festival sells its own passes); it
-  only adds a "Powered by FRONTROW" attribution, per the plan.
+Aligned to the v4 export (`Music artist website template (4).zip`), whose remediation
+**keeps each surface's richness and redirects only the terminal action** to the owner
+(rather than stripping the surface). The live repo takes that highest-level synthesis:
+
+- **Venue** keeps interactive ticket selection (tiers + quantities + total). Confirming
+  places a **hold** (`captureBooking kind: "ticket-hold"`); payment/fulfilment settle on
+  the FRONTROW ticketing network (`/ticketing`). Venue is a seller on the network, not a
+  second network.
+- **Clubhouse** and **Concierge** keep their membership/retainer **tier displays** (so a
+  consumer sees what's on offer), but every "Apply / Choose" hands off to Membership OS
+  (`/membership`) — the single owner of apply/tiers/gate/billing. Neither runs its own
+  application form.
+- **Event** keeps its self-contained checkout (a festival sells its own passes); it only
+  adds a "Powered by FRONTROW" attribution.
 - **Ecommerce** and **POS** both legitimately hold a cart: Ecommerce owns the retail
   line-item cart UX; POS owns tender + multi-vendor settlement + the operator register.
+- The live repo exceeds the static prototypes throughout: real Supabase capture actions,
+  persisted state, favorites, cancel/manage flows, promo codes, wishlists, certificates,
+  continue-watching, reorder, lifetime-giving, and shared cross-link cards.
 </content>
