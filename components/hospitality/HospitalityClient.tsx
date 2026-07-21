@@ -53,12 +53,12 @@ export function RoomsList() {
       <section className="wrap" style={{ paddingBlock: "8px 0" }}><div className="kicker">{nightsLabel}</div></section>
       <section className="wrap" style={{ paddingBlock: "16px 0" }}>
         <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>
-          {showSaved ? `Showing saved · ${fav.count}` : `Saved · ${fav.count}`}
+          {showSaved ? `Showing favorites · ` : `Favorites · `}
         </button>
       </section>
       <section className="wrap" style={{ paddingBlock: "clamp(24px, 3vw, 44px) clamp(48px, 6vw, 80px)" }}>
         {showSaved && rows.length === 0 ? (
-          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No saved rooms yet. Tap the heart on a room to add it here.</p>
+          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No favorites yet. Tap the heart on a room to add it here.</p>
         ) : null}
         {rows.map((r) => (
           <div key={r.slug} className="split2" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.6fr) minmax(0, 1fr)", gap: "clamp(24px, 4vw, 56px)", alignItems: "center", paddingBlock: "clamp(24px, 3vw, 40px)", borderTop: "2px solid var(--color-divider)" }}>

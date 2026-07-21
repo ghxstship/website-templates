@@ -2,14 +2,14 @@ export const HOSPITALITY = {
   brand: "THE FORGE HOTEL",
   kind: "Hotel & residences",
   city: "Lisbon",
-  tagline: "A restored ironworks turned design hotel — forty rooms, a rooftop pool and a handful of residences above the harbour.",
+  tagline: "A restored ironworks turned design hotel — forty rooms, a rooftop pool and a handful of residences above the harbor.",
   address: "2 Cais do Sodré, Lisbon",
 };
 
 export type Room = { slug: string; name: string; sleeps: string; size: string; num: number; desc: string };
 export const ROOMS: Room[] = [
   { slug: "foundry-room", name: "Foundry Room", sleeps: "Sleeps 2", size: "28 m²", num: 210, desc: "A calm room with original steel beams, a walk-in shower and a city view." },
-  { slug: "harbour-suite", name: "Harbour Suite", sleeps: "Sleeps 2", size: "46 m²", num: 340, desc: "A corner suite with a freestanding tub and a balcony over the water." },
+  { slug: "harbor-suite", name: "Harbor Suite", sleeps: "Sleeps 2", size: "46 m²", num: 340, desc: "A corner suite with a freestanding tub and a balcony over the water." },
   { slug: "loft-studio", name: "Loft Studio", sleeps: "Sleeps 3", size: "52 m²", num: 380, desc: "A split-level loft with a kitchenette, ideal for longer stays." },
   { slug: "the-penthouse", name: "The Penthouse", sleeps: "Sleeps 4", size: "110 m²", num: 720, desc: "The top floor, wraparound terrace, private pool and the best light in the house." },
 ];
@@ -19,7 +19,7 @@ export const STATS = [
   { num: "★★★★★", label: "Rated" }, { num: "1901", label: "The building" },
 ];
 export const RESIDENCES = [
-  { name: "The North Loft", meta: "2 bed · 96 m² · harbour view", price: "$1.2M" },
+  { name: "The North Loft", meta: "2 bed · 96 m² · harbor view", price: "$1.2M" },
   { name: "Ironmonger Duplex", meta: "3 bed · 140 m² · terrace", price: "$1.9M" },
   { name: "Penthouse Residence", meta: "4 bed · 220 m² · private pool", price: "$4.4M" },
 ];

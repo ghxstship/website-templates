@@ -67,7 +67,7 @@ export const INFO_BLOCKS = [
 ];
 
 export const FAQS = [
-  { q: "Is there an age limit?", a: "The festival is 18+ after 22:00. Under-16s are welcome free with a paying adult during the earlier programme, and Sunday opens with an all-ages family hour." },
+  { q: "Is there an age limit?", a: "The festival is 18+ after 22:00. Under-16s are welcome free with a paying adult during the earlier program, and Sunday opens with an all-ages family hour." },
   { q: "Can I bring a camera?", a: "Handheld cameras and phones are fine. Professional rigs, tripods and drones require a press pass — apply via the Contact page." },
   { q: "What is the refund policy?", a: "Tickets are refundable up to 14 days before the event. Inside 14 days they are transferable to another person but not refundable." },
   { q: "Is re-entry allowed?", a: "Yes with any pass; Weekend and Patron holders get priority re-entry lanes. Your wristband is your ticket for the whole run." },

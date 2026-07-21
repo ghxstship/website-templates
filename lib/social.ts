@@ -9,7 +9,7 @@ export type FeedPost = { id: string; name: string; handle: string; time: string;
 export const FEED: FeedPost[] = [
   { id: "s1", name: "Maya Okafor", handle: "@mayabuilds", time: "2h", text: "shipped the redesign today. six weeks, one designer, zero meetings that couldn't have been an email. proud of this one.", hasImg: true, likes: 342, comments: 28, reposts: 41 },
   { id: "s2", name: "Dev Null", handle: "@devnull", time: "4h", text: "hot take: your framework isn't slow. your 4MB of unoptimised hero images are.", hasImg: false, likes: 1243, comments: 210, reposts: 190 },
-  { id: "s3", name: "Aria Chen", handle: "@ariacreates", time: "6h", text: "process shots from the harbour mural. three weeks, forty litres of paint, one very patient building owner.", hasImg: true, likes: 894, comments: 44, reposts: 62 },
+  { id: "s3", name: "Aria Chen", handle: "@ariacreates", time: "6h", text: "process shots from the harbor mural. three weeks, forty liters of paint, one very patient building owner.", hasImg: true, likes: 894, comments: 44, reposts: 62 },
   { id: "s4", name: "The Armory", handle: "@thearmory", time: "9h", text: "Autumn season tickets are live. Members get 48-hour early access — link in bio.", hasImg: false, likes: 512, comments: 33, reposts: 88 },
   { id: "s5", name: "Jonah Reed", handle: "@jreed", time: "12h", text: "two years fully remote taught me the office was never the problem. the calendar was.", hasImg: false, likes: 2104, comments: 340, reposts: 410 },
   { id: "s6", name: "Studio Meridien", handle: "@meridien", time: "1d", text: "tonight's menu is written. sixteen courses, and the sea buckthorn is back. see you at 6:30.", hasImg: true, likes: 640, comments: 20, reposts: 15 },
@@ -27,7 +27,7 @@ export const COMMUNITIES: Community[] = [
 export type CommunityPost = { id: string; author: string; time: string; title: string; body: string; score: number; comments: number };
 export const COMMUNITY_POSTS: CommunityPost[] = [
   { id: "c1", author: "u/pixelpush", time: "3h", title: "What's your hard rule for spacing scales?", body: "Been going back and forth on a 4pt vs 8pt base. What do you actually ship with and why?", score: 428, comments: 96 },
-  { id: "c2", author: "u/gridlord", time: "5h", title: "Show me your favourite grayscale-only sites", body: "Collecting references for a mono redesign. Drop the best ones you've seen.", score: 1203, comments: 210 },
+  { id: "c2", author: "u/gridlord", time: "5h", title: "Show me your favorite grayscale-only sites", body: "Collecting references for a mono redesign. Drop the best ones you've seen.", score: 1203, comments: 210 },
   { id: "c3", author: "u/kerning_anxiety", time: "8h", title: "Archivo at display sizes is criminally underrated", body: "That 800 weight tightens up beautifully. Anyone pairing it with something unexpected?", score: 315, comments: 54 },
 ];
 
@@ -62,7 +62,7 @@ export const SUGGESTIONS = [
 ];
 
 export const MY_SEED_POSTS = [
-  { text: "redid my whole portfolio in grayscale. turns out you don't miss the colour when the type is doing the work.", time: "2d" },
+  { text: "redid my whole portfolio in grayscale. turns out you don't miss the color when the type is doing the work.", time: "2d" },
   { text: "unpopular opinion: 2px borders age better than shadows.", time: "5d" },
 ];
 

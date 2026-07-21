@@ -5,11 +5,11 @@ export const EVENTS: TEvent[] = [
   { id: "e0", title: "Nocturne Orchestra", date: "Sep 18", venue: "The Armory, Manchester", cat: "Concert", from: "From $42" },
   { id: "e1", title: "Warehouse: All Night", date: "Sep 19", venue: "The Armory, Manchester", cat: "Club", from: "From $28" },
   { id: "e2", title: "City vs. United", date: "Sep 20", venue: "Foundry Stadium", cat: "Sports", from: "From $60" },
-  { id: "e3", title: "A Number", date: "Sep 23", venue: "The Studio", cat: "Theatre", from: "From $34" },
+  { id: "e3", title: "A Number", date: "Sep 23", venue: "The Studio", cat: "Theater", from: "From $34" },
   { id: "e4", title: "Halcyon (Live)", date: "Oct 02", venue: "The Armory, Manchester", cat: "Concert", from: "From $38" },
   { id: "e5", title: "Comedy Gala", date: "Oct 09", venue: "The Studio", cat: "Comedy", from: "From $25" },
 ];
-export const EVENT_CATS = ["all", "Concert", "Club", "Sports", "Theatre", "Comedy"];
+export const EVENT_CATS = ["all", "Concert", "Club", "Sports", "Theater", "Comedy"];
 
 export const TICKET_TIERS = [
   { name: "General admission", note: "Standing", num: 42 },

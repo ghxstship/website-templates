@@ -25,7 +25,7 @@ const FALLBACK_PRODUCTS: Product[] = [
   { id: "9", slug: "leather-card-holder", name: "Leather Card Holder", category: "Accessories", price_cents: 5500, is_new: false, description: "A slim vegetable-tanned card holder that patinas beautifully.", specs: [["Material", "Veg-tan leather"], ["Slots", "Four + center"], ["Made in", "Italy"]], sort_order: 8 },
   { id: "10", slug: "chore-jacket", name: "Chore Jacket", category: "Apparel", price_cents: 17500, is_new: true, description: "A classic French chore jacket in garment-dyed cotton twill with three patch pockets.", specs: [["Material", "Cotton twill"], ["Fit", "Boxy"], ["Pockets", "Three patch"]], sort_order: 9 },
   { id: "11", slug: "trail-cap", name: "Trail Cap", category: "Accessories", price_cents: 3800, is_new: false, description: "A six-panel cap in washed ripstop with a soft brim and a brass adjuster.", specs: [["Material", "Washed ripstop"], ["Panels", "Six"], ["Adjuster", "Brass"]], sort_order: 10 },
-  { id: "12", slug: "table-lamp", name: "Table Lamp", category: "Home", price_cents: 21000, is_new: true, description: "A spun-aluminium table lamp with a dimmable warm LED and a fabric cord.", specs: [["Material", "Spun aluminium"], ["Bulb", "Dimmable LED"], ["Made in", "Denmark"]], sort_order: 11 },
+  { id: "12", slug: "table-lamp", name: "Table Lamp", category: "Home", price_cents: 21000, is_new: true, description: "A spun-aluminum table lamp with a dimmable warm LED and a fabric cord.", specs: [["Material", "Spun aluminum"], ["Bulb", "Dimmable LED"], ["Made in", "Denmark"]], sort_order: 11 },
 ];
 
 export const getProducts = cache(async function getProducts(): Promise<Product[]> {

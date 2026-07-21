@@ -16,7 +16,7 @@ export const ARTICLES: Article[] = [
 ];
 
 export const ARTICLE_BODY = [
-  "It begins, as these stories often do, with a timetable. For a decade the region had organised its life around the certainty of the night train, and that certainty had become a kind of infrastructure in itself — the thing everything else could lean on.",
+  "It begins, as these stories often do, with a timetable. For a decade the region had organized its life around the certainty of the night train, and that certainty had become a kind of infrastructure in itself — the thing everything else could lean on.",
   "The decision was not universally popular. Critics called it nostalgic, expensive, a bet against the direction of travel. But the planners had run the numbers, and the numbers were stubborn.",
   "What they had not predicted was how completely the change would reshape the ordinary texture of the days: the shops that stayed open later, the neighbourhoods that filled back in, the slow return of a certain kind of confidence.",
   "Ten years on, the 06:12 still departs on time. And the region it serves looks, by almost every measure that matters, like a place that chose well.",

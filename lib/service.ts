@@ -19,10 +19,10 @@ export const SERVICES: Svc[] = [
   { name: "Hot-Towel Shave", desc: "Traditional straight-razor shave, hot towels.", dur: "40 min", num: 40, cat: "Shave" },
   { name: "Beard Trim & Line-up", desc: "Shape, trim and razor line-up.", dur: "25 min", num: 28, cat: "Shave" },
   { name: "Kids Cut (under 12)", desc: "Patient cuts for the little ones.", dur: "30 min", num: 30, cat: "Hair" },
-  { name: "Grey Blending", desc: "Natural-looking colour camouflage.", dur: "40 min", num: 55, cat: "Colour" },
+  { name: "Gray Blending", desc: "Natural-looking color camouflage.", dur: "40 min", num: 55, cat: "Color" },
   { name: "Scalp Treatment", desc: "Exfoliating treatment and massage.", dur: "30 min", num: 38, cat: "Care" },
 ];
-export const SVC_CATS = ["all", "Hair", "Shave", "Colour", "Care"];
+export const SVC_CATS = ["all", "Hair", "Shave", "Color", "Care"];
 
 export const STATS = [
   { num: `★ ${SERVICE.rating}`, label: `${SERVICE.reviewCount} reviews` },
@@ -33,7 +33,7 @@ export const STATS = [
 
 export const TEAM = [
   { name: "Marcus Vell", role: "Master barber · Owner", bio: "Twenty years behind the chair. Fades, classic cuts and straight-razor work." },
-  { name: "Ivy Sol", role: "Senior barber", bio: "Textured crops, scissor work and colour blending specialist." },
+  { name: "Ivy Sol", role: "Senior barber", bio: "Textured crops, scissor work and color blending specialist." },
   { name: "Dez Rowe", role: "Barber", bio: "Sharp line-ups, beard sculpting and a very steady hand." },
 ];
 
@@ -41,7 +41,7 @@ export const GALLERY: { caption: string; ratio: string }[] = [
   { caption: "Skin fade", ratio: "1/1" }, { caption: "Textured crop", ratio: "3/4" },
   { caption: "Beard sculpt", ratio: "1/1" }, { caption: "Classic side part", ratio: "3/4" },
   { caption: "Line-up detail", ratio: "1/1" }, { caption: "Hot-towel shave", ratio: "3/4" },
-  { caption: "Colour blend", ratio: "1/1" }, { caption: "The shop floor", ratio: "3/4" },
+  { caption: "Color blend", ratio: "1/1" }, { caption: "The shop floor", ratio: "3/4" },
 ];
 
 export const REVIEWS = [

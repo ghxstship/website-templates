@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Placeholder } from "@/components/Placeholder";
 import { Modal } from "@/components/ds/Modal";
 import { useCareer } from "./CareerContext";
+import { SaveHeart } from "@/components/ds/SaveHeart";
+import { useFavorites } from "@/lib/useFavorites";
 import { captureMessage } from "@/lib/actions";
 import { LISTINGS, TYPE_FILTERS, sectionsFor, APPLY_LABELS, UPLOAD_LABELS, PITCH_LABELS, ATS_ROLES, STAGE_NAMES, type Listing, type ListingType } from "@/lib/career";
 
@@ -22,20 +24,28 @@ export function HomeSearch() {
 
 export function ListingsList({ initialType = "all" }: { initialType?: string }) {
   const [type, setType] = useState<ListingType | "all">((TYPE_FILTERS as string[]).includes(initialType) ? (initialType as ListingType) : "all");
-  const shown = LISTINGS.filter((l) => type === "all" || l.type === type);
+  const [showFav, setShowFav] = useState(false);
+  const fav = useFavorites("career", "Role");
+  let shown = LISTINGS.filter((l) => type === "all" || l.type === type);
+  if (showFav) shown = shown.filter((l) => fav.isSaved(l.id));
   return (
     <>
       <section className="wrap" style={{ paddingBlock: "20px 8px" }}>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {TYPE_FILTERS.map((t) => <button key={t} type="button" onClick={() => setType(t)} className={`chip${type === t ? " active" : ""}`}>{t === "all" ? "All" : `${t}s`}</button>)}
+          <button type="button" onClick={() => setShowFav((v) => !v)} className={`chip${showFav ? " active" : ""}`}>Favorites · {fav.count}</button>
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
+        {showFav && shown.length === 0 ? (
+          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No favorites yet. Tap the heart on any role.</p>
+        ) : null}
         {shown.map((l) => (
-          <Link key={l.id} href={`/career/listings/${l.id}`} className="row-line" style={{ display: "grid", gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr) auto auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)", textDecoration: "none", color: "var(--color-text)" }}>
+          <Link key={l.id} href={`/career/listings/${l.id}`} className="row-line" style={{ display: "grid", gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr) auto auto auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)", textDecoration: "none", color: "var(--color-text)" }}>
             <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(17px, 2vw, 22px)" }}>{l.title}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", marginTop: 4 }}>{l.org} · {l.location}</div></div>
             <div className="row-sub" style={{ fontSize: 14, color: "color-mix(in srgb, var(--color-text) 72%, transparent)" }}>{l.comp}</div>
             <span className="tag tag-outline">{l.type}</span>
+            <SaveHeart active={fav.isSaved(l.id)} onToggle={() => fav.toggle(l.id, l.title)} label={`Favorite ${l.title}`} size={16} />
             <span className="btn btn-primary" style={{ padding: "8px 16px" }}>View</span>
           </Link>
         ))}

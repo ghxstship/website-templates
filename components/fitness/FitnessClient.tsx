@@ -28,8 +28,8 @@ export function Timetable() {
   const cancel = (i: number, name: string) => {
     const key = `${day}:${i}`;
     setBooked((s) => s.filter((k) => k !== key));
-    announce(`${name} cancelled`);
-    setConfirm({ title: "Class cancelled", body: `Your place in ${name} on ${DAYS[day]} has been released.` });
+    announce(`${name} canceled`);
+    setConfirm({ title: "Class canceled", body: `Your place in ${name} on ${DAYS[day]} has been released.` });
   };
 
   return (

@@ -80,10 +80,10 @@ export function FleetGrid() {
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "4px 0" }}>
-        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing saved · ${fav.count}` : `Saved · ${fav.count}`}</button>
+        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing favorites · ` : `Favorites · `}</button>
       </section>
       <section className="wrap" style={{ paddingBlock: "20px clamp(48px, 6vw, 80px)" }}>
-        {showSaved && rows.length === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No saved aircraft yet. Tap the heart on any listing.</p> : null}
+        {showSaved && rows.length === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No favorites yet. Tap the heart on any listing.</p> : null}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>
           {rows.map((f) => (
             <div key={f.slug} style={{ background: "var(--color-bg)", display: "flex", flexDirection: "column" }}>

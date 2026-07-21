@@ -28,7 +28,7 @@ export function TravelProvider({ children }: { children: React.ReactNode }) {
   const cancelTrip = useCallback((index: number) => {
     setTrips((prev) => {
       const trip = prev[index];
-      if (trip) setConfirm({ title: "Trip cancelled", body: `${trip.title} (ref ${trip.ref}) has been cancelled. Any refund due will be processed to your original payment method.` });
+      if (trip) setConfirm({ title: "Trip canceled", body: `${trip.title} (ref ${trip.ref}) has been canceled. Any refund due will be processed to your original payment method.` });
       return prev.filter((_, i) => i !== index);
     });
   }, [setTrips]);
@@ -58,7 +58,7 @@ export function TravelProvider({ children }: { children: React.ReactNode }) {
             <div style={{ fontSize: 14, color: "color-mix(in srgb, var(--color-text) 65%, transparent)", marginBottom: 20 }}>{booking.sub} · {booking.meta}</div>
             <form onSubmit={submit} style={{ display: "grid", gap: 16 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <div className="field"><label htmlFor="tb-name">Lead traveller</label><input id="tb-name" className="input" required placeholder="Full name" /></div>
+                <div className="field"><label htmlFor="tb-name">Lead traveler</label><input id="tb-name" className="input" required placeholder="Full name" /></div>
                 <div className="field"><label htmlFor="tb-email">Email</label><input id="tb-email" className="input" type="email" required placeholder="you@email.com" /></div>
               </div>
               <div className="field"><label htmlFor="tb-card">Card number</label><input id="tb-card" className="input" required placeholder="4242 4242 4242 4242" /></div>

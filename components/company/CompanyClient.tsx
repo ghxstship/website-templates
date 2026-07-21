@@ -5,6 +5,8 @@ import Link from "next/link";
 import { PLANS, PRODUCTS, FAQS } from "@/lib/company";
 import { FAQ } from "@/components/ds/FAQ";
 import { Modal } from "@/components/ds/Modal";
+import { SaveHeart } from "@/components/ds/SaveHeart";
+import { useFavorites } from "@/lib/useFavorites";
 import { captureMessage } from "@/lib/actions";
 
 export function DemoForm() {
@@ -107,14 +109,27 @@ export function Pricing() {
 
 export function ProductsGrid() {
   const [open, setOpen] = useState<number | null>(null);
+  const [showFav, setShowFav] = useState(false);
+  const fav = useFavorites("company", "Product");
+  const shown = (showFav ? PRODUCTS.filter((p) => fav.isSaved(p.name)) : PRODUCTS).map((p) => ({ p, i: PRODUCTS.indexOf(p) }));
   const product = open != null ? PRODUCTS[open] : null;
   return (
     <>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
+        <button type="button" onClick={() => setShowFav(false)} className={`chip${!showFav ? " active" : ""}`}>All products</button>
+        <button type="button" onClick={() => setShowFav(true)} className={`chip${showFav ? " active" : ""}`}>Favorites · {fav.count}</button>
+      </div>
+      {showFav && shown.length === 0 ? (
+        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No favorites yet. Tap the heart on any product.</p>
+      ) : null}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>
-        {PRODUCTS.map((p, i) => (
+        {shown.map(({ p, i }) => (
           <div key={p.name} style={{ background: "var(--color-bg)", padding: "clamp(24px, 3vw, 36px)", display: "flex", flexDirection: "column" }}>
-            <div style={{ width: 44, height: 44, background: "var(--color-accent)", color: "var(--color-bg)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-              <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 20 }}>{p.mark}</span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div style={{ width: 44, height: 44, background: "var(--color-accent)", color: "var(--color-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 20 }}>{p.mark}</span>
+              </div>
+              <SaveHeart active={fav.isSaved(p.name)} onToggle={() => fav.toggle(p.name, p.name)} label={`Favorite ${p.name}`} size={18} />
             </div>
             <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 24, margin: "0 0 10px" }}>{p.name}</h3>
             <p style={{ fontSize: 15, lineHeight: 1.6, margin: "0 0 20px", flex: 1, color: "color-mix(in srgb, var(--color-text) 80%, transparent)" }}>{p.body}</p>

@@ -24,10 +24,10 @@ export function Discography({ albums }: { albums: Album[] }) {
     <>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingBottom: 16 }}>
         <button type="button" onClick={() => setShowLiked(false)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: !showLiked ? "var(--color-text)" : "transparent", color: !showLiked ? "var(--color-bg)" : "var(--color-text)" }}>All releases</button>
-        <button type="button" onClick={() => setShowLiked(true)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: showLiked ? "var(--color-accent)" : "transparent", color: showLiked ? "var(--color-bg)" : "var(--color-text)" }}>Liked · {fav.count}</button>
+        <button type="button" onClick={() => setShowLiked(true)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: showLiked ? "var(--color-accent)" : "transparent", color: showLiked ? "var(--color-bg)" : "var(--color-text)" }}>Favorites · {fav.count}</button>
       </div>
       {showLiked && shown.length === 0 ? (
-        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No liked releases yet. Tap the heart on any album.</p>
+        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No favorites yet. Tap the heart on any album.</p>
       ) : null}
       {shown.map((album) => {
         const i = albums.indexOf(album);

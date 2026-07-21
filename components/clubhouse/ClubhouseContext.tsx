@@ -31,8 +31,8 @@ export function ClubhouseProvider({ children }: { children: React.ReactNode }) {
     setRsvps((prev) => {
       const going = prev.includes(id);
       if (going) {
-        announce(`RSVP cancelled for ${title}`);
-        setConfirm({ title: "RSVP cancelled", body: `Your place at ${title} has been released.` });
+        announce(`RSVP canceled for ${title}`);
+        setConfirm({ title: "RSVP canceled", body: `Your place at ${title} has been released.` });
         return prev.filter((x) => x !== id);
       }
       announce(`RSVP confirmed for ${title}`);

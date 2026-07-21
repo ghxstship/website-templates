@@ -7,6 +7,8 @@ import { MenuIcon } from "@/components/icons";
 import { QtyStepper } from "@/components/ds/QtyStepper";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { Placeholder } from "@/components/Placeholder";
+import { SaveHeart } from "@/components/ds/SaveHeart";
+import { useFavorites } from "@/lib/useFavorites";
 import { captureBooking, captureMessage } from "@/lib/actions";
 import { VENUE, NAV, EVENTS, EVENT_CATS, TICKET_TIERS, type VEvent } from "@/lib/venue";
 
@@ -37,21 +39,29 @@ export function VenueHeader() {
 
 export function EventsList() {
   const [cat, setCat] = useState("all");
-  const shown = EVENTS.filter((e) => cat === "all" || e.cat === cat);
+  const [showFav, setShowFav] = useState(false);
+  const fav = useFavorites("venue", "Event");
+  let shown = EVENTS.filter((e) => cat === "all" || e.cat === cat);
+  if (showFav) shown = shown.filter((e) => fav.isSaved(e.id));
   return (
     <>
       <section className="wrap" style={{ paddingBlock: "20px 8px" }}>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {EVENT_CATS.map((c) => <button key={c} type="button" onClick={() => setCat(c)} className={`chip${cat === c ? " active" : ""}`}>{c === "all" ? "All" : c}</button>)}
+          <button type="button" onClick={() => setShowFav((v) => !v)} className={`chip${showFav ? " active" : ""}`}>Favorites · {fav.count}</button>
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
+        {showFav && shown.length === 0 ? (
+          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No favorites yet. Tap the heart on any event.</p>
+        ) : null}
         {shown.map((e) => (
-          <Link key={e.id} href={`/venue/events/${e.id}`} className="row-line" style={{ display: "grid", gridTemplateColumns: "130px minmax(0,1fr) minmax(0,0.8fr) auto auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)", textDecoration: "none", color: "var(--color-text)" }}>
+          <Link key={e.id} href={`/venue/events/${e.id}`} className="row-line" style={{ display: "grid", gridTemplateColumns: "130px minmax(0,1fr) minmax(0,0.8fr) auto auto auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)", textDecoration: "none", color: "var(--color-text)" }}>
             <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 15, textTransform: "uppercase" }}>{e.date}</div>
             <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(18px, 2vw, 24px)" }}>{e.title}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", marginTop: 4 }}>{e.time}</div></div>
             <div className="row-sub"><span className="tag tag-outline">{e.cat}</span></div>
             <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 15 }}>{e.from}</div>
+            <SaveHeart active={fav.isSaved(e.id)} onToggle={() => fav.toggle(e.id, e.title)} label={`Favorite ${e.title}`} size={16} />
             <span className="btn btn-primary" style={{ padding: "8px 16px" }}>Tickets</span>
           </Link>
         ))}

@@ -22,7 +22,7 @@ export function ListingCard({ l, bordered = false }: { l: Listing; bordered?: bo
       <figure className="grayscale" style={{ margin: 0, aspectRatio: "3/2", position: "relative", borderBottom: bordered ? "2px solid var(--color-divider)" : undefined }}>
         <Placeholder label={l.title} />
         <span className="tag" style={{ position: "absolute", top: 10, left: 10, background: "var(--color-text)", color: "var(--color-bg)" }}>{l.deal}</span>
-        <SaveHeart overlay active={fav.isSaved(l.slug)} onToggle={() => fav.toggle(l.slug, l.title)} label="Save to shortlist" size={17} />
+        <SaveHeart overlay active={fav.isSaved(l.slug)} onToggle={() => fav.toggle(l.slug, l.title)} label="Add to favorites" size={17} />
       </figure>
       <div style={{ padding: "16px 18px 20px", flex: 1, display: "flex", flexDirection: "column" }}>
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 20, color: "var(--color-accent)" }}>{fmtPrice(l)}</div>
@@ -95,7 +95,7 @@ export function SavedGrid() {
     <section className="wrap" style={{ paddingBlock: "20px clamp(48px, 6vw, 80px)" }}>
       {rows.length === 0 ? (
         <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>
-          You haven’t saved any homes yet. Tap the heart on any listing to add it to your shortlist.
+          No favorites yet. Tap the heart on any listing to add it to your favorites.
         </p>
       ) : (
         <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(16px, 2vw, 28px)" }}>
@@ -145,7 +145,7 @@ export function ListingAside({ l }: { l: Listing }) {
         <button type="button" className="btn btn-primary" onClick={() => setModal("viewing")} style={{ width: "100%", justifyContent: "center", padding: "13px 20px", marginBottom: 10 }}>Book a viewing</button>
         <button type="button" className="btn btn-secondary" onClick={() => setModal("enquiry")} style={{ width: "100%", justifyContent: "center", padding: "13px 20px" }}>Ask a question</button>
         <button type="button" className="btn btn-ghost" onClick={() => fav.toggle(l.slug, l.title)} style={{ width: "100%", justifyContent: "center", padding: "12px 20px", marginTop: 10, color: fav.isSaved(l.slug) ? "var(--color-accent)" : undefined }}>
-          {fav.isSaved(l.slug) ? "★ Saved to shortlist" : "♡ Save to shortlist"}
+          {fav.isSaved(l.slug) ? "★ In favorites" : "♡ Add to favorites"}
         </button>
       </div>
 

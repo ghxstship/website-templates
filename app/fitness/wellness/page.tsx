@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Wellness" };
 export default function WellnessPage() {
   return (
     <div className="fadein">
-      <PageHeader kicker="Recover & optimise" title="Wellness" />
+      <PageHeader kicker="Recover & optimize" title="Wellness" />
       <section className="wrap" style={{ paddingBlock: "clamp(24px, 3vw, 44px)" }}>
         <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(22px, 2.6vw, 32px)", letterSpacing: "-0.02em", margin: "0 0 20px", textTransform: "uppercase" }}>Recovery &amp; biohacking</h2>
         <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, background: "var(--color-divider)", border: "2px solid var(--color-divider)" }}>

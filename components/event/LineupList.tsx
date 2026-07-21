@@ -13,10 +13,10 @@ export function LineupList() {
     <>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 28 }}>
         <button type="button" onClick={() => setMine(false)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: !mine ? "var(--color-text)" : "transparent", color: !mine ? "var(--color-bg)" : "var(--color-text)" }}>Full lineup</button>
-        <button type="button" onClick={() => setMine(true)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: mine ? "var(--color-accent)" : "transparent", color: mine ? "var(--color-bg)" : "var(--color-text)" }}>My lineup · {fav.count}</button>
+        <button type="button" onClick={() => setMine(true)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: mine ? "var(--color-accent)" : "transparent", color: mine ? "var(--color-bg)" : "var(--color-text)" }}>Favorites · {fav.count}</button>
       </div>
       {mine && fav.count === 0 ? (
-        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>Your lineup is empty. Tap the heart on any act to build your schedule.</p>
+        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No favorites yet. Tap the heart on any act to build your lineup.</p>
       ) : null}
       {LINEUP_TIERS.map((tier) => {
         const acts = mine ? tier.acts.filter((a) => fav.isSaved(a)) : tier.acts;

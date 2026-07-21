@@ -47,7 +47,7 @@ export const RESULTS: Record<Mode, Result[]> = {
   ],
   tours: [
     { title: "Nordic Fjords Expedition", sub: "8 days · Small ship · Max 96", meta: "Bergen → Kirkenes", num: 3200, priceNote: "per person" },
-    { title: "Kyoto & Kansai on Foot", sub: "6 days · Guided walking", meta: "Max 12 travellers", num: 1850, priceNote: "per person" },
+    { title: "Kyoto & Kansai on Foot", sub: "6 days · Guided walking", meta: "Max 12 travelers", num: 1850, priceNote: "per person" },
     { title: "Atacama Stargazing", sub: "5 days · 4×4 · Astronomy guide", meta: "San Pedro base", num: 2100, priceNote: "per person" },
   ],
 };
@@ -63,7 +63,7 @@ export const DESTINATIONS = [
 
 export const TOURS = [
   { name: "Nordic Fjords Expedition", length: "8 days", region: "Norway", desc: "A small-ship voyage up the working coast — fishing villages, glaciers, and the chance of the aurora, with an expedition team aboard.", num: 3200 },
-  { name: "Kyoto & Kansai on Foot", length: "6 days", region: "Japan", desc: "Temples at dawn, a tea ceremony, and back-street kaiseki — a guided walking tour capped at twelve travellers.", num: 1850 },
+  { name: "Kyoto & Kansai on Foot", length: "6 days", region: "Japan", desc: "Temples at dawn, a tea ceremony, and back-street kaiseki — a guided walking tour capped at twelve travelers.", num: 1850 },
   { name: "Atacama Stargazing", length: "5 days", region: "Chile", desc: "The clearest skies on earth, a resident astronomer, and salt flats at sunrise from a desert base camp.", num: 2100 },
   { name: "Serengeti Migration Safari", length: "9 days", region: "Tanzania", desc: "Follow the herds across the plains in open 4×4s, with tented camps that move as the animals do.", num: 4600 },
 ];

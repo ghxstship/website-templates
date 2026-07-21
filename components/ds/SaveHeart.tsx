@@ -3,7 +3,7 @@
 import { HeartIcon } from "@/components/icons";
 
 /**
- * Favourite toggle. `overlay` renders it as an absolute chip on a card figure;
+ * Favorite toggle. `overlay` renders it as an absolute chip on a card figure;
  * otherwise it's an inline button. Always stops propagation so it never
  * triggers a parent row/card open handler.
  */
@@ -50,7 +50,7 @@ export function SaveHeart({
     <button
       type="button"
       aria-pressed={active}
-      aria-label={active ? `${label}d — tap to remove` : label}
+      aria-label={active ? "Remove from favorites" : label}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();

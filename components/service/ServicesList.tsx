@@ -43,13 +43,13 @@ export function ServicesList() {
           className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`}
           style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}
         >
-          {showSaved ? `Showing saved · ${fav.count}` : `Saved · ${fav.count}`}
+          {showSaved ? `Showing favorites · ` : `Favorites · `}
         </button>
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
         {showSaved && rows.length === 0 ? (
           <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>
-            No saved services yet. Tap the heart on any service.
+            No favorites yet. Tap the heart on any service.
           </p>
         ) : null}
         {rows.map((s) => (

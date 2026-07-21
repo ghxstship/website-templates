@@ -30,7 +30,7 @@ export const SPACES = [
   { name: "The Library", cap: "Quiet · 20 seats", rate: "Included", desc: "A silent room of leather and long tables for heads-down work." },
   { name: "Studio 2", cap: "Up to 12", rate: "From £40/hr", desc: "A daylight studio for workshops, shoots and life drawing." },
   { name: "The Boardroom", cap: "Up to 10", rate: "From £60/hr", desc: "A private meeting room with screen, whiteboard and coffee service." },
-  { name: "The Snug", cap: "Up to 6", rate: "From £30/hr", desc: "A cosy corner with a fireplace for small dinners and calls." },
+  { name: "The Snug", cap: "Up to 6", rate: "From £30/hr", desc: "A cozy corner with a fireplace for small dinners and calls." },
 ];
 
 export const MENU = [

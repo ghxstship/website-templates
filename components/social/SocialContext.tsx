@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useMemo } from "react";
+import { usePersistentState } from "@/lib/persist";
 import { CloseIcon } from "@/components/icons";
 import { SOCIAL, FEED, COMMUNITY_POSTS } from "@/lib/social";
 
@@ -9,6 +10,7 @@ type Toggle = Set<string>;
 type Ctx = {
   myPosts: string[];
   likes: Toggle; reposts: Toggle; saves: Toggle; follows: Toggle; joined: Toggle; comments: Record<string, string[]>;
+  saveCount: number;
   votes: Record<string, number>;
   msgs: Record<number, string[]>;
   addPost: (t: string) => void;
@@ -25,7 +27,11 @@ const SocialCtx = createContext<Ctx | null>(null);
 
 export function SocialProvider({ children }: { children: React.ReactNode }) {
   const [myPosts, setMyPosts] = useState<string[]>([]);
-  const [sets, setSets] = useState<Record<string, Set<string>>>({ likes: new Set(), reposts: new Set(), saves: new Set(), follows: new Set(), joined: new Set(["r/webdev"]) });
+  const [setArrays, setSetArrays] = usePersistentState<Record<string, string[]>>("social.sets", { likes: [], reposts: [], saves: [], follows: [], joined: ["r/webdev"] });
+  const sets = useMemo<Record<string, Set<string>>>(() => ({
+    likes: new Set(setArrays.likes ?? []), reposts: new Set(setArrays.reposts ?? []), saves: new Set(setArrays.saves ?? []),
+    follows: new Set(setArrays.follows ?? []), joined: new Set(setArrays.joined ?? []),
+  }), [setArrays]);
   const [votes, setVotes] = useState<Record<string, number>>({});
   const [msgs, setMsgs] = useState<Record<number, string[]>>({});
   const [comments, setComments] = useState<Record<string, string[]>>({});
@@ -36,8 +42,8 @@ export function SocialProvider({ children }: { children: React.ReactNode }) {
 
   const addPost = useCallback((t: string) => { const v = t.trim(); if (v) setMyPosts((p) => [v, ...p]); }, []);
   const toggle = useCallback((kind: string, id: string) => {
-    setSets((s) => { const n = new Set(s[kind]); if (n.has(id)) n.delete(id); else n.add(id); return { ...s, [kind]: n }; });
-  }, []);
+    setSetArrays((s) => { const arr = s[kind] ?? []; const has = arr.includes(id); return { ...s, [kind]: has ? arr.filter((x) => x !== id) : [...arr, id] }; });
+  }, [setSetArrays]);
   const vote = useCallback((id: string, dir: number) => {
     setVotes((v) => ({ ...v, [id]: v[id] === dir ? 0 : dir }));
   }, []);
@@ -55,7 +61,7 @@ export function SocialProvider({ children }: { children: React.ReactNode }) {
   const openComments = openPostId ? [...(seedComments[openPostId] ?? []), ...((comments[openPostId] ?? []).map((t) => ({ name: SOCIAL.meName, text: t })))] : [];
 
   const value: Ctx = {
-    myPosts, likes: sets.likes, reposts: sets.reposts, saves: sets.saves, follows: sets.follows, joined: sets.joined, comments, votes, msgs,
+    myPosts, likes: sets.likes, reposts: sets.reposts, saves: sets.saves, follows: sets.follows, joined: sets.joined, comments, saveCount: sets.saves.size, votes, msgs,
     addPost, toggle, isOn: (k, id) => sets[k].has(id), vote, voteOf: (id) => votes[id] ?? 0, sendMsg, addComment,
     openComposer: () => setComposerOpen(true), openPost: (id) => setOpenPostId(id),
   };

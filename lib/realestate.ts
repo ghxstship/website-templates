@@ -13,7 +13,7 @@ export type Listing = {
 export const LISTINGS: Listing[] = [
   { slug: "foundry-loft", title: "The Foundry Loft", area: "Shoreditch, E1", num: 1250000, deal: "For sale", beds: 2, baths: 2, sqm: 96, type: "Apartment", agent: "Maren Cole", desc: "A double-height warehouse conversion with original cast-iron columns, a mezzanine study and a west-facing terrace.", features: ["Terrace", "Concierge", "Parking", "Lift"] },
   { slug: "ironmonger-house", title: "Ironmonger House", area: "Clerkenwell, EC1", num: 3400000, deal: "For sale", beds: 4, baths: 3, sqm: 220, type: "House", agent: "Jonas Ek", desc: "A restored Georgian townhouse over five floors with a landscaped garden and a self-contained lower apartment.", features: ["Garden", "Cellar", "Period", "Freehold"] },
-  { slug: "harbour-view-12", title: "Harbour View 12", area: "Wapping, E1W", num: 4200, deal: "To rent", beds: 2, baths: 2, sqm: 88, type: "Apartment", agent: "Priya Rao", desc: "A bright riverside apartment with a balcony over the Thames, 24-hour porter and residents’ gym.", features: ["River view", "Balcony", "Gym", "Furnished"] },
+  { slug: "harbor-view-12", title: "Harbor View 12", area: "Wapping, E1W", num: 4200, deal: "To rent", beds: 2, baths: 2, sqm: 88, type: "Apartment", agent: "Priya Rao", desc: "A bright riverside apartment with a balcony over the Thames, 24-hour porter and residents’ gym.", features: ["River view", "Balcony", "Gym", "Furnished"] },
   { slug: "the-old-press", title: "The Old Press", area: "Bermondsey, SE1", num: 895000, deal: "For sale", beds: 1, baths: 1, sqm: 64, type: "Apartment", agent: "Maren Cole", desc: "A characterful one-bed in a former print works, exposed brick throughout and a communal courtyard.", features: ["Courtyard", "Exposed brick", "Bike store"] },
   { slug: "ropewalk-mews", title: "Ropewalk Mews", area: "Rotherhithe, SE16", num: 5800, deal: "To rent", beds: 3, baths: 2, sqm: 120, type: "House", agent: "Jonas Ek", desc: "A modern mews house with an integral garage, roof terrace and open-plan living.", features: ["Garage", "Roof terrace", "Unfurnished"] },
   { slug: "steelyard-penthouse", title: "Steelyard Penthouse", area: "City, EC4", num: 6750000, deal: "For sale", beds: 3, baths: 3, sqm: 260, type: "Apartment", agent: "Priya Rao", desc: "A landmark penthouse with 360-degree views, private lift access and a wraparound terrace.", features: ["Private lift", "Terrace", "Views", "Parking"] },
@@ -47,7 +47,7 @@ export const SOCIALS = ["Instagram", "LinkedIn", "Newsletter"];
 
 export const NAV = [
   { label: "Buy & rent", path: "/realestate/buy" },
-  { label: "Saved", path: "/realestate/saved" },
+  { label: "Favorites", path: "/realestate/saved" },
   { label: "Sell", path: "/realestate/sell" },
   { label: "Agents", path: "/realestate/agents" },
 ];

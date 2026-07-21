@@ -13,7 +13,7 @@ export const LISTINGS: Listing[] = [
   { id: "l3", title: "City Wayfinding System", org: "City of Helix", location: "On-site", comp: "$180k budget", type: "RFP", detailLine: "Tender · closes Oct 30" },
   { id: "l4", title: "Full-Stack Engineer", org: "Vela", location: "Hybrid — Berlin", comp: "€70–90k", type: "Job", detailLine: "Full-time · Permanent" },
   { id: "l5", title: "Motion Designer (contract)", org: "Ironwood", location: "Remote", comp: "$450/day", type: "Gig", detailLine: "Freelance · 3 months" },
-  { id: "l6", title: "Ensemble — Regional Theatre", org: "The Armory", location: "Manchester, UK", comp: "Equity min.", type: "Audition", detailLine: "Casting · rep season" },
+  { id: "l6", title: "Ensemble — Regional Theater", org: "The Armory", location: "Manchester, UK", comp: "Equity min.", type: "Audition", detailLine: "Casting · rep season" },
   { id: "l7", title: "Digital Archive Platform", org: "Meridian Trust", location: "Remote", comp: "$240k budget", type: "RFP", detailLine: "Tender · closes Nov 14" },
 ];
 export const TYPE_FILTERS: (ListingType | "all")[] = ["all", "Job", "Gig", "Audition", "RFP"];

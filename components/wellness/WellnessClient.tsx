@@ -42,10 +42,10 @@ export function TreatmentsList() {
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "4px 0" }}>
-        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing saved · ${fav.count}` : `Saved · ${fav.count}`}</button>
+        <button type="button" onClick={() => setShowSaved((v) => !v)} className={`btn ${showSaved ? "btn-primary" : "btn-secondary"}`} style={{ padding: "8px 16px", border: "1px solid var(--color-divider)" }}>{showSaved ? `Showing favorites · ` : `Favorites · `}</button>
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
-        {showSaved && rows.length === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No saved treatments yet. Tap the heart on any treatment.</p> : null}
+        {showSaved && rows.length === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No favorites yet. Tap the heart on any treatment.</p> : null}
         {rows.map((t) => (
           <div key={t.name} className="row-line" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.5fr) auto minmax(0, 0.4fr) auto", gap: 18, alignItems: "center", padding: "18px 0", borderTop: "2px solid var(--color-divider)" }}>
             <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(17px, 2vw, 22px)" }}>{t.name}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 62%, transparent)", marginTop: 4, maxWidth: "52ch" }}>{t.desc}</div></div>

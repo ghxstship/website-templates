@@ -41,7 +41,7 @@ export function TicketingProvider({ children }: { children: React.ReactNode }) {
   const cancelBooking = useCallback((index: number) => {
     setBookings((prev) => {
       const bk = prev[index];
-      if (bk) setConfirm({ title: "Tickets cancelled", body: `Your ${bk.qty}× ${bk.title} ${bk.qty === 1 ? "ticket has" : "tickets have"} been cancelled and refunded to your original payment method.` });
+      if (bk) setConfirm({ title: "Tickets canceled", body: `Your ${bk.qty}× ${bk.title} ${bk.qty === 1 ? "ticket has" : "tickets have"} been canceled and refunded to your original payment method.` });
       return prev.filter((_, i) => i !== index);
     });
   }, [setBookings]);

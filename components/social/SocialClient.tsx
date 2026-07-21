@@ -101,20 +101,25 @@ function PostActions({ post }: { post: (typeof FEED)[number] }) {
 }
 
 export function Feed() {
-  const { myPosts, addPost, follows } = useSocial();
-  const [tab, setTab] = useState<"foryou" | "following">("foryou");
+  const { myPosts, addPost, follows, saves } = useSocial();
+  const [tab, setTab] = useState<"foryou" | "following" | "favorites">("foryou");
   const [text, setText] = useState("");
   const composed = myPosts.map((t, i) => ({ id: `me${i}`, name: SOCIAL.meName, handle: SOCIAL.meHandle, time: "now", text: t, hasImg: false, likes: 0, comments: 0, reposts: 0 }));
   const all = [...composed, ...FEED];
-  const shown = tab === "following" ? all.filter((x) => follows.has(x.handle) || x.handle === SOCIAL.meHandle) : all;
+  const shown = tab === "following"
+    ? all.filter((x) => follows.has(x.handle) || x.handle === SOCIAL.meHandle)
+    : tab === "favorites"
+      ? all.filter((x) => saves.has(x.id))
+      : all;
   const dim = "color-mix(in srgb, var(--color-text) 60%, transparent)";
+  const tabLabel = { foryou: "For you", following: "Following", favorites: `Favorites · ${saves.size}` };
 
   return (
     <>
       <CenterHeader title="Home">
         <div style={{ display: "flex" }}>
-          {(["foryou", "following"] as const).map((k) => (
-            <button key={k} type="button" onClick={() => setTab(k)} style={{ flex: 1, padding: 14, background: "none", border: 0, borderBottom: `3px solid ${tab === k ? "var(--color-accent)" : "transparent"}`, cursor: "pointer", fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 14, color: tab === k ? "var(--color-text)" : dim, textTransform: "uppercase", letterSpacing: "0.04em" }}>{k === "foryou" ? "For you" : "Following"}</button>
+          {(["foryou", "following", "favorites"] as const).map((k) => (
+            <button key={k} type="button" onClick={() => setTab(k)} style={{ flex: 1, padding: 14, background: "none", border: 0, borderBottom: `3px solid ${tab === k ? "var(--color-accent)" : "transparent"}`, cursor: "pointer", fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 14, color: tab === k ? "var(--color-text)" : dim, textTransform: "uppercase", letterSpacing: "0.04em" }}>{tabLabel[k]}</button>
           ))}
         </div>
       </CenterHeader>
@@ -125,6 +130,9 @@ export function Feed() {
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}><button type="submit" className="btn btn-primary" disabled={!text.trim()} style={{ padding: "9px 22px" }}>Post</button></div>
         </form>
       </div>
+      {tab === "favorites" && shown.length === 0 ? (
+        <p style={{ fontSize: 15, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "24px 22px" }}>No favorites yet. Tap the bookmark on any post to save it here.</p>
+      ) : null}
       {shown.map((p) => (
         <article key={p.id} style={{ display: "flex", gap: 14, padding: "18px 22px", borderBottom: "2px solid var(--color-divider)" }}>
           <figure className="grayscale" style={{ margin: 0, width: 44, height: 44, border: "1px solid var(--color-divider)", flex: "0 0 auto" }}><Placeholder /></figure>

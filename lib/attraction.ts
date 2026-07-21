@@ -2,14 +2,14 @@ export const ATTRACTION = {
   name: "THE HELIX",
   kind: "Museum of science & wonder",
   city: "Chicago",
-  tagline: "Four floors of hands-on exhibits, a domed theatre and a rooftop observatory — where curiosity gets loud.",
+  tagline: "Four floors of hands-on exhibits, a domed theater and a rooftop observatory — where curiosity gets loud.",
   address: "600 Lakeshore Drive, Chicago IL",
 };
 
 export const ATTRACTIONS = [
-  { title: "The Deep Ocean", tag: "Gallery", zone: "Level 1", desc: "A two-storey tank and a walk-through tunnel beneath the reef.", detail: "Allow 45 min" },
+  { title: "The Deep Ocean", tag: "Gallery", zone: "Level 1", desc: "A two-story tank and a walk-through tunnel beneath the reef.", detail: "Allow 45 min" },
   { title: "Gravity Lab", tag: "Hands-on", zone: "Level 2", desc: "Drop towers, pendulums and a vacuum chamber you can trigger yourself.", detail: "Allow 30 min" },
-  { title: "The Dome", tag: "Show", zone: "Level 2", desc: "A 20-metre planetarium running four programmes daily.", detail: "Shows on the hour" },
+  { title: "The Dome", tag: "Show", zone: "Level 2", desc: "A 20-meter planetarium running four programmes daily.", detail: "Shows on the hour" },
   { title: "Bodyworks", tag: "Gallery", zone: "Level 3", desc: "The human body at every scale, from cell to system.", detail: "Allow 40 min" },
   { title: "Rooftop Observatory", tag: "Experience", zone: "Level 4", desc: "Solar scopes by day, deep-sky viewing on late Fridays.", detail: "Weather permitting" },
   { title: "Tinker Studio", tag: "Hands-on", zone: "Level 1", desc: "A working makerspace — build, break and take it home.", detail: "Drop-in" },

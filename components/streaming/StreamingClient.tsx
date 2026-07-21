@@ -181,7 +181,7 @@ export function Library() {
     <section className="wrap" style={{ paddingBlock: "clamp(24px, 3vw, 44px) clamp(48px, 6vw, 80px)" }}>
       <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 22, margin: "0 0 18px" }}>Unlocked &amp; purchased</h2>
       {items.length === 0 ? (
-        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>Nothing unlocked yet. <Link href="/streaming/browse">Browse the catalogue →</Link></p>
+        <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>Nothing unlocked yet. <Link href="/streaming/browse">Browse the catalog →</Link></p>
       ) : items.map((m) => (
         <Link key={m.id} href={`/streaming/media/${m.id}`} style={{ display: "grid", gridTemplateColumns: "88px minmax(0,1fr) auto auto", gap: 18, alignItems: "center", padding: "16px 0", borderTop: "2px solid var(--color-divider)", textDecoration: "none", color: "var(--color-text)" }}>
           <figure className="grayscale" style={{ margin: 0, width: 88, height: 56, border: "1px solid var(--color-divider)" }}><Placeholder /></figure>

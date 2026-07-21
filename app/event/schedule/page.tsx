@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Schedule" };
 export default function SchedulePage() {
   return (
     <div className="fadein">
-      <PageHeader kicker="Programme" title="Schedule" />
+      <PageHeader kicker="Program" title="Schedule" />
       <ScheduleTabs />
     </div>
   );

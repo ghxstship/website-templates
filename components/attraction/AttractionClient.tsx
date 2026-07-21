@@ -5,24 +5,33 @@ import { QtyStepper } from "@/components/ds/QtyStepper";
 import { Modal } from "@/components/ds/Modal";
 import { Placeholder } from "@/components/Placeholder";
 import { CheckIcon } from "@/components/icons";
+import { SaveHeart } from "@/components/ds/SaveHeart";
+import { useFavorites } from "@/lib/useFavorites";
 import { captureBooking } from "@/lib/actions";
 import { ATTRACTIONS, ZONES, SLOTS, TICKET_TYPES } from "@/lib/attraction";
 
 export function AttractionsGrid() {
   const [zone, setZone] = useState("all");
-  const shown = ATTRACTIONS.filter((a) => zone === "all" || a.zone === zone);
+  const [showFav, setShowFav] = useState(false);
+  const fav = useFavorites("attraction", "Exhibit");
+  let shown = ATTRACTIONS.filter((a) => zone === "all" || a.zone === zone);
+  if (showFav) shown = shown.filter((a) => fav.isSaved(a.title));
   return (
     <>
       <section className="wrap" style={{ paddingBlock: "20px 8px" }}>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {ZONES.map((z) => <button key={z} type="button" onClick={() => setZone(z)} className={`chip${zone === z ? " active" : ""}`}>{z === "all" ? "All levels" : z}</button>)}
+          <button type="button" onClick={() => setShowFav((v) => !v)} className={`chip${showFav ? " active" : ""}`}>Favorites · {fav.count}</button>
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "16px clamp(48px, 6vw, 80px)" }}>
+        {showFav && shown.length === 0 ? (
+          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No favorites yet. Tap the heart on any exhibit.</p>
+        ) : null}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "clamp(16px, 2vw, 28px)" }}>
           {shown.map((a) => (
             <div key={a.title} style={{ border: "2px solid var(--color-divider)", display: "flex", flexDirection: "column" }}>
-              <figure className="grayscale" style={{ margin: 0, aspectRatio: "4/3", borderBottom: "2px solid var(--color-divider)" }}><Placeholder /></figure>
+              <figure className="grayscale" style={{ margin: 0, aspectRatio: "4/3", borderBottom: "2px solid var(--color-divider)", position: "relative" }}><Placeholder /><SaveHeart overlay active={fav.isSaved(a.title)} onToggle={() => fav.toggle(a.title, a.title)} label={`Favorite ${a.title}`} size={17} /></figure>
               <div style={{ padding: "16px 18px 20px", flex: 1, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}><span style={{ fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--color-accent-700)" }}>{a.tag}</span><span className="tag tag-neutral">{a.zone}</span></div>
                 <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 19, margin: "0 0 8px" }}>{a.title}</h3>
