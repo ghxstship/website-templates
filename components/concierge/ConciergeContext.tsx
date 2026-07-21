@@ -30,7 +30,9 @@ export function ConciergeProvider({ children }: { children: React.ReactNode }) {
   const addRequest = useCallback(async (cat: string, detail: string, responseTime: string) => {
     await captureMessage("concierge", { name: "Concierge member", email: "member@atlasconcierge.example", subject: `${cat} request`, message: detail || `New ${cat.toLowerCase()} request` });
     counter += 1;
-    const req: Request = { id: `req-${counter}-${cat}`, title: `New ${cat.toLowerCase()} request`, cat, when: "Today", manager: "Sofia", status: "New" };
+    // Fold time into the id: the counter alone resets on reload while the list
+    // is persisted, so req-N ids could collide with stored ones across sessions.
+    const req: Request = { id: `req-${Date.now().toString(36)}-${counter}`, title: `New ${cat.toLowerCase()} request`, cat, when: "Today", manager: "Sofia", status: "New" };
     setRequests((prev) => [req, ...prev]);
     announce("Request received");
     setConfirm({ title: "Request received", body: `Your ${cat.toLowerCase()} request is with your manager, Sofia. You’ll hear back ${responseTime}.`, go: true });

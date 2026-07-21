@@ -21,6 +21,30 @@ export function AudioPlayer({ artistName }: { artistName: string }) {
     seek(pct);
   };
 
+  const STEP = 5;
+  const onSeekKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    switch (e.key) {
+      case "ArrowLeft":
+      case "ArrowDown":
+        e.preventDefault();
+        seek(player.progress - STEP);
+        break;
+      case "ArrowRight":
+      case "ArrowUp":
+        e.preventDefault();
+        seek(player.progress + STEP);
+        break;
+      case "Home":
+        e.preventDefault();
+        seek(0);
+        break;
+      case "End":
+        e.preventDefault();
+        seek(100);
+        break;
+    }
+  };
+
   const eqState = player.playing ? "running" : "paused";
 
   return (
@@ -38,7 +62,9 @@ export function AudioPlayer({ artistName }: { artistName: string }) {
       {/* seek track */}
       <div
         onClick={onSeek}
+        onKeyDown={onSeekKey}
         role="slider"
+        tabIndex={0}
         aria-label="Seek"
         aria-valuemin={0}
         aria-valuemax={100}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Placeholder } from "@/components/Placeholder";
 import { SaveHeart } from "@/components/ds/SaveHeart";
 import { Modal } from "@/components/ds/Modal";
@@ -36,29 +36,51 @@ export function ListingCard({ l, bordered = false }: { l: Listing; bordered?: bo
 
 export function HomeSearch() {
   const router = useRouter();
+  const [loc, setLoc] = useState("");
+  const [forWhat, setForWhat] = useState<"Buy" | "Rent">("Buy");
+  const [beds, setBeds] = useState("Any");
   return (
     <form
-      onSubmit={(e) => { e.preventDefault(); router.push("/realestate/buy"); }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        const params = new URLSearchParams();
+        const q = loc.trim();
+        if (q) params.set("q", q);
+        params.set("deal", forWhat === "Rent" ? "rent" : "sale");
+        if (beds !== "Any") params.set("beds", beds.replace("+", ""));
+        const qs = params.toString();
+        router.push(`/realestate/buy${qs ? `?${qs}` : ""}`);
+      }}
       className="searchrow"
       style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 12, maxWidth: 860, border: "2px solid var(--color-divider)", padding: 12 }}
     >
-      <div className="field" style={{ margin: 0 }}><label>Location</label><input className="input" placeholder="City or area" style={{ border: 0, minHeight: 42 }} /></div>
-      <div className="field" style={{ margin: 0 }}><label>For</label><select className="input" style={{ border: 0, minHeight: 42 }}><option>Buy</option><option>Rent</option></select></div>
-      <div className="field" style={{ margin: 0 }}><label>Beds</label><select className="input" style={{ border: 0, minHeight: 42 }}><option>Any</option><option>1+</option><option>2+</option><option>3+</option></select></div>
+      <div className="field" style={{ margin: 0 }}><label htmlFor="re-search-loc">Location</label><input id="re-search-loc" className="input" value={loc} onChange={(e) => setLoc(e.target.value)} placeholder="City or area" style={{ border: 0, minHeight: 42 }} /></div>
+      <div className="field" style={{ margin: 0 }}><label htmlFor="re-search-for">For</label><select id="re-search-for" className="input" value={forWhat} onChange={(e) => setForWhat(e.target.value as "Buy" | "Rent")} style={{ border: 0, minHeight: 42 }}><option>Buy</option><option>Rent</option></select></div>
+      <div className="field" style={{ margin: 0 }}><label htmlFor="re-search-beds">Beds</label><select id="re-search-beds" className="input" value={beds} onChange={(e) => setBeds(e.target.value)} style={{ border: 0, minHeight: 42 }}><option>Any</option><option>1+</option><option>2+</option><option>3+</option></select></div>
       <button type="submit" className="btn btn-primary" style={{ alignSelf: "end", padding: "12px 24px" }}>Search</button>
     </form>
   );
 }
 
 export function BuyGrid() {
-  const [deal, setDeal] = useState<"For sale" | "To rent">("For sale");
+  const params = useSearchParams();
+  const fav = useFavorites("realestate", "Home");
+  const [deal, setDeal] = useState<"For sale" | "To rent">(params.get("deal") === "rent" ? "To rent" : "For sale");
   const [ptype, setPtype] = useState("all");
   const [sort, setSort] = useState("new");
+  const [savedOnly, setSavedOnly] = useState(false);
+
+  const q = (params.get("q") ?? "").trim().toLowerCase();
+  const minBeds = Number(params.get("beds")) || 0;
 
   let rows = LISTINGS.filter((l) => l.deal === deal && (ptype === "all" || l.type === ptype));
+  if (q) rows = rows.filter((l) => `${l.title} ${l.area}`.toLowerCase().includes(q));
+  if (minBeds) rows = rows.filter((l) => l.beds >= minBeds);
+  if (savedOnly) rows = rows.filter((l) => fav.isSaved(l.slug));
   if (sort === "low") rows = [...rows].sort((a, b) => a.num - b.num);
   if (sort === "high") rows = [...rows].sort((a, b) => b.num - a.num);
 
+  const savedCount = LISTINGS.filter((l) => fav.isSaved(l.slug)).length;
   const types = ["all", "House", "Apartment"];
   return (
     <>
@@ -74,15 +96,25 @@ export function BuyGrid() {
           {types.map((t) => (
             <button key={t} type="button" onClick={() => setPtype(t)} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: ptype === t ? "var(--color-text)" : "transparent", color: ptype === t ? "var(--color-bg)" : "var(--color-text)" }}>{t === "all" ? "All types" : `${t}s`}</button>
           ))}
+          <span style={{ width: 1, background: "var(--color-divider)", margin: "0 4px" }} />
+          <button type="button" onClick={() => setSavedOnly((v) => !v)} aria-pressed={savedOnly} className="btn" style={{ padding: "8px 16px", border: "1px solid var(--color-divider)", background: savedOnly ? "var(--color-accent)" : "transparent", color: savedOnly ? "var(--color-bg)" : "var(--color-text)" }}>Saved · {savedCount}</button>
         </div>
         <select className="input" value={sort} onChange={(e) => setSort(e.target.value)} style={{ width: "auto", minHeight: 38 }}>
           <option value="new">Newest</option><option value="low">Price ↑</option><option value="high">Price ↓</option>
         </select>
       </section>
       <section className="wrap" style={{ paddingBlock: "16px clamp(48px, 6vw, 80px)" }}>
-        <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(16px, 2vw, 28px)" }}>
-          {rows.map((l) => <ListingCard key={l.slug} l={l} bordered />)}
-        </div>
+        {rows.length === 0 ? (
+          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>
+            {savedOnly
+              ? "No saved homes yet. Tap the heart on any listing to shortlist it."
+              : "No homes match these filters. Try widening your search."}
+          </p>
+        ) : (
+          <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(16px, 2vw, 28px)" }}>
+            {rows.map((l) => <ListingCard key={l.slug} l={l} bordered />)}
+          </div>
+        )}
       </section>
     </>
   );
@@ -149,7 +181,7 @@ export function ListingAside({ l }: { l: Listing }) {
         </button>
       </div>
 
-      <Modal open={modal !== null} onClose={() => setModal(null)} width={500} showClose={false}>
+      <Modal open={modal !== null} onClose={() => setModal(null)} width={500} label={modal === "enquiry" ? "Ask a question" : "Book a viewing"}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
           <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18, textTransform: "uppercase" }}>{modal === "enquiry" ? "Ask a question" : "Book a viewing"}</span>
         </div>

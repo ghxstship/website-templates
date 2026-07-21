@@ -13,7 +13,7 @@ type Ctx = {
   status: Status; tier: Tier; applyRef: string;
   usedPerks: string[]; votes: Record<string, string>; decisions: Record<string, string>;
   isMember: boolean; tierName: string; memberChip: string; ctaLabel: string;
-  submitApply: (name: string, email: string) => Promise<void>;
+  submitApply: (name: string, email: string, desiredTier: string) => Promise<void>;
   simulateApprove: () => void;
   resetApply: () => void;
   chooseTier: (key: Tier, name: string) => void;
@@ -39,18 +39,21 @@ export function MembershipProvider({ children }: { children: React.ReactNode }) 
   const memberChip = isMember ? `${tierName} · No. 4021` : "Sign in";
   const ctaLabel = isMember ? "Your pass" : "Request invite";
 
-  const submitApply = useCallback(async (name: string, email: string) => {
-    const res = await captureMessage("membership", { name, email, subject: "Membership application", message: `Application to ${MEMBERSHIP.brand}` });
+  const submitApply = useCallback(async (name: string, email: string, desiredTier: string) => {
+    // Carry the applicant's chosen tier through to the record and approval.
+    const tierKey = (Object.keys(TIER_NAMES) as Tier[]).find((k) => TIER_NAMES[k] === desiredTier) ?? "resident";
+    setTier(tierKey);
+    const res = await captureMessage("membership", { name, email, subject: `Membership application — ${TIER_NAMES[tierKey]}`, message: `Application to ${MEMBERSHIP.brand} for the ${TIER_NAMES[tierKey]} tier.` });
     setApplyRef(res.ref ?? `APP-${(name.length * 173 + 1000) % 9999}`);
     setStatus("pending");
-  }, [setApplyRef, setStatus]);
+  }, [setApplyRef, setStatus, setTier]);
 
   const simulateApprove = useCallback(() => {
     setStatus("member");
     announce("Membership approved");
-    setConfirm({ title: "You’re in", body: `Welcome to ${MEMBERSHIP.brand}. Your Resident membership is live — explore the ecosystem with your new pass.` });
+    setConfirm({ title: "You’re in", body: `Welcome to ${MEMBERSHIP.brand}. Your ${TIER_NAMES[tier]} membership is live — explore the ecosystem with your new pass.` });
     router.push("/membership/pass");
-  }, [setStatus, router]);
+  }, [setStatus, router, tier]);
 
   const resetApply = useCallback(() => { setStatus("guest"); setApplyRef(""); }, [setStatus, setApplyRef]);
 

@@ -15,39 +15,44 @@ export function HomeSearch() {
   const router = useRouter();
   const [q, setQ] = useState("");
   return (
-    <form onSubmit={(e) => { e.preventDefault(); router.push("/career/listings"); }} style={{ display: "flex", gap: 10, flexWrap: "wrap", maxWidth: 640 }}>
+    <form onSubmit={(e) => { e.preventDefault(); const query = q.trim(); router.push(query ? `/career/listings?q=${encodeURIComponent(query)}` : "/career/listings"); }} style={{ display: "flex", gap: 10, flexWrap: "wrap", maxWidth: 640 }}>
       <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Role, skill or keyword" style={{ flex: 1, minWidth: 220, minHeight: 46 }} />
       <button type="submit" className="btn btn-primary" style={{ padding: "12px 24px" }}>Search</button>
     </form>
   );
 }
 
-export function ListingsList({ initialType = "all" }: { initialType?: string }) {
+export function ListingsList({ initialType = "all", initialQuery = "" }: { initialType?: string; initialQuery?: string }) {
   const [type, setType] = useState<ListingType | "all">((TYPE_FILTERS as string[]).includes(initialType) ? (initialType as ListingType) : "all");
+  const [q, setQ] = useState(initialQuery);
   const [showFav, setShowFav] = useState(false);
   const fav = useFavorites("career", "Role");
+  const needle = q.trim().toLowerCase();
   let shown = LISTINGS.filter((l) => type === "all" || l.type === type);
+  if (needle) shown = shown.filter((l) => `${l.title} ${l.org} ${l.location} ${l.type} ${l.comp}`.toLowerCase().includes(needle));
   if (showFav) shown = shown.filter((l) => fav.isSaved(l.id));
   return (
     <>
       <section className="wrap" style={{ paddingBlock: "20px 8px" }}>
+        <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search roles, skills or keywords" aria-label="Search listings" style={{ maxWidth: 420, minHeight: 44, marginBottom: 12 }} />
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {TYPE_FILTERS.map((t) => <button key={t} type="button" onClick={() => setType(t)} className={`chip${type === t ? " active" : ""}`}>{t === "all" ? "All" : `${t}s`}</button>)}
           <button type="button" onClick={() => setShowFav((v) => !v)} className={`chip${showFav ? " active" : ""}`}>Favorites · {fav.count}</button>
         </div>
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
-        {showFav && shown.length === 0 ? (
-          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>No favorites yet. Tap the heart on any role.</p>
+        {shown.length === 0 ? (
+          <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "16px 0" }}>{showFav ? "No favorites yet. Tap the heart on any role." : "No roles match your search."}</p>
         ) : null}
         {shown.map((l) => (
-          <Link key={l.id} href={`/career/listings/${l.id}`} className="row-line" style={{ display: "grid", gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr) auto auto auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)", textDecoration: "none", color: "var(--color-text)" }}>
-            <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(17px, 2vw, 22px)" }}>{l.title}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", marginTop: 4 }}>{l.org} · {l.location}</div></div>
+          <div key={l.id} className="row-line" style={{ position: "relative", display: "grid", gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr) auto auto auto", gap: 18, alignItems: "center", padding: "20px 0", borderTop: "2px solid var(--color-divider)", color: "var(--color-text)" }}>
+            <Link href={`/career/listings/${l.id}`} aria-label={`View ${l.title}`} style={{ position: "absolute", inset: 0, zIndex: 1, textDecoration: "none" }} />
+            <div style={{ minWidth: 0 }}><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(17px, 2vw, 22px)" }}>{l.title}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", marginTop: 4 }}>{l.org} · {l.location}</div></div>
             <div className="row-sub" style={{ fontSize: 14, color: "color-mix(in srgb, var(--color-text) 72%, transparent)" }}>{l.comp}</div>
             <span className="tag tag-outline">{l.type}</span>
-            <SaveHeart active={fav.isSaved(l.id)} onToggle={() => fav.toggle(l.id, l.title)} label={`Favorite ${l.title}`} size={16} />
+            <span style={{ position: "relative", zIndex: 2, justifySelf: "start" }}><SaveHeart active={fav.isSaved(l.id)} onToggle={() => fav.toggle(l.id, l.title)} label={`Favorite ${l.title}`} size={16} /></span>
             <span className="btn btn-primary" style={{ padding: "8px 16px" }}>View</span>
-          </Link>
+          </div>
         ))}
       </section>
     </>

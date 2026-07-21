@@ -61,8 +61,9 @@ export async function captureBooking(
   },
 ): Promise<ActionResult> {
   const prefix = (input.refPrefix ?? template.slice(0, 3)).toUpperCase();
-  // Deterministic-ish ref from summary length + kind (no Math.random on server path).
-  const n = 10000 + ((input.summary.length * 37 + input.kind.length * 911) % 89999);
+  // Unique 6-digit ref. Server actions run at request time, so time + entropy is
+  // safe here and avoids the collisions a summary-length hash produced.
+  const n = Math.floor(100000 + Math.random() * 899999);
   const ref = `${prefix}-${n}`;
   try {
     const sb = getSupabaseServer();

@@ -19,7 +19,7 @@ const NAV = [
 
 export function LeftRail() {
   const pathname = usePathname();
-  const { openComposer } = useSocial();
+  const { openComposer, unreadMessages } = useSocial();
   const active = (p: string) => (p === "/social" ? pathname === p : pathname.startsWith(p));
   return (
     <aside className="left-rail">
@@ -27,7 +27,7 @@ export function LeftRail() {
       {NAV.map((n) => (
         <Link key={n.path} href={n.path} className="nav-item" style={{ color: active(n.path) ? "var(--color-accent)" : "var(--color-text)", textDecoration: "none" }}>
           {n.label}
-          {n.label === "Messages" ? <span style={{ marginLeft: "auto", background: "var(--color-accent)", color: "var(--color-bg)", fontSize: 11, fontWeight: 800, padding: "1px 7px" }}>3</span> : null}
+          {n.label === "Messages" && unreadMessages > 0 ? <span aria-label={`${unreadMessages} unread`} style={{ marginLeft: "auto", background: "var(--color-accent)", color: "var(--color-bg)", fontSize: 11, fontWeight: 800, padding: "1px 7px" }}>{unreadMessages}</span> : null}
         </Link>
       ))}
       <button type="button" className="btn btn-primary" onClick={openComposer} style={{ marginTop: 14, padding: "13px 16px", justifyContent: "center" }}>Post</button>
@@ -150,7 +150,7 @@ export function Feed() {
       <div style={{ display: "flex", gap: 14, padding: "20px 22px", borderBottom: "2px solid var(--color-divider)" }}>
         <figure className="grayscale" style={{ margin: 0, width: 44, height: 44, border: "1px solid var(--color-divider)", flex: "0 0 auto" }}><Placeholder /></figure>
         <form onSubmit={(e) => { e.preventDefault(); addPost(text); setText(""); }} style={{ flex: 1 }}>
-          <textarea className="input" value={text} onChange={(e) => setText(e.target.value)} placeholder="What's happening?" style={{ border: 0, padding: "8px 0", minHeight: 52, fontSize: 17, resize: "none" }} />
+          <textarea className="input" value={text} onChange={(e) => setText(e.target.value)} placeholder="What's happening?" aria-label="What's happening?" style={{ border: 0, padding: "8px 0", minHeight: 52, fontSize: 17, resize: "none" }} />
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}><button type="submit" className="btn btn-primary" disabled={!text.trim()} style={{ padding: "9px 22px" }}>Post</button></div>
         </form>
       </div>
@@ -277,7 +277,7 @@ export function Messages() {
             ))}
           </div>
           <form onSubmit={(e) => { e.preventDefault(); sendMsg(ti, draft); setDraft(""); }} style={{ display: "flex", gap: 10, padding: "14px 18px", borderTop: "2px solid var(--color-divider)" }}>
-            <input className="input" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Message…" style={{ flex: 1 }} />
+            <input className="input" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Message…" aria-label={`Message ${active.name}`} style={{ flex: 1 }} />
             <button type="submit" className="btn btn-primary" disabled={!draft.trim()} style={{ padding: "9px 20px" }}>Send</button>
           </form>
         </div>

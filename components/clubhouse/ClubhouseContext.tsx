@@ -61,7 +61,7 @@ export function ClubhouseProvider({ children }: { children: React.ReactNode }) {
   return (
     <ClubhouseCtx.Provider value={{ rsvps, isGoing, toggleRsvp, openBook, joined, joinRef, submitJoin }}>
       {children}
-      <Modal open={book !== null} onClose={() => setBook(null)} width={500} showClose={false}>
+      <Modal open={book !== null} onClose={() => setBook(null)} label={book ? `Book ${book}` : "Book a space"} width={500} showClose={false}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
           <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18, textTransform: "uppercase" }}>Book {book}</span>
         </div>

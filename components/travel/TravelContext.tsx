@@ -48,7 +48,7 @@ export function TravelProvider({ children }: { children: React.ReactNode }) {
   return (
     <TravelCtx.Provider value={{ trips, openBooking, cancelTrip }}>
       {children}
-      <Modal open={!!booking} onClose={() => setBooking(null)} width={520} showClose={false}>
+      <Modal open={!!booking} onClose={() => setBooking(null)} width={520} label="Confirm booking">
         {booking ? (
           <>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePersistentState } from "@/lib/persist";
 import { announce } from "@/lib/announce";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
+import { FilterChipRow } from "@/components/ds/FilterChipRow";
 import { Placeholder } from "@/components/Placeholder";
 import { captureBooking } from "@/lib/actions";
 import { DAYS, DISCIPLINES, CLASSES, LEAGUES, RECOVERY, NUTRITION, PLANS } from "@/lib/fitness";
@@ -36,8 +37,20 @@ export function Timetable() {
   return (
     <>
       <section className="wrap" style={{ paddingBlock: "20px 8px", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>{DAYS.map((d, i) => <button key={d} type="button" onClick={() => setDay(i)} className={`chip${day === i ? " active" : ""}`} style={{ padding: "8px 14px" }}>{d}</button>)}</div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>{DISCIPLINES.map((c) => <button key={c} type="button" onClick={() => setDisc(c)} className={`chip${disc === c ? " active" : ""}`} style={{ padding: "8px 14px" }}>{c === "all" ? "All" : c}</button>)}</div>
+        <FilterChipRow
+          label="Day"
+          options={DAYS.map((d, i) => ({ value: String(i), label: d }))}
+          value={String(day)}
+          onChange={(v) => setDay(Number(v))}
+          chipStyle={{ padding: "8px 14px" }}
+        />
+        <FilterChipRow
+          label="Discipline"
+          options={DISCIPLINES.map((c) => ({ value: c, label: c === "all" ? "All" : c }))}
+          value={disc}
+          onChange={setDisc}
+          chipStyle={{ padding: "8px 14px" }}
+        />
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
         {shown.map(({ c, i }) => {

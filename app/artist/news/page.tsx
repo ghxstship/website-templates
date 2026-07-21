@@ -70,25 +70,13 @@ export default async function NewsPage() {
                 style={{
                   fontSize: 16,
                   lineHeight: 1.6,
-                  margin: "0 0 18px",
+                  margin: 0,
                   maxWidth: "60ch",
                   color: "color-mix(in srgb, var(--color-text) 78%, transparent)",
                 }}
               >
                 {post.excerpt}
               </p>
-              <a
-                href="#"
-                style={{
-                  fontFamily: "var(--font-heading)",
-                  fontWeight: 600,
-                  fontSize: 13,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.04em",
-                }}
-              >
-                Read more →
-              </a>
             </div>
           </article>
         ))}

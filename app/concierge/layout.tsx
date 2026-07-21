@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { SiteHeader } from "@/components/shell/SiteHeader";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { ConciergeProvider } from "@/components/concierge/ConciergeContext";
+import { ConciergeHeader } from "@/components/concierge/ConciergeHeader";
 import { CONCIERGE, NAV, SOCIALS } from "@/lib/concierge";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export default function ConciergeLayout({ children }: { children: React.ReactNod
   return (
     <ConciergeProvider>
       <div style={{ minHeight: "100vh" }}>
-        <SiteHeader brand={CONCIERGE.brand} brandHref="/concierge" navItems={NAV} ctas={[{ label: "Make a request", href: "/concierge/request" }]} />
+        <ConciergeHeader brand={CONCIERGE.brand} navItems={NAV} ctas={[{ label: "Make a request", href: "/concierge/request" }]} />
         <main>{children}</main>
         <SiteFooter brand={CONCIERGE.brand} tagline={CONCIERGE.heroSub} columns={[{ title: "Concierge", links: NAV.map((n) => ({ label: n.label, href: n.path })) }, { title: "Reach us", links: [{ label: CONCIERGE.email, href: `mailto:${CONCIERGE.email}` }] }]} socials={SOCIALS} />
       </div>

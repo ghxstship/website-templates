@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useMemo } from "react";
 import { usePersistentState } from "@/lib/persist";
 import { announce } from "@/lib/announce";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
@@ -29,20 +29,29 @@ type Ctx = {
 const LearningCtx = createContext<Ctx | null>(null);
 
 export function LearningProvider({ children }: { children: React.ReactNode }) {
-  const [enrolled, setEnrolled] = useState<Set<string>>(new Set());
-  const [done, setDone] = useState<Record<string, Set<number>>>({});
+  // Enrollment and lesson progress persist across reloads (stored as
+  // JSON-serializable arrays; exposed to consumers as Sets, unchanged).
+  const [enrolledList, setEnrolledList] = usePersistentState<string[]>("learning.enrolled", []);
+  const [progress, setProgress] = usePersistentState<Record<string, number[]>>("learning.progress", {});
   const [posts, setPosts] = useState<string[]>([]);
   const [likes, setLikes] = useState<Set<string>>(new Set());
   const [certificates, setCertificates] = usePersistentState<string[]>("learning.certificates", []);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
 
+  const enrolled = useMemo(() => new Set(enrolledList), [enrolledList]);
+  const done = useMemo(() => {
+    const out: Record<string, Set<number>> = {};
+    for (const slug of Object.keys(progress)) out[slug] = new Set(progress[slug]);
+    return out;
+  }, [progress]);
+
   const enroll = useCallback((slug: string, title: string) => {
-    setEnrolled((s) => new Set(s).add(slug));
+    setEnrolledList((s) => (s.includes(slug) ? s : [...s, slug]));
     setConfirm({ title: "Enrolled", body: `You now have lifetime access to ${title}. Jump into the first lesson whenever you're ready.` });
-  }, []);
+  }, [setEnrolledList]);
 
   const toggleLesson = useCallback((slug: string, lessonIdx: number, total: number) => {
-    setDone((d) => {
+    setProgress((d) => {
       const set = new Set(d[slug] ?? []);
       if (set.has(lessonIdx)) set.delete(lessonIdx);
       else set.add(lessonIdx);
@@ -54,9 +63,9 @@ export function LearningProvider({ children }: { children: React.ReactNode }) {
           return [...prev, slug];
         });
       }
-      return { ...d, [slug]: set };
+      return { ...d, [slug]: [...set] };
     });
-  }, [setCertificates]);
+  }, [setProgress, setCertificates]);
 
   const addPost = useCallback((text: string) => {
     const t = text.trim();

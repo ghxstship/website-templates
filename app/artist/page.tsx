@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getSiteData } from "@/lib/data";
 import { Placeholder } from "@/components/Placeholder";
 import { PlayButton } from "@/components/player/PlayButton";
-import { NewsletterForm } from "@/components/NewsletterForm";
+import { NewsletterInline } from "@/components/forms/NewsletterInline";
 import { PlayIcon } from "@/components/icons";
 
 export const revalidate = 60;
@@ -335,7 +335,14 @@ export default async function HomePage() {
               First listens, ticket presales and tour announcements — direct, no
               noise.
             </p>
-            <NewsletterForm />
+            <NewsletterInline
+              template="artist"
+              button="Subscribe"
+              success="Subscribed. Check your inbox."
+              inputStyle={{ background: "var(--color-bg)", borderColor: "var(--color-bg)" }}
+              buttonClassName="btn"
+              buttonStyle={{ background: "var(--color-bg)", color: "var(--color-accent)", padding: "11px 22px" }}
+            />
           </div>
         </div>
       </section>

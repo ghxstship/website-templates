@@ -4,7 +4,11 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import { usePersistentState } from "@/lib/persist";
 import { Modal } from "@/components/ds/Modal";
 import { captureBooking } from "@/lib/actions";
-import { SEED_CART, DELIVERY_TYPES, fmt, type CartItem } from "@/lib/pos";
+import { SEED_CART, DELIVERY_TYPES, PAY_DEFS, fmt, type CartItem } from "@/lib/pos";
+
+// Monotonic fallback sequence so orders that settle without a server ref still
+// get a unique reference (the old fixed "ORD-0000" collided across vendors).
+let orderSeq = 0;
 
 export type VendorGroup = {
   vid: string; vendor: string; type: string;
@@ -88,22 +92,23 @@ export function PosProvider({ children }: { children: React.ReactNode }) {
   const confirmCheckout = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPending(true);
+    const payLabel = PAY_DEFS.find(([k]) => k === pay)?.[1] ?? pay;
     const refs: { vendor: string; ref: string }[] = [];
     for (const g of groups) {
-      const res = await captureBooking("pos", { kind: "order", summary: `${g.vendor} — ${fmt(g.subtotal)}`, details: { type: g.type, fulfill: g.fulfill }, refPrefix: "ORD" });
-      refs.push({ vendor: g.vendor, ref: res.ref ?? "ORD-0000" });
+      const res = await captureBooking("pos", { kind: "order", summary: `${g.vendor} — ${fmt(g.subtotal)}`, details: { type: g.type, fulfill: g.fulfill, pay: payLabel }, refPrefix: "ORD" });
+      refs.push({ vendor: g.vendor, ref: res.ref ?? `ORD-${String(++orderSeq).padStart(4, "0")}` });
     }
     const vc = totals.vendorCount;
     setPending(false);
     setModal(false);
     setCart([]);
-    setConfirm({ title: "Order placed", body: `Paid ${fmt(totals.grand)} across ${vc} ${vc === 1 ? "store" : "stores"}. Each store received its own order and settles separately.`, refs });
+    setConfirm({ title: "Order placed", body: `Paid ${fmt(totals.grand)} by ${payLabel} across ${vc} ${vc === 1 ? "store" : "stores"}. Each store received its own order and settles separately.`, refs });
   };
 
   return (
     <PosCtx.Provider value={{ cart, count, addSample, changeQty, groups, fulfill, setFulfill, tip, setTip, pay, setPay, totals, openCheckout, notify }}>
       {children}
-      <Modal open={modal} onClose={() => setModal(false)} width={520} showClose={false}>
+      <Modal open={modal} onClose={() => setModal(false)} width={520} showClose={false} label="Checkout">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
           <span style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 18, textTransform: "uppercase" }}>Checkout · {fmt(totals.grand)}</span>
         </div>
@@ -121,7 +126,7 @@ export function PosProvider({ children }: { children: React.ReactNode }) {
           <button type="submit" className="btn btn-primary" disabled={pending} style={{ padding: "13px 24px", justifyContent: "center" }}>{pending ? "Processing…" : `Pay ${fmt(totals.grand)}`}</button>
         </form>
       </Modal>
-      <Modal open={!!confirm} onClose={() => setConfirm(null)} width={480} showClose={false}>
+      <Modal open={!!confirm} onClose={() => setConfirm(null)} width={480} showClose={false} label="Order confirmation">
         {confirm ? (
           <div>
             <div style={{ width: 48, height: 48, background: "var(--color-accent)", color: "var(--color-bg)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 22, fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 24 }}>✓</div>

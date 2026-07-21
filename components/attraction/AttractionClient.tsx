@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { QtyStepper } from "@/components/ds/QtyStepper";
 import { Modal } from "@/components/ds/Modal";
+import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { Placeholder } from "@/components/Placeholder";
-import { CheckIcon } from "@/components/icons";
 import { SaveHeart } from "@/components/ds/SaveHeart";
 import { useFavorites } from "@/lib/useFavorites";
 import { captureBooking } from "@/lib/actions";
@@ -83,7 +83,7 @@ export function TicketBuilder() {
           <div key={t.name} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, alignItems: "center", padding: "16px 0", borderTop: "1px solid var(--color-divider)" }}>
             <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16 }}>{t.name}</div><div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 58%, transparent)" }}>{t.note}</div></div>
             <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 16, color: "var(--color-accent)" }}>${t.num}</div>
-            <QtyStepper value={qtys[i]} onChange={(v) => setQ(i, v)} min={0} max={10} size="sm" />
+            <QtyStepper value={qtys[i]} onChange={(v) => setQ(i, v)} min={0} max={10} size="sm" label={`Quantity, ${t.name}`} />
           </div>
         ))}
       </div>
@@ -111,20 +111,20 @@ export function TicketBuilder() {
         </form>
       </Modal>
 
-      {confirm ? (
-        <div onClick={() => setConfirm(null)} style={{ position: "fixed", inset: 0, zIndex: 92, background: "color-mix(in srgb, var(--color-text) 90%, transparent)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-          <div onClick={(e) => e.stopPropagation()} style={{ width: "min(460px, 100%)", background: "var(--color-bg)", border: "2px solid var(--color-accent)", padding: "clamp(28px, 4vw, 48px)" }}>
-            <div style={{ width: 48, height: 48, background: "var(--color-accent)", color: "var(--color-bg)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 22 }}><CheckIcon size={24} /></div>
-            <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 26, letterSpacing: "-0.015em", margin: "0 0 12px" }}>You&apos;re booked in</h3>
+      <ConfirmModal
+        open={!!confirm}
+        onClose={() => setConfirm(null)}
+        title="You're booked in"
+        body={
+          <>
             <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "0 0 20px", color: "color-mix(in srgb, var(--color-text) 78%, transparent)" }}>Your timed-entry tickets are confirmed and in your email. See you on {date} at {slot}.</p>
-            <div style={{ display: "flex", gap: 14, alignItems: "center", border: "2px solid var(--color-divider)", padding: 14, marginBottom: 22 }}>
+            <div style={{ display: "flex", gap: 14, alignItems: "center", border: "2px solid var(--color-divider)", padding: 14 }}>
               <div style={{ width: 56, height: 56, flex: "0 0 auto", background: "repeating-linear-gradient(45deg, var(--color-text) 0 3px, transparent 3px 6px)" }} />
-              <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 14 }}>{confirm.ref}</div><div style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 58%, transparent)" }}>Show this QR at the gate</div></div>
+              <div><div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 14 }}>{confirm?.ref}</div><div style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-text) 58%, transparent)" }}>Show this QR at the gate</div></div>
             </div>
-            <button type="button" className="btn btn-primary" onClick={() => setConfirm(null)} style={{ padding: "12px 22px" }}>Done</button>
-          </div>
-        </div>
-      ) : null}
+          </>
+        }
+      />
     </section>
   );
 }

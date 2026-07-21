@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getSiteData } from "@/lib/data";
 import { PageHeader } from "@/components/PageHeader";
-import { ContactForm } from "@/components/ContactForm";
+import { ContactForm } from "@/components/forms/ContactForm";
 
 export const revalidate = 60;
 export const metadata: Metadata = { title: "Contact" };
@@ -69,7 +69,11 @@ export default async function ContactPage() {
           >
             Booking &amp; enquiries
           </h2>
-          <ContactForm />
+          <ContactForm
+            template="artist"
+            subjects={["Booking / live", "Press / interview", "Licensing / sync", "General"]}
+            successBody="Thanks for reaching out — we'll be in touch within a few days."
+          />
         </div>
       </section>
     </div>

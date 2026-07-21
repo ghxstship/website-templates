@@ -30,6 +30,7 @@ export function ApplyFunnel() {
     await submitApply(
       (form.elements.namedItem("mo-name") as HTMLInputElement)?.value ?? "",
       (form.elements.namedItem("mo-email") as HTMLInputElement)?.value ?? "",
+      (form.elements.namedItem("mo-tier") as HTMLSelectElement)?.value ?? "Resident",
     );
     setPending(false);
   };
@@ -49,7 +50,7 @@ export function ApplyFunnel() {
         {mode === "referral" ? <div className="field"><label htmlFor="mo-ref">Member referral code</label><input id="mo-ref" className="input" required placeholder="e.g. MV-2231" /></div> : null}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           <div className="field"><label htmlFor="mo-city">City</label><input id="mo-city" className="input" required /></div>
-          <div className="field"><label htmlFor="mo-tier">Desired tier</label><select id="mo-tier" className="input" style={{ minHeight: 42 }}><option>Resident</option><option>Patron</option><option>Founder</option></select></div>
+          <div className="field"><label htmlFor="mo-tier">Desired tier</label><select id="mo-tier" name="mo-tier" className="input" style={{ minHeight: 42 }}><option>Resident</option><option>Patron</option><option>Founder</option></select></div>
         </div>
         <div className="field"><label htmlFor="mo-why">What draws you to the club?</label><textarea id="mo-why" className="input" required style={{ minHeight: 100 }} /></div>
         <button type="submit" className="btn btn-primary" disabled={pending} style={{ padding: "13px 24px", justifyContent: "flex-start" }}>{pending ? "Submitting…" : mode === "referral" ? "Submit with referral" : "Submit application"}</button>

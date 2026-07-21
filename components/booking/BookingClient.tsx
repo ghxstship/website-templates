@@ -65,6 +65,7 @@ export function DiscoverGrid({ initialCat = "all" }: { initialCat?: string }) {
       </section>
       <section className="wrap" style={{ paddingBlock: "16px clamp(48px, 6vw, 80px)" }}>
         {showSaved && fav.count === 0 ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No saved businesses yet. Tap the heart on any listing.</p> : null}
+        {list.length === 0 && !(showSaved && fav.count === 0) ? <p style={{ fontSize: 16, color: "color-mix(in srgb, var(--color-text) 60%, transparent)", padding: "8px 0 16px" }}>No places match this category.</p> : null}
         <div className="grid3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(16px, 2vw, 28px)" }}>
           {list.map((b) => (
             <Link key={b.slug} href={`/booking/business/${b.slug}`} style={{ border: "2px solid var(--color-divider)", cursor: "pointer", display: "flex", flexDirection: "column", textDecoration: "none", color: "var(--color-text)" }}>
@@ -125,6 +126,8 @@ export function BookingFlow({ biz }: { biz: Business }) {
   const [date, setDate] = useState(0);
   const [time, setTime] = useState<string | null>(null);
   const [done, setDone] = useState<{ ref: string } | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const chosen = biz.services.filter((_, i) => selected.has(i));
   const totalNum = chosen.reduce((t, s) => t + s.price, 0);
@@ -136,10 +139,15 @@ export function BookingFlow({ biz }: { biz: Business }) {
   const nextLabel = ["Choose specialist", "Skip — any specialist", "Enter details", "", ""][step];
 
   const confirm = async () => {
-    const n = 100000 + ((totalNum * 37 + biz.slug.length * 911) % 899999);
-    const ref = `BK-${n}`;
-    await captureBooking("booking", { kind: "appointment", summary: `${chosen.map((s) => s.name).join(", ") || "appointment"} — ${biz.name}`, details: { biz: biz.name, staff: staffName, when: whenLabel, services: chosen.map((s) => s.name) }, refPrefix: "SLT" });
-    setDone({ ref });
+    setError(null);
+    setSubmitting(true);
+    const res = await captureBooking("booking", { kind: "appointment", summary: `${chosen.map((s) => s.name).join(", ") || "appointment"} — ${biz.name}`, details: { biz: biz.name, staff: staffName, when: whenLabel, services: chosen.map((s) => s.name) }, refPrefix: "SLT" });
+    setSubmitting(false);
+    if (!res.ok || !res.ref) {
+      setError(res.error ?? "Something went wrong. Please try again.");
+      return;
+    }
+    setDone({ ref: res.ref });
     try { window.scrollTo(0, 0); } catch { /* noop */ }
   };
 
@@ -237,10 +245,11 @@ export function BookingFlow({ biz }: { biz: Business }) {
             <div>
               <h1 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(26px, 4vw, 42px)", letterSpacing: "-0.02em", margin: "0 0 6px", textTransform: "uppercase" }}>Confirm &amp; pay</h1>
               <p style={{ fontSize: 15, color: "color-mix(in srgb, var(--color-text) 65%, transparent)", margin: "0 0 24px" }}>A {BOOKING.deposit} deposit holds your slot; balance due in-store.</p>
+              {error ? <p role="alert" style={{ fontSize: 14, color: "var(--color-accent)", margin: "0 0 16px" }}>{error}</p> : null}
               <form onSubmit={(e) => { e.preventDefault(); confirm(); }} style={{ display: "grid", gap: 18 }}>
                 <div className="field"><label htmlFor="bk-card">Card number</label><input id="bk-card" className="input" required placeholder="4242 4242 4242 4242" /></div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}><div className="field"><label htmlFor="bk-exp">Expiry</label><input id="bk-exp" className="input" required placeholder="MM / YY" /></div><div className="field"><label htmlFor="bk-cvc">CVC</label><input id="bk-cvc" className="input" required placeholder="123" /></div></div>
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><button type="submit" className="btn btn-primary" style={{ padding: "13px 24px", justifyContent: "flex-start" }}>Pay {BOOKING.deposit} &amp; book</button><button type="button" className="btn btn-secondary" onClick={confirm} style={{ padding: "13px 20px" }}>Pay in store</button></div>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><button type="submit" className="btn btn-primary" disabled={submitting} style={{ padding: "13px 24px", justifyContent: "flex-start" }}>{submitting ? "Booking…" : `Pay ${BOOKING.deposit} & book`}</button><button type="button" className="btn btn-secondary" onClick={confirm} disabled={submitting} style={{ padding: "13px 20px" }}>Pay in store</button></div>
               </form>
             </div>
           )}

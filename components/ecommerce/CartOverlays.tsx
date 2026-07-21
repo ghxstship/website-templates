@@ -105,8 +105,10 @@ function Checkout() {
       region: String(fd.get("region") ?? ""),
       zip: String(fd.get("zip") ?? ""),
       items: items.map((i) => ({ name: i.name, variant: i.variant, price_cents: i.price_cents })),
-      subtotalCents: subtotalCents - discountCents,
+      subtotalCents,
       shippingCents,
+      discountCents,
+      promoCode: promo,
     });
     setPending(false);
     if (res.ok) {

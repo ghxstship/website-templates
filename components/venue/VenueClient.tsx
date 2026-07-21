@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MenuIcon } from "@/components/icons";
 import { QtyStepper } from "@/components/ds/QtyStepper";
 import { ConfirmModal } from "@/components/ds/ConfirmModal";
@@ -71,6 +71,7 @@ export function EventsList() {
 }
 
 export function EventDetail({ event }: { event: VEvent }) {
+  const router = useRouter();
   const [qtys, setQtys] = useState<number[]>([0, 0, 0]);
   const [confirm, setConfirm] = useState<{ title: string; body: string } | null>(null);
   const setQ = (i: number, v: number) => setQtys((q) => q.map((x, j) => (j === i ? v : x)));
@@ -110,7 +111,7 @@ export function EventDetail({ event }: { event: VEvent }) {
           <p style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 58%, transparent)", margin: "16px 0 0", maxWidth: "46ch" }}>Payment, seat maps, loyalty points and VIP settle on <Link href="/ticketing/events">FRONTROW ↗</Link>, our ticketing network. Members save on every booking.</p>
         </div>
       </section>
-      <ConfirmModal open={!!confirm} onClose={() => setConfirm(null)} title={confirm?.title ?? ""} body={confirm?.body ?? ""} />
+      <ConfirmModal open={!!confirm} onClose={() => { setConfirm(null); router.push("/venue/events"); }} title={confirm?.title ?? ""} body={confirm?.body ?? ""} doneLabel="Back to what’s on" />
     </>
   );
 }

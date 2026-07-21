@@ -37,7 +37,7 @@ export function ProductDetailControls({ product }: { product: Product }) {
         ))}
       </div>
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-        <QtyStepper value={qty} onChange={setQty} min={1} max={20} />
+        <QtyStepper value={qty} onChange={setQty} min={1} max={20} label={`Quantity — ${product.name}`} />
         <button type="button" className="btn btn-primary" onClick={add} style={{ padding: "13px 26px", justifyContent: "flex-start" }}>
           Add to cart — {money(product.price_cents)}
         </button>

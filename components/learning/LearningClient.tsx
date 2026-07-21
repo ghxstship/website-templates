@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MenuIcon, CheckIcon, HeartIcon, CommentIcon } from "@/components/icons";
 import { Placeholder } from "@/components/Placeholder";
+import { ConfirmModal } from "@/components/ds/ConfirmModal";
 import { useLearning } from "./LearningContext";
 import { LEARNING, NAV, COURSES, CATEGORIES, PLANS, SEED_POSTS, lessonCount, type Course } from "@/lib/learning";
 
@@ -177,6 +178,7 @@ export function Community() {
 
 export function Dashboard() {
   const { enrolled, done, certificates } = useLearning();
+  const [certDownload, setCertDownload] = useState<string | null>(null);
   const mine = COURSES.filter((c) => enrolled.has(c.slug));
   const earned = COURSES.filter((c) => certificates.includes(c.slug));
   return (
@@ -193,6 +195,7 @@ export function Dashboard() {
                 </div>
                 <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: 20, margin: 0 }}>{c.title}</h3>
                 <div style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-text) 62%, transparent)" }}>Awarded to Alex Rivera · {c.instructor}</div>
+                <button type="button" onClick={() => setCertDownload(c.title)} className="btn btn-primary" style={{ padding: "9px 16px", marginTop: 6, alignSelf: "flex-start" }}>Download certificate</button>
               </div>
             ))}
           </div>
@@ -218,6 +221,7 @@ export function Dashboard() {
           })}
         </div>
       )}
+      <ConfirmModal open={!!certDownload} onClose={() => setCertDownload(null)} title="Certificate downloaded" body={certDownload ? `Your certificate of completion for ${certDownload} has been saved as a PDF.` : ""} />
     </section>
   );
 }

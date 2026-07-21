@@ -60,7 +60,7 @@ export function BookingEngine() {
 
 export function ResultsClient({ mode }: { mode: Mode }) {
   const { openBooking } = useTravel();
-  const [sort, setSort] = useState<"best" | "price" | "fast">("best");
+  const [sort, setSort] = useState<"best" | "price">("best");
   let results = RESULTS[mode] ?? [];
   if (sort === "price") results = [...results].sort((a, b) => a.num - b.num);
 
@@ -74,7 +74,7 @@ export function ResultsClient({ mode }: { mode: Mode }) {
       <hr className="rule" />
       <section className="wrap" style={{ paddingBlock: "20px 8px", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <span className="eyebrow" style={{ marginRight: 6 }}>Sort</span>
-        {(["best", "price", "fast"] as const).map((k) => <button key={k} type="button" onClick={() => setSort(k)} className={`chip${sort === k ? " active" : ""}`}>{k === "best" ? "Best" : k === "price" ? "Cheapest" : "Fastest"}</button>)}
+        {(["best", "price"] as const).map((k) => <button key={k} type="button" onClick={() => setSort(k)} className={`chip${sort === k ? " active" : ""}`}>{k === "best" ? "Best" : "Cheapest"}</button>)}
       </section>
       <section className="wrap" style={{ paddingBlock: "12px clamp(48px, 6vw, 80px)" }}>
         {results.map((r, i) => (

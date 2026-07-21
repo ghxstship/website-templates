@@ -39,6 +39,7 @@ export const IMPACT_EXAMPLES = [
   { amt: "$250", does: "A village water test for a year." },
 ];
 export function impactLine(amt: number): string {
+  if (amt <= 0) return "Choose an amount to see the difference your gift makes.";
   return amt >= 250 ? `$${amt} funds a village water test for a year.`
     : amt >= 100 ? `$${amt} filters clean water for a family for a year.`
     : amt >= 50 ? `$${amt} plants 50 mangroves.`

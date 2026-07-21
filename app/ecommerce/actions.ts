@@ -19,6 +19,8 @@ export async function placeOrder(input: {
   items: OrderItem[];
   subtotalCents: number;
   shippingCents: number;
+  discountCents: number;
+  promoCode: string | null;
 }): Promise<PlaceOrderResult> {
   if (!EMAIL_RE.test(input.email)) return { ok: false, error: "Enter a valid email." };
   if (!input.items.length) return { ok: false, error: "Your cart is empty." };
@@ -41,7 +43,9 @@ export async function placeOrder(input: {
       items: input.items,
       subtotal_cents: input.subtotalCents,
       shipping_cents: input.shippingCents,
-      total_cents: input.subtotalCents + input.shippingCents,
+      discount_cents: input.discountCents,
+      promo_code: input.promoCode,
+      total_cents: input.subtotalCents - input.discountCents + input.shippingCents,
     });
     if (error) throw error;
     return { ok: true, ref };

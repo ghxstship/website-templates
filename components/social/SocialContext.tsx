@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useCallback, useMemo } from "react";
 import { usePersistentState } from "@/lib/persist";
 import { CloseIcon } from "@/components/icons";
-import { SOCIAL, FEED, COMMUNITY_POSTS } from "@/lib/social";
+import { SOCIAL, FEED, COMMUNITY_POSTS, THREADS } from "@/lib/social";
 
 type Toggle = Set<string>;
 
@@ -11,6 +11,7 @@ type Ctx = {
   myPosts: string[];
   likes: Toggle; reposts: Toggle; saves: Toggle; follows: Toggle; joined: Toggle; comments: Record<string, string[]>;
   saveCount: number;
+  unreadMessages: number;
   votes: Record<string, number>;
   msgs: Record<number, string[]>;
   addPost: (t: string) => void;
@@ -50,6 +51,13 @@ export function SocialProvider({ children }: { children: React.ReactNode }) {
   const sendMsg = useCallback((thread: number, t: string) => { const v = t.trim(); if (v) setMsgs((m) => ({ ...m, [thread]: [...(m[thread] ?? []), v] })); }, []);
   const addComment = useCallback((id: string, t: string) => { const v = t.trim(); if (v) setComments((c) => ({ ...c, [id]: [...(c[id] ?? []), v] })); }, []);
 
+  // Unread = threads whose latest message is from the other person (i.e. you haven't replied yet).
+  const unreadMessages = useMemo(() => THREADS.reduce((n, t, i) => {
+    const all = [...t.seed, ...((msgs[i] ?? []).map((text) => ({ me: true, text })))];
+    const last = all[all.length - 1];
+    return n + (last && !last.me ? 1 : 0);
+  }, 0), [msgs]);
+
   const op = openPostId ? (FEED.find((x) => x.id === openPostId) ?? COMMUNITY_POSTS.find((x) => x.id === openPostId)) : null;
   const opName = op ? ("name" in op ? op.name : op.author) : "";
   const opHandle = op && "handle" in op ? op.handle : "";
@@ -61,7 +69,7 @@ export function SocialProvider({ children }: { children: React.ReactNode }) {
   const openComments = openPostId ? [...(seedComments[openPostId] ?? []), ...((comments[openPostId] ?? []).map((t) => ({ name: SOCIAL.meName, text: t })))] : [];
 
   const value: Ctx = {
-    myPosts, likes: sets.likes, reposts: sets.reposts, saves: sets.saves, follows: sets.follows, joined: sets.joined, comments, saveCount: sets.saves.size, votes, msgs,
+    myPosts, likes: sets.likes, reposts: sets.reposts, saves: sets.saves, follows: sets.follows, joined: sets.joined, comments, saveCount: sets.saves.size, unreadMessages, votes, msgs,
     addPost, toggle, isOn: (k, id) => sets[k].has(id), vote, voteOf: (id) => votes[id] ?? 0, sendMsg, addComment,
     openComposer: () => setComposerOpen(true), openPost: (id) => setOpenPostId(id),
   };
@@ -78,7 +86,7 @@ export function SocialProvider({ children }: { children: React.ReactNode }) {
               <button type="button" className="btn btn-icon" onClick={() => setComposerOpen(false)} aria-label="Close"><CloseIcon size={18} /></button>
             </div>
             <form onSubmit={(e) => { e.preventDefault(); addPost(composer); setComposer(""); setComposerOpen(false); }} style={{ padding: 20 }}>
-              <textarea className="input" value={composer} onChange={(e) => setComposer(e.target.value)} placeholder="What's happening?" style={{ minHeight: 120, fontSize: 17, border: 0, padding: 0 }} />
+              <textarea className="input" value={composer} onChange={(e) => setComposer(e.target.value)} placeholder="What's happening?" aria-label="New post" style={{ minHeight: 120, fontSize: 17, border: 0, padding: 0 }} />
               <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}><button type="submit" className="btn btn-primary" disabled={!composer.trim()} style={{ padding: "11px 26px" }}>Post</button></div>
             </form>
           </div>
@@ -104,7 +112,7 @@ export function SocialProvider({ children }: { children: React.ReactNode }) {
               ))}
             </div>
             <form onSubmit={(e) => { e.preventDefault(); if (openPostId) addComment(openPostId, reply); setReply(""); }} style={{ display: "flex", gap: 10, padding: "14px 18px", borderTop: "2px solid var(--color-divider)" }}>
-              <input className="input" value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Post your reply…" style={{ flex: 1 }} />
+              <input className="input" value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Post your reply…" aria-label="Post your reply" style={{ flex: 1 }} />
               <button type="submit" className="btn btn-primary" disabled={!reply.trim()} style={{ padding: "9px 20px" }}>Reply</button>
             </form>
           </div>

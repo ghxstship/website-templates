@@ -9,17 +9,22 @@ export function QtyStepper({
   min = 0,
   max = 99,
   size = "md",
+  label,
 }: {
   value: number;
   onChange: (next: number) => void;
   min?: number;
   max?: number;
   size?: "sm" | "md";
+  /** Accessible name for the group, e.g. "Quantity for Balloon Ride". */
+  label?: string;
 }) {
   const pad = size === "sm" ? 6 : 9;
   const w = size === "sm" ? 34 : 44;
   return (
     <div
+      role="group"
+      aria-label={label ?? "Quantity"}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -37,6 +42,8 @@ export function QtyStepper({
         <MinusIcon size={14} />
       </button>
       <span
+        aria-live="polite"
+        aria-atomic="true"
         style={{
           minWidth: w,
           textAlign: "center",
